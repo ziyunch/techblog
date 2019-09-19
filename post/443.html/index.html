@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.5.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Runhan Yu">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="使用 Emacs 三年多了，当时受了 一年成为 Emacs 高手 的蛊惑，且贪图便利，使用了 Purcell 的配置。正如 Purcell 所说，此配置相当 reasonable，用来入门确实让我受益匪浅，少走了很多弯路。三年使用下来，我需要添加的插件只有 org-ref 和 ob-smiles ，配置更新也仅须 git pull 外加 M-x package-list-packages U x 即可，非常方便。
+
+然而过去三年来，我主要是使用 Emacs 中的 org-mode 来记 Science 与 Tech 方面笔记，基于 Latex 的长文章 / 代码我更喜欢用 Atoms &#43; Vim-mode 来写，基于 Markdown 的博客则用 MWeb 来写，中文笔记喜欢使用 Bears，最后却还是回到了苹果自带的免费 Notes。其他零零碎碎的场景则使用更为零碎的 app，餐馆用 DayGram &#43; Workflowy，记账用随手记。非常不统一。
+
+也就是说，我并不是一个“running my life with Emacs”的重症者，Purcell 配置的 Emacs 中也有大量我用不到，或者需要使用却不甚了解的插件。所以失业在家这个契机恰好也是让我重新审视 Emacs，看看我能否最大化地使用 Emacs。
+
+对我而言，使用 Atoms 来写代码与 Latex，是由于我对使用 Emacs 调试还不甚熟练。所以这几天我花了一点时间重新阅读了 Emacs 手册。
+
+使用 MWeb 来写博客与使用 Notes 来记笔记的原因则比较可笑，因为我基本上都是使用英文记录 Science &amp; Tech 方面的笔记，我并没有配置 Emacs 的中文环境。所以需要使用中文来写东西时，我自然就得换用其他工具。这段时间准备面试，将 org-mode 的使用范围扩大到记录面试适宜，由于一亩三分地是一个主要资料来源，不免需要粘贴许多中文帖子进来。这时再将 Emacs 视为一个纯英文环境未免有些麻烦。而将 Emacs 中文化了，自然也不需要 MWeb 和 Notes 或者 Bear 什么事了。
+
+而记录餐馆和消费的需求比较麻烦，本文暂且搁置，今后有空再来研究。">
+
+  
+  <link rel="alternate" hreflang="en-us" href="/post/443.html/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="rgb(251, 191, 183)">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css" crossorigin="anonymous" title="hl-light">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+        
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro%7CLora:400,700%7CSource+Serif+Pro:400,700&display=swap">
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/css/academic.min.cd1d04c8beda9bdca8f807d7f75dafdb.css">
+
+  
+
+  
+  
+  
+
+  
+
+  <link rel="manifest" href="/index.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon-32.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/post/443.html/">
+
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary">
+  
+  <meta property="og:site_name" content="RUNHAN YU">
+  <meta property="og:url" content="/post/443.html/">
+  <meta property="og:title" content="Emacs 中文环境配置 | RUNHAN YU">
+  <meta property="og:description" content="使用 Emacs 三年多了，当时受了 一年成为 Emacs 高手 的蛊惑，且贪图便利，使用了 Purcell 的配置。正如 Purcell 所说，此配置相当 reasonable，用来入门确实让我受益匪浅，少走了很多弯路。三年使用下来，我需要添加的插件只有 org-ref 和 ob-smiles ，配置更新也仅须 git pull 外加 M-x package-list-packages U x 即可，非常方便。
+
+然而过去三年来，我主要是使用 Emacs 中的 org-mode 来记 Science 与 Tech 方面笔记，基于 Latex 的长文章 / 代码我更喜欢用 Atoms &#43; Vim-mode 来写，基于 Markdown 的博客则用 MWeb 来写，中文笔记喜欢使用 Bears，最后却还是回到了苹果自带的免费 Notes。其他零零碎碎的场景则使用更为零碎的 app，餐馆用 DayGram &#43; Workflowy，记账用随手记。非常不统一。
+
+也就是说，我并不是一个“running my life with Emacs”的重症者，Purcell 配置的 Emacs 中也有大量我用不到，或者需要使用却不甚了解的插件。所以失业在家这个契机恰好也是让我重新审视 Emacs，看看我能否最大化地使用 Emacs。
+
+对我而言，使用 Atoms 来写代码与 Latex，是由于我对使用 Emacs 调试还不甚熟练。所以这几天我花了一点时间重新阅读了 Emacs 手册。
+
+使用 MWeb 来写博客与使用 Notes 来记笔记的原因则比较可笑，因为我基本上都是使用英文记录 Science &amp; Tech 方面的笔记，我并没有配置 Emacs 的中文环境。所以需要使用中文来写东西时，我自然就得换用其他工具。这段时间准备面试，将 org-mode 的使用范围扩大到记录面试适宜，由于一亩三分地是一个主要资料来源，不免需要粘贴许多中文帖子进来。这时再将 Emacs 视为一个纯英文环境未免有些麻烦。而将 Emacs 中文化了，自然也不需要 MWeb 和 Notes 或者 Bear 什么事了。
+
+而记录餐馆和消费的需求比较麻烦，本文暂且搁置，今后有空再来研究。"><meta property="og:image" content="/img/icon-192.png">
+  <meta property="twitter:image" content="/img/icon-192.png"><meta property="og:locale" content="en-us">
+  
+    
+      <meta property="article:published_time" content="2019-07-03T13:44:00-04:00">
+    
+    <meta property="article:modified_time" content="2019-09-19T00:54:04-04:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/post/443.html/"
+  },
+  "headline": "Emacs 中文环境配置",
+  
+  "datePublished": "2019-07-03T13:44:00-04:00",
+  "dateModified": "2019-09-19T00:54:04-04:00",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Runhan Yu"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "RUNHAN YU",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/img/icon-512.png"
+    }
+  },
+  "description": "\u003cp\u003e使用 Emacs 三年多了，当时受了 \u003ca href=\"https://github.com/redguardtoo/mastering-emacs-in-one-year-guide\" target=\"_blank\"\u003e一年成为 Emacs 高手\u003c/a\u003e 的蛊惑，且贪图便利，使用了 \u003ca href=\"https://github.com/purcell/emacs.d\" target=\"_blank\"\u003ePurcell 的配置\u003c/a\u003e。正如 Purcell 所说，此配置相当 reasonable，用来入门确实让我受益匪浅，少走了很多弯路。三年使用下来，我需要添加的插件只有 \u003ccode\u003eorg-ref\u003c/code\u003e 和 \u003ccode\u003eob-smiles\u003c/code\u003e ，配置更新也仅须 \u003ccode\u003egit pull\u003c/code\u003e 外加 \u003ckbd\u003eM-x package-list-packages U x\u003c/kbd\u003e 即可，非常方便。\u003c/p\u003e\n\n\u003cp\u003e然而过去三年来，我主要是使用 Emacs 中的 org-mode 来记 Science 与 Tech 方面笔记，基于 Latex 的长文章 / 代码我更喜欢用 Atoms + Vim-mode 来写，基于 Markdown 的博客则用 MWeb 来写，中文笔记喜欢使用 Bears，最后却还是回到了苹果自带的免费 Notes。其他零零碎碎的场景则使用更为零碎的 app，餐馆用 DayGram + Workflowy，记账用随手记。非常不统一。\u003c/p\u003e\n\n\u003cp\u003e也就是说，我并不是一个“running my life with Emacs”的重症者，Purcell 配置的 Emacs 中也有大量我用不到，或者需要使用却不甚了解的插件。所以失业在家这个契机恰好也是让我重新审视 Emacs，看看我能否最大化地使用 Emacs。\u003c/p\u003e\n\n\u003cp\u003e对我而言，使用 Atoms 来写代码与 Latex，是由于我对使用 Emacs 调试还不甚熟练。所以这几天我花了一点时间重新阅读了 Emacs 手册。\u003c/p\u003e\n\n\u003cp\u003e使用 MWeb 来写博客与使用 Notes 来记笔记的原因则比较可笑，因为我基本上都是使用英文记录 Science \u0026amp; Tech 方面的笔记，我并没有配置 Emacs 的中文环境。所以需要使用中文来写东西时，我自然就得换用其他工具。这段时间准备面试，将 org-mode 的使用范围扩大到记录面试适宜，由于一亩三分地是一个主要资料来源，不免需要粘贴许多中文帖子进来。这时再将 Emacs 视为一个纯英文环境未免有些麻烦。而将 Emacs 中文化了，自然也不需要 MWeb 和 Notes 或者 Bear 什么事了。\u003c/p\u003e\n\n\u003cp\u003e而记录餐馆和消费的需求比较麻烦，本文暂且搁置，今后有空再来研究。\u003c/p\u003e"
+}
+</script>
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  <title>Emacs 中文环境配置 | RUNHAN YU</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0 compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+      <a class="navbar-brand" href="/">RUNHAN YU</a>
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+    
+    <div class="collapse navbar-collapse" id="navbar">
+
+      
+      
+      <ul class="navbar-nav mr-auto">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>Home</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link  active" href="/post"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/project"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/publication"><span>Publications</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/tags"><span>Tag</span></a>
+        </li>
+
+        
+        
+
+      
+      </ul>
+      <ul class="navbar-nav ml-auto">
+      
+
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+        </li>
+        
+
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link js-dark-toggle" href="#"><i class="fas fa-moon" aria-hidden="true"></i></a>
+        </li>
+        
+
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+  <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Emacs 中文环境配置</h1>
+
+  
+
+  
+    
+
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+          Last updated on
+      
+    
+    Sep 19, 2019
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    3 min read
+  </span>
+  
+
+  
+  
+  
+
+  
+  
+
+  
+    
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/post/443.html/&amp;text=Emacs%20%e4%b8%ad%e6%96%87%e7%8e%af%e5%a2%83%e9%85%8d%e7%bd%ae" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/post/443.html/&amp;t=Emacs%20%e4%b8%ad%e6%96%87%e7%8e%af%e5%a2%83%e9%85%8d%e7%bd%ae" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Emacs%20%e4%b8%ad%e6%96%87%e7%8e%af%e5%a2%83%e9%85%8d%e7%bd%ae&amp;body=/post/443.html/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/post/443.html/&amp;title=Emacs%20%e4%b8%ad%e6%96%87%e7%8e%af%e5%a2%83%e9%85%8d%e7%bd%ae" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://web.whatsapp.com/send?text=Emacs%20%e4%b8%ad%e6%96%87%e7%8e%af%e5%a2%83%e9%85%8d%e7%bd%ae%20/post/443.html/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/post/443.html/&amp;title=Emacs%20%e4%b8%ad%e6%96%87%e7%8e%af%e5%a2%83%e9%85%8d%e7%bd%ae" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <p>使用 Emacs 三年多了，当时受了 <a href="https://github.com/redguardtoo/mastering-emacs-in-one-year-guide" target="_blank">一年成为 Emacs 高手</a> 的蛊惑，且贪图便利，使用了 <a href="https://github.com/purcell/emacs.d" target="_blank">Purcell 的配置</a>。正如 Purcell 所说，此配置相当 reasonable，用来入门确实让我受益匪浅，少走了很多弯路。三年使用下来，我需要添加的插件只有 <code>org-ref</code> 和 <code>ob-smiles</code> ，配置更新也仅须 <code>git pull</code> 外加 <kbd>M-x package-list-packages U x</kbd> 即可，非常方便。</p>
+
+<p>然而过去三年来，我主要是使用 Emacs 中的 org-mode 来记 Science 与 Tech 方面笔记，基于 Latex 的长文章 / 代码我更喜欢用 Atoms + Vim-mode 来写，基于 Markdown 的博客则用 MWeb 来写，中文笔记喜欢使用 Bears，最后却还是回到了苹果自带的免费 Notes。其他零零碎碎的场景则使用更为零碎的 app，餐馆用 DayGram + Workflowy，记账用随手记。非常不统一。</p>
+
+<p>也就是说，我并不是一个“running my life with Emacs”的重症者，Purcell 配置的 Emacs 中也有大量我用不到，或者需要使用却不甚了解的插件。所以失业在家这个契机恰好也是让我重新审视 Emacs，看看我能否最大化地使用 Emacs。</p>
+
+<p>对我而言，使用 Atoms 来写代码与 Latex，是由于我对使用 Emacs 调试还不甚熟练。所以这几天我花了一点时间重新阅读了 Emacs 手册。</p>
+
+<p>使用 MWeb 来写博客与使用 Notes 来记笔记的原因则比较可笑，因为我基本上都是使用英文记录 Science &amp; Tech 方面的笔记，我并没有配置 Emacs 的中文环境。所以需要使用中文来写东西时，我自然就得换用其他工具。这段时间准备面试，将 org-mode 的使用范围扩大到记录面试适宜，由于一亩三分地是一个主要资料来源，不免需要粘贴许多中文帖子进来。这时再将 Emacs 视为一个纯英文环境未免有些麻烦。而将 Emacs 中文化了，自然也不需要 MWeb 和 Notes 或者 Bear 什么事了。</p>
+
+<p>而记录餐馆和消费的需求比较麻烦，本文暂且搁置，今后有空再来研究。</p>
+
+<h2 id="emacs-中文输入法">Emacs 中文输入法</h2>
+
+<p>Emacs 窗口左下角显示的是 character set 与 editing state，其中 character set 默认值为 U，即没有 input-mode 且使用 unicode 的 coding system，通过 <kbd>C-\</kbd> ，可以非常方便地设置输入法并进行切换。</p>
+
+<p>Emacs 有一些自带的中文输入法，比如拼音（chinese-py）、自然码（chinese-ziranma），还有一些四声（chinese-sisheng）、英汉（chinese-ecdict）等输入法。我将简体编码的一些输入法列于下表，详见 <code>leim-lisp.el</code> （可通过 <kbd>M-x find-library</kbd> 迅速查看）。</p>
+
+<table>
+<thead>
+<tr>
+<th>input mode</th>
+<th>输入法</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>chinese-ccdospy</td>
+<td>缩写拼音</td>
+</tr>
+
+<tr>
+<td>chinese-ctlau</td>
+<td>刘锡祥式粤音</td>
+</tr>
+
+<tr>
+<td>chinese-punct</td>
+<td>标点符号</td>
+</tr>
+
+<tr>
+<td>chinese-py</td>
+<td>拼音</td>
+</tr>
+
+<tr>
+<td>chinese-qj</td>
+<td>全角</td>
+</tr>
+
+<tr>
+<td>chinese-sw</td>
+<td>首尾</td>
+</tr>
+
+<tr>
+<td>chinese-tonepy</td>
+<td>带调拼音</td>
+</tr>
+
+<tr>
+<td>chinese-ziranma</td>
+<td>自然码</td>
+</tr>
+</tbody>
+</table>
+
+<p>由于我习惯用微软双拼，故另外安装 <a href="https://github.com/tumashu/pyim" target="_blank">pyim</a>，配置如下：</p>
+
+<pre><code class="language-lisp">(require 'pyim)
+(require 'pyim-basedict)
+(pyim-basedict-enable)
+(setq default-input-method &quot;pyim&quot;)
+(setq pyim-default-scheme 'microsoft-shuangpin)
+(setq pyim-page-tooltip 'popup)
+(setq pyim-page-length 5)
+</code></pre>
+
+<h2 id="emacs-中文字体">Emacs 中文字体</h2>
+
+<p>Emacs 中默认的中文字体是 Arial Unicode MS，看着总觉得哪哪不顺眼，所以下一步就是更换个顺眼的中文字体。</p>
+
+<p>此处我先参考了 <a href="http://zhuoqiang.me/torture-emacs.html" target="_blank">zhuoqiang 的做法</a>，将中英文字体设为等宽的：</p>
+
+<pre><code class="language-lisp">;; Setting English Font
+(set-face-attribute 'default nil :font &quot;DejaVu Sans Mono 14&quot;)
+
+;; Chinese Font
+(dolist (charset '(kana han symbol cjk-misc bopomofo))
+  (set-fontset-font (frame-parameter nil 'font)
+                    charset (font-spec :family &quot;PingFang SC&quot;
+                                       :size 16)))
+</code></pre>
+
+<p>并将他写的更为通用的设置字体的函数：</p>
+
+<pre><code class="language-lisp">(defun qiang-set-font (english-fonts
+                       english-font-size
+                       chinese-fonts
+                       &amp;optional chinese-font-size))
+</code></pre>
+
+<p>略加修改为：</p>
+
+<pre><code class="language-lisp">(defun qiang-set-font (english-fonts
+                       english-font-size
+                       chinese-fonts
+                       &amp;optional chinese-font-scale)
+    ...
+    :size (* chinese-font-scale english-font-size))
+</code></pre>
+
+<p>然而当我用 <kbd>C-x C-+</kbd> 动态调整字体大小时，发现只有英文字体会缩放，中文则仍然蠢蠢地处于初始大小。查手册得可通过 <code>face-font-rescale-alist</code> 来设定特定字体缩放值。简单来说就是这样：</p>
+
+<pre><code class="language-lisp">(setq face-font-rescale-alist '((&quot;PingFang SC&quot; . chinese-font-scale))
+</code></pre>
+
+<p>但是这样只能对苹方字体起效，如果一个一个对 font-list 中的字体修改 scale-factor 看起来又不简洁。于是我想到两种较为简便的设定方式：</p>
+
+<pre><code class="language-lisp">;; First method
+(setq face-font-rescale-alist
+      (loop for x in zh-font-list
+            collect (cons x chinese-font-scale)))
+;; Second method
+(setq face-font-rescale-alist
+      (pairlis zh-font-list
+               (make-list (list-length zh-font-list)
+                           chinese-font-scale)))
+</code></pre>
+
+<p>效果拔群。</p>
+
+<p>详细配置如下：</p>
+
+<pre><code class="language-lisp">(defun qiang-font-existsp (font)
+  (if (null (x-list-fonts font))
+      nil
+    t))
+
+(defvar zh-font-list '(&quot;PingFang SC&quot; &quot;Hiragino Sans GB&quot; &quot;Microsoft Yahei&quot; &quot;Source Han Sans Normal&quot; &quot;STHeiti&quot; &quot;黑体&quot; &quot;新宋体&quot; &quot;宋体&quot;))
+(defvar en-font-list '(&quot;DejaVu Sans Mono&quot; &quot;Monaco&quot; &quot;Consolas&quot; &quot;Monospace&quot; &quot;Courier New&quot;))
+
+(defun qiang-make-font-string (font-name font-size)
+  (if (and (stringp font-size)
+           (equal &quot;:&quot; (string (elt font-size 0))))
+      (format &quot;%s%s&quot; font-name font-size)
+    (format &quot;%s %s&quot; font-name font-size)))
+
+(defun qiang-set-font (english-fonts
+                       english-font-size
+                       chinese-fonts
+                       &amp;optional chinese-font-scale)
+
+  (setq chinese-font-scale (or chinese-font-scale 1.2))
+
+  (setq face-font-rescale-alist
+        (loop for x in zh-font-list
+              collect (cons x chinese-font-scale)))
+
+  &quot;english-font-size could be set to \&quot;:pixelsize=18\&quot; or a integer.
+If set/leave chinese-font-scale to nil, it will follow english-font-size&quot;
+
+  (require 'cl)                         ; for find if
+  (let ((en-font (qiang-make-font-string
+                  (find-if #'qiang-font-existsp english-fonts)
+                  english-font-size))
+        (zh-font (font-spec :family (find-if #'qiang-font-existsp chinese-fonts))))
+
+    ;; Set the default English font
+    (message &quot;Set English Font to %s&quot; en-font)
+    (set-face-attribute 'default nil :font en-font)
+
+    ;; Set Chinese font
+    ;; Do not use 'unicode charset, it will cause the English font setting invalid
+    (message &quot;Set Chinese Font to %s&quot; zh-font)
+    (dolist (charset '(kana han symbol cjk-misc bopomofo))
+      (set-fontset-font (frame-parameter nil 'font)
+                        charset zh-font))))
+
+(qiang-set-font en-font-list 14 zh-font-list)
+</code></pre>
+    </div>
+
+    
+
+
+    
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tags/emacs/">Emacs</a>
+  
+  <a class="badge badge-light" href="/tags/lisp/">lisp</a>
+  
+  <a class="badge badge-light" href="/tags/pyim/">pyim</a>
+  
+</div>
+
+
+
+    
+      
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  <div class="media author-card">
+    
+      
+      <img class="portrait mr-3" src="/authors/admin/avatar_hu8d2ecfec5daac15b322d8551e4669aa2_8959_250x250_fill_q90_lanczos_center.jpeg" alt="Avatar">
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="/">Runhan Yu</a></h5>
+      <h6 class="card-subtitle">Data Engineer Fellow</h6>
+      <p class="card-text">My interests include software development, big data, cloud computing and biochemistry.</p>
+      <ul class="network-icon" aria-hidden="true">
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a href="https://github.com/ziyunch" target="_blank" rel="noopener">
+              <i class="fab fa-github"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a href="https://www.linkedin.com/in/runhanyu/" target="_blank" rel="noopener">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a href="/#contact" >
+              <i class="fas fa-envelope"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a href="https://scholar.google.com/citations?user=iuNw-9YAAAAJ" target="_blank" rel="noopener">
+              <i class="ai ai-google-scholar"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+
+      
+      
+      <div class="article-widget">
+        <div class="hr-light"></div>
+        <h3>Related</h3>
+        <ul>
+          
+          <li><a href="/project/csv2bean/">CSV2Bean</a></li>
+          
+        </ul>
+      </div>
+      
+    
+
+    
+
+    
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js" integrity="sha256-aYTdUrn6Ow1DDgh5JTc3aDGnnju48y/1c8s1dgkYPQ8=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/r.min.js"></script>
+        
+      
+
+      
+      
+    
+
+    
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/index.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'results': "results found",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="/js/academic.min.130521ecfc6f534c52c158217bbff718.js"></script>
+
+    
+
+
+
+
+
+
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" id="back_to_top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

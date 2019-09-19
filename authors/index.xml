@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Authors | RUNHAN YU</title>
+    <link>/authors/</link>
+      <atom:link href="/authors/index.xml" rel="self" type="application/rss+xml" />
+    <description>Authors</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language>
+    <image>
+      <url>/img/icon-192.png</url>
+      <title>Authors</title>
+      <link>/authors/</link>
+    </image>
+    
+    <item>
+      <title></title>
+      <link>/authors/admin/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/authors/admin/</guid>
+      <description>&lt;p&gt;I am a recent PhD graduate from Brandeis University with background in both Chemistry and Finance. I started programming since high school, and I am proficient in Python, R and SQL and data skills in PySpark, Hive and AWS cloud computing. At Insight Data Science, I developed a few data pipelines to deal with large datasets and heterogeneous data and build the front-end. In the grad school, I built efficient data analysis pipelines and managed 24 graduate and undergraduate students.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

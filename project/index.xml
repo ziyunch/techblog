@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Projects | RUNHAN YU</title>
+    <link>/project/</link>
+      <atom:link href="/project/index.xml" rel="self" type="application/rss+xml" />
+    <description>Projects</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Fri, 15 Mar 2019 13:44:00 -0400</lastBuildDate>
+    <image>
+      <url>/img/icon-192.png</url>
+      <title>Projects</title>
+      <link>/project/</link>
+    </image>
+    
+    <item>
+      <title>CSV2Bean</title>
+      <link>/project/csv2bean/</link>
+      <pubDate>Fri, 15 Mar 2019 13:44:00 -0400</pubDate>
+      <guid>/project/csv2bean/</guid>
+      <description>&lt;p&gt;• Provide smooth transition from accounting app to plain text accounting tools.&lt;/p&gt;
+
+&lt;p&gt;• Convert &lt;code&gt;.csv&lt;/code&gt; file exported from Sui accounting app to a Beancount text ledger.&lt;/p&gt;
+
+&lt;p&gt;• Feature a &lt;code&gt;lisp&lt;/code&gt; function to quickly add transactions into Beancount using Emacs.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Gene Variation Analysis of Stomach Cancer</title>
+      <link>/project/gistic/</link>
+      <pubDate>Fri, 15 Mar 2019 13:44:00 -0400</pubDate>
+      <guid>/project/gistic/</guid>
+      <description>&lt;p&gt;• Extracted cancer research data from the Cancer Genome Atlas Network &amp;reg;.&lt;/p&gt;
+
+&lt;p&gt;• Applied GISTIC clustering analysis to patient-indexed tables to identify molecular subgroups (Bioinformatics).&lt;/p&gt;
+
+&lt;p&gt;• Mapped gene list with biological annotations with functional annotation tool DAVID (Python).&lt;/p&gt;
+
+&lt;p&gt;• Summarized and visualized stomach cancer-related gene candidates with R package MAFtools &amp;reg;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Multithread Web Crawler</title>
+      <link>/project/multicrawler/</link>
+      <pubDate>Fri, 15 Mar 2019 13:44:00 -0400</pubDate>
+      <guid>/project/multicrawler/</guid>
+      <description>&lt;p&gt;• Write a class to handle multithreading website crawling inside the given domain.&lt;/p&gt;
+
+&lt;p&gt;• Feature a breath-first search algorithm and a multithread pool to visit all urls asynchronously.&lt;/p&gt;
+
+&lt;p&gt;• Handle various status code, time-out and exceptions in a structured manner.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>NavPage</title>
+      <link>/project/navpage/</link>
+      <pubDate>Fri, 15 Mar 2019 13:44:00 -0400</pubDate>
+      <guid>/project/navpage/</guid>
+      <description>&lt;p&gt;• Provide a personalized websites collection and naviation page.&lt;/p&gt;
+
+&lt;p&gt;• Built with Javascript, CSS and npm.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>RxMiner</title>
+      <link>/project/rxminer/</link>
+      <pubDate>Fri, 15 Mar 2019 13:44:00 -0400</pubDate>
+      <guid>/project/rxminer/</guid>
+      <description>
+
+&lt;p&gt;• Developed an ETL pipeline to extract, integrate and transform prescription data from multiple providers in AWS cloud computing to enable nation-wide queries on prescription drug usage (Python, AWS, Airflow).&lt;/p&gt;
+
+&lt;p&gt;• Validated and combined public available Medicaid and Medicare datasets with NIH, FDA and NPPES sources into a SQL queryable databases in Redshift, visualized in website (Redshift, Tableau, JavaScript, CSS).&lt;/p&gt;
+
+&lt;p&gt;• Implemented custom connector to Redshift/PostgreSQL with 20 times more efficiency (Python).&lt;/p&gt;
+
+&lt;h2 id=&#34;rxminer&#34;&gt;RxMiner&lt;/h2&gt;
+
+&lt;p&gt;RxMiner is a scalable data pipeline for prescription drug analytics that standardizes Medicaid and Medicare prescriptions using NIH drug, FDA drug, and NEPPS provider information.&lt;/p&gt;
+
+&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;
+
+&lt;p&gt;With a switch to electronic prescriptions, healthcare and insurance companies are providing large drug usage datasets. However, since each provider has their own way to log prescriptions the data sets are non-standard. Using publicly available drug datasets, RxMiner standardizes and joins prescription datasets.&lt;/p&gt;
+
+&lt;p&gt;RxMiner features:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;100 million standardized prescriptions queryable in Redshift&lt;/li&gt;
+&lt;li&gt;Automated ingestion of Medicaid, Medicare, NIH, FDA and NEPPS data&lt;/li&gt;
+&lt;li&gt;Validation of prescriptions against NIH, FDA and NEPPS&lt;/li&gt;
+&lt;li&gt;Union of prescription from Medicaid and Medicare&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;RxMiner is scalable and built on Amazon S3, EC2, and Redshift on AWS. Tableau can be used to visualize and analyze the standardized dataset or each data source.&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure&gt;
+
+
+  &lt;a data-fancybox=&#34;&#34; href=&#34;https://github.com/ziyunch/RxMiner/raw/master/docs/pipeline.png&#34; &gt;
+&lt;img src=&#34;https://github.com/ziyunch/RxMiner/raw/master/docs/pipeline.png&#34; alt=&#34;&#34; &gt;&lt;/a&gt;
+
+
+
+&lt;/figure&gt;
+
+
+&lt;h2 id=&#34;requirments&#34;&gt;Requirments&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Python 3.7&lt;/li&gt;
+&lt;li&gt;Amazon AWS Account&lt;/li&gt;
+&lt;li&gt;SODA API&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;installation&#34;&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;Clone the RxMiner project to your local computer or `m4.4xlarge` EC2 instance and install awscli and other requirements.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;git clone https://github.com/ziyunch/RxMiner.git
+pip install awscli
+pip install ./requirements.txt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next add the following credentials as environment variables to your &lt;code&gt;~/.bash_profile&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;# AWS Credentials
+export AWS_BUCKET_NAME=XXXX
+export AWS_ACCESS_KEY_ID=XXXX
+export AWS_SECRET_ACCESS_KEY=XXXX
+# SODA API
+export SODAPY_APPTOKEN=XXXX
+# Redshift configuration
+export REDSHIFT_USER=XXXX
+export REDSHIFT_PASSWORD=XXXX
+export REDSHIFT_HOST_IP=XXXX
+export REDSHIFT_PORT=XXXX
+export REDSHIFT_DATABASE=XXXX
+# PostgreSQL configuration
+export POSTGRESQL_USER=XXXX
+export POSTGRESQL_PASSWORD=XXXX
+export POSTGRESQL_HOST_IP=XXXX
+export POSTGRESQL_PORT=XXXX
+export POSTGRESQL_DATABASE=XXXX
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Source the &lt;code&gt;.bash_profile&lt;/code&gt; when finished.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;source ~/.bash_profile
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then import data into S3 bucket.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;. ./deployment/import.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ingest data and stage them in SQL database.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;. ./deployment/ingest.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Prepare sample table based on queries.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;. ./deployment/sql.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;getting-started&#34;&gt;Getting Started&lt;/h2&gt;
+
+&lt;p&gt;Open the website at &lt;a href=&#34;http://rxminer.net&#34; target=&#34;_blank&#34;&gt;http://rxminer.net&lt;/a&gt;. Four graphs are shown in the interactive dashboard. On the top is the market size of all or chosen drugs over the states. Bottom left shows the Top 10 categories of drugs shared most markets for the whole nation or chosen state. Bottom middle shows the market of each drug in the descending order. Bottom right shows the drug usage for each year.&lt;/p&gt;
+
+&lt;p&gt;The sample visualization of national drug usage during 2013-2016 was also published on &lt;a href=&#34;https://public.tableau.com/profile/runhan.yu#!/vizhome/rxminer2/Dashboard1&#34; target=&#34;_blank&#34;&gt;Tableau public server&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The standardized dataset or each data source could be connected by &lt;code&gt;Tableau Desktop 2018.3&lt;/code&gt; or other data analysis or visualization tools.&lt;/p&gt;
+
+&lt;h2 id=&#34;credits&#34;&gt;Credits&lt;/h2&gt;
+
+&lt;p&gt;RxMiner was built as a project at Insight Data Engineering in the Winter 2019 session by Runhan Yu. It is availble as open source and is free to use and modify by anyone.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

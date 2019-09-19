@@ -1,0 +1,1113 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts | RUNHAN YU</title>
+    <link>/post/</link>
+      <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <description>Posts</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Wed, 04 Sep 2019 20:06:00 -0400</lastBuildDate>
+    <image>
+      <url>/img/icon-192.png</url>
+      <title>Posts</title>
+      <link>/post/</link>
+    </image>
+    
+    <item>
+      <title>Org-mode 中添加结构模板</title>
+      <link>/post/450.html/</link>
+      <pubDate>Wed, 04 Sep 2019 20:06:00 -0400</pubDate>
+      <guid>/post/450.html/</guid>
+      <description>&lt;p&gt;作为文学编程利器，org-mode 中有一个非常方便的功能来插入常用结构，比如 &lt;code&gt;&amp;lt;s&lt;/code&gt; &lt;kbd&gt;TAB&lt;/kbd&gt; 会自动生成&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-org&#34;&gt;#+BEGIN_SRC
+
+#+END_SRC
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样插入代码或者引用这类结构非常方便。&lt;/p&gt;
+
+&lt;p&gt;在 &lt;code&gt;org-structure-template-alist&lt;/code&gt; 这个列表中预置了许多常用结构，如&lt;a href=&#34;https://orgmode.org/manual/Structure-Templates.html&#34; target=&#34;_blank&#34;&gt;官方文档&lt;/a&gt;所示:&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Key&lt;/th&gt;
+&lt;th&gt;Structure Template&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;a&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_EXPORT ascii’ … ‘#+END_EXPORT’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;c&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_CENTER’ … ‘#+END_CENTER’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;C&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_COMMENT’ … ‘#+END_COMMENT’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;e&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_EXAMPLE’ … ‘#+END_EXAMPLE’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_EXPORT’ … ‘#+END_EXPORT’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_EXPORT html’ … ‘#+END_EXPORT’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;l&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_EXPORT latex’ … ‘#+END_EXPORT’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;q&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_QUOTE’ … ‘#+END_QUOTE’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;s&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_SRC’ … ‘#+END_SRC’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;v&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_VERSE’ … ‘#+END_VERSE’&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;不过有时也会想要自己造个轮子，比如我平时写博客，有时需要插入按键标签 &lt;code&gt;&amp;lt;kbd&amp;gt;&lt;/code&gt; 。此时可用 lisp 的 &lt;a href=&#34;https://www.gnu.org/software/emacs/manual/html%5Fnode/elisp/List-Variables.html&#34; target=&#34;_blank&#34;&gt;add-to-list 语法&lt;/a&gt;来添加新的结构模板：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;add-to-list symbol element &amp;amp;optional append compare-fn
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;即&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(add-to-list &#39;org-structure-template-alist
+             &#39;(&amp;quot;k&amp;quot; &amp;quot;@@html:&amp;lt;kbd&amp;gt;@@?@@html:&amp;lt;/kbd&amp;gt;@@&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个语法的优点在于它会对比原列表内的元素以避免添加重复元素。&lt;/p&gt;
+
+&lt;p&gt;这个 &lt;code&gt;add-to-list&lt;/code&gt; 语法每次只能添加一个元素进入列表，并不能添加多个元素。而简单执行 &lt;a href=&#34;http://clhs.lisp.se/Body/f%5Fappend.htm&#34; target=&#34;_blank&#34;&gt;append&lt;/a&gt; ，则无法避免重复元素的添加。所以我采用 &lt;a href=&#34;http://clhs.lisp.se/Body/m%5Fdolist.htm&#34; target=&#34;_blank&#34;&gt;dolist&lt;/a&gt; 指令来添加多个元素：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(dolist
+    (my-org-structure-template
+     &#39;((&amp;quot;k&amp;quot; &amp;quot;@@html:&amp;lt;kbd&amp;gt;@@?@@html:&amp;lt;/kbd&amp;gt;@@&amp;quot;)
+       (&amp;quot;spy&amp;quot; &amp;quot;#+BEGIN_SRC python\n?\n#+END_SRC&amp;quot;)
+       (&amp;quot;son&amp;quot; &amp;quot;#+BEGIN_SRC org :eval never-export\n,?\n#+END_SRC&amp;quot;)))
+  (add-to-list &#39;org-structure-template-alist my-org-structure-template))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;效果拔群。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Mac 版 Emacs 中使用 Rime 输入法打带调双拼</title>
+      <link>/post/449.html/</link>
+      <pubDate>Sat, 31 Aug 2019 20:40:00 -0400</pubDate>
+      <guid>/post/449.html/</guid>
+      <description>&lt;p&gt;由于我习惯写中文博客，所以将写博客这件事也转移到 Emacs 后，我渐渐感觉到 pyim 的不足。所以今天研究一下如何让 pyim 调用 Rime 的词库。&lt;/p&gt;
+
+&lt;h2 id=&#34;基础配置&#34;&gt;基础配置&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;首先安装鼠须管，此一节可见 &lt;a href=&#34;https://blindwith.science/2019/07/445.html/&#34; target=&#34;_blank&#34;&gt;鼠须管傻瓜化配置&lt;/a&gt;，一句话概括呢就是：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;brew cask install squirrel
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;然后参考&lt;a href=&#34;https://manateelazycat.github.io/emacs/2019/07/24/use-rime-in-emacs.html&#34; target=&#34;_blank&#34;&gt;前人经验&lt;/a&gt;，下载 librime 获取源码并从鼠须管中获取编译好的 &lt;code&gt;librime.dylib&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~
+git clone --recursive https://github.com/rime/librime.git --depth=1
+mkdir -p ~/librime/xbuild/lib/Release/
+cp /Library/Input\ Methods/Squirrel.app/Contents/Frameworks/librime.1.dylib ~/librime/xbuild/lib/Release/librime.dylib
+sudo cp /Library/Input\ Methods/Squirrel.app/Contents/Frameworks/librime.1.dylib /usr/local/lib
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;然后下载并编译 liberime，需要提前安装 cmake 库来进行编译：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;git clone https://gitlab.com/liberime/liberime.git --depth=1
+cd ~/liberime
+export RIME_PATH=~/librime
+make liberime
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;然后需要在 emacs 中安装 pyim，此一节详见 &lt;a href=&#34;https://blindwith.science/2019/07/443.html/&#34; target=&#34;_blank&#34;&gt;Emacs 中文环境配置&lt;/a&gt; ，当然不看也行，毕竟具体设置在本篇中需要推倒重来；
+&lt;kbd&gt;M-x package-install RET pyim RET&lt;/kbd&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;将 &lt;code&gt;liberime.so&lt;/code&gt; 动态库存至 pyim 文件夹中：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cp ~/liberime/buid/liberime.so ~/.emacs.d/pyim/
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;初试啼声&#34;&gt;初试啼声&lt;/h2&gt;
+
+&lt;p&gt;接下来就是添加 emacs 对于 liberime 的配置，我先想当然地试了这个配置：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(liberime-start (expand-file-name &amp;quot;~/Library/Rime&amp;quot;)
+                (expand-file-name &amp;quot;~/.emacs.d/pyim/rime/&amp;quot;))
+(liberime-select-schema &amp;quot;terra_double_pinyin_mspy&amp;quot;)
+(setq pyim-default-scheme &#39;rime)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个方法有几个问题，一是哪怕我在设置中采用了简体，输出依然为繁体字；二是不支持分号与声调，所以在微软双拼中不能输入元音为 ing 的字，也不能通过声调来选词；三则是由于引入了诸多词库，打字特别卡顿。&lt;/p&gt;
+
+&lt;h2 id=&#34;再接再厉&#34;&gt;再接再厉&lt;/h2&gt;
+
+&lt;p&gt;然后我可以通过添加新的 schema 来提供对分号的支持，但是声调比较麻烦。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(add-to-list
+ &#39;pyim-schemes
+ &#39;(rime-mspy
+   :document &amp;quot;support ;&amp;quot;
+   :class rime
+   :first-chars &amp;quot;abcdefghijklmnopqrstuvwxyz&amp;quot;
+   :rest-chars &amp;quot;abcdefghijklmnopqrstuvwxyz;&amp;quot;
+   :prefer-trigger-chars nil
+   ))
+
+(liberime-start (expand-file-name &amp;quot;/Library/Input Methods/Squirrel.app/Contents/SharedSupport&amp;quot;)
+                (expand-file-name &amp;quot;~/.emacs.d/pyim/rime/&amp;quot;))
+(liberime-select-schema &amp;quot;double_pinyin_mspy&amp;quot;)
+(setq pyim-default-scheme &#39;rime-mspy)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是我发现只要改回共享库，打出来的就是简体，但是我不明白为什么只能使用共享库，却不能使用个人库，毕竟我还魔改了我的鼠须管呀，万一我想打 emoji 呢，万一我想引用个古诗词呢？&lt;/p&gt;
+
+&lt;h2 id=&#34;最终解决方案&#34;&gt;最终解决方案&lt;/h2&gt;
+
+&lt;p&gt;一番折腾之后，终于找出了合适的方案：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;个人库无法显示繁体的原因其实很简单，由于鼠须管默认将 &lt;a href=&#34;https://github.com/BYVoid/OpenCC&#34; target=&#34;_blank&#34;&gt;opencc 开放中文转换库&lt;/a&gt; 放在共享库中，所以个人库中并不包含 opencc，这样 build 的时候就不能调用这些转换文件。所以，一行代码搞定。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;ln -s /Library/Input\ Methods/Squirrel.app/Contents/SharedSupport/opencc/* ~/Library/Rime/opencc/
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;输入分号的问题前面通过调用新写的 schema 解决，但是声调问题比较麻烦。由于 pyim 作者给减号键（我用作平声调的）赋予了太多用途，我这半调子 lisp 水平一时半会儿也写不了一个新的函数使此键在非后翻页状态作为简单的 &lt;code&gt;pyim-self-insert-command&lt;/code&gt; ，而且还得把后面那个函数改了，事情实在太多，所以我将方括号改作翻页，并将长得差不多的等号键用作平声。以后有时间，可能还是会把它改回减号键，毕竟长得更像一点。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;其次则是卡顿的问题。我发现当 liberime build 时，由于在个人库中已经有过 build 好的文件，所以不会在 liberime 的库中重新 build 一份，这样非常影响速度。所以我复制了一份我写的地球双拼给 liberime 专用（yaml 文件见&lt;a href=&#34;https://github.com/ziyunch/Rime/blob/master/terra%5Fdouble%5Fpinyin%5Fpyim.schema.yaml&#34; target=&#34;_blank&#34;&gt;这儿&lt;/a&gt;），效果拔群。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;具体配置如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(require &#39;use-package)
+(use-package pyim
+    :ensure nil
+    :demand t
+    :config
+    (setq default-input-method &amp;quot;pyim&amp;quot;)
+    (setq pyim-page-length 9)
+    :bind
+    (:map pyim-mode-map
+          (&amp;quot;]&amp;quot; . pyim-page-next-page)
+          (&amp;quot;[&amp;quot; . pyim-page-previous-page)
+          (&amp;quot;-&amp;quot; . pyim-self-insert-command)
+          (&amp;quot;=&amp;quot; . pyim-self-insert-command))
+    )
+(use-package liberime
+    :load-path &amp;quot;~/.emacs.d/pyim/&amp;quot;
+    :config
+    (liberime-start (expand-file-name &amp;quot;~/Library/Rime/&amp;quot;)
+                    (expand-file-name &amp;quot;~/.emacs.d/pyim/rime&amp;quot;))
+    (liberime-select-schema &amp;quot;terra_double_pinyin_pyim&amp;quot;)
+    (add-to-list
+     &#39;pyim-schemes
+     &#39;(rime-mspy
+       :document &amp;quot;support ;&amp;quot;
+       :class rime
+       :first-chars &amp;quot;abcdefghijklmnopqrstuvwxyz/&amp;quot;
+       :rest-chars &amp;quot;abcdefghijklmnopqrstuvwxyz;=/,\\&amp;quot;
+       :prefer-trigger-chars nil
+       ))
+    (setq pyim-default-scheme &#39;rime-mspy)
+    )
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;另外，我在 &lt;code&gt;~/.emacs.d/pyim/rime/&lt;/code&gt; 文件夹中添加了 pyim 作者推荐的优化配置文件 &lt;code&gt;default.custom.yaml&lt;/code&gt; ，详见其 &lt;a href=&#34;https://github.com/tumashu/pyim/blob/master/README.md&#34; target=&#34;_blank&#34;&gt;github&lt;/a&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;patch:
+  schema_list:
+    - schema: terra_double_pinyin_pyim
+  &amp;quot;menu/page_size&amp;quot;: 50
+  &amp;quot;speller/auto_select&amp;quot;: false
+  &amp;quot;speller/auto_select_unique_candidate&amp;quot;: false
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>Hacking the Data Transformation Interview</title>
+      <link>/post/448.html/</link>
+      <pubDate>Fri, 30 Aug 2019 11:14:00 -0400</pubDate>
+      <guid>/post/448.html/</guid>
+      <description>&lt;p&gt;I am currently (still) seeking a job in data/software engineering area, and I am preparing for all kinds of technical interviews, ranging from coding, algorithm, system design, SQL to computer science fundamental quiz. Data engineer is a role with vague definition, and people with this title functions as an ETL (extract, transformation, load) engineer in some companies. Thus, topics on data transformation could be covered during the interview. In this blog, I am trying to hack interview focusing on data tranformation.&lt;/p&gt;
+
+&lt;h2 id=&#34;prerequisites-boto3&#34;&gt;Prerequisites: boto3&lt;/h2&gt;
+
+&lt;p&gt;Boto is the AWS SDK for python, which provides easy-to-use, object-oriented API and low-level access to AWS services. We could find the documentation &lt;a href=&#34;https://boto3.amazonaws.com/v1/documentation/api/latest/index.html&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;We could easily install the latest Boto 3 release via pip:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ pip install boto3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then configure the credential file at &lt;code&gt;~/.aws/credentials&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-nil&#34;&gt;[default]
+aws_access_key_id = YOUR_ACCESS_KEY
+aws_secret_access_key = YOUR_SECRET_KEY
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And set the default region at &lt;code&gt;~/.aws/config&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-nil&#34;&gt;[default]
+region=us-east-1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To use boto3, we could import it and pass the service-to-use to it. For example, to use Amazon S3, we could choose a resource by:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import boto3
+s3 = boto3.resource(&#39;s3&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Create a s3 bucket over client level:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;s3_client = boto3.client(&#39;s3&#39;)
+s3_client.create_bucket(Bucket=&#39;BUCKET_NAME&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;List existing buckets for the AWS account:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;response = s3_client.list_buckets()
+for bucket in response[&#39;Buckets&#39;]:
+    print(f&#39;  {bucket[&amp;quot;Name&amp;quot;]}&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Upload file into a s3 bucket:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;response = s3_client.upload_file(file_name, bucket, object_name)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or upload object in binary mode into a s3 bucket:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;with open(&#39;test.jpg&#39;, &#39;rb&#39;) as f:
+    s3.upload_fileobj(f, &amp;quot;BUCKET_NAME&amp;quot;, &amp;quot;OBJECT_NAME&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or directly put object into a s3 bucket over the bucket level:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;data = open(&#39;test.jpg&#39;, &#39;rb&#39;)
+bucket = s3.Bucket(&#39;my-bucket&#39;)
+bucket.put_object(Key=object_name, Body=data)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To download file from a S3 bucket, we could:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;s3.download_file(&#39;BUCKET_NAME&#39;, &#39;OBJECT_NAME&#39;, &#39;FILE_NAME&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;with open(&#39;FILE_NAME&#39;, &#39;wb&#39;) as f:
+    s3.download_fileobj(&#39;BUCKET_NAME&#39;, &#39;OBJECT_NAME&#39;, f)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We could also set configuration when uploading, downloading, or copying a file or S3 object by:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from boto3.s3.transfer import TransferConfig
+GB = 1024 ** 3
+config = TransferConfig(multipart_threshold=5*GB)
+config = TransferConfig(max_concurrency=5)
+config = TransferConfig(use_threads=False)
+s3.upload_file(&#39;FILE_NAME&#39;, &#39;BUCKET_NAME&#39;, &#39;OBJECT_NAME&#39;, Config=config)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;prerequisites-psycopg2&#34;&gt;Prerequisites: psycopg2&lt;/h2&gt;
+
+&lt;p&gt;Psycopg2 is a popular PostgreSQL database adapter for python. We could find documentation &lt;a href=&#34;http://initd.org/psycopg/docs/&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;We could easily install psycopg2 via pip:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ pip install psycopg2-binary
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To use psycopg2, we could import it, connect to an existing database and open a cursor to perform database operations:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import psycopg2
+conn = psycopg2.connect(dbname=&amp;quot;DATABASE_NAME&amp;quot;, user=&amp;quot;USER&amp;quot;, host=&amp;quot;HOST&amp;quot;, port=&amp;quot;PORT&amp;quot;, password=&amp;quot;PASSWORD&amp;quot;)
+cur = conn.cursor()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Query the database and fetch data in an iteration-like way:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cur.execute(sql_query)
+cur.fetchone()
+cur.fetchmany(2)
+cur.fetchall()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Pass parameters to SQL queries:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cur.execute(&amp;quot;&amp;quot;&amp;quot;
+    INSERT INTO some_table (an_int, a_date, another_date, a_string)
+    VALUES (%(int)s, %(date)s, %(date)s, %(str)s);
+    &amp;quot;&amp;quot;&amp;quot;,
+    {&#39;int&#39;: 10, &#39;str&#39;: &amp;quot;O&#39;Reilly&amp;quot;, &#39;date&#39;: datetime.date(2005, 11, 18)})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Make the changes to the database persistent:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;conn.commit()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Close communication with the database&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cur.close()
+conn.close()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;upload-data-from-s3-into-redshift&#34;&gt;Upload data from S3 into Redshift&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def main():
+    connection_parameters = {
+        &#39;dbname&#39;: dbname,
+        &#39;user&#39;: user,
+        &#39;host&#39;: host,
+        &#39;port&#39;: port,
+        &#39;password&#39;: password
+    }
+    try:
+        conn = psycopg2.connect(**connection_parameters)
+        print(&amp;quot;Connected to Redshift.&amp;quot;)
+    except:
+        print(&amp;quot;Unable to connect to Redshift.&amp;quot;)
+
+    cur = conn.cursor()
+
+    upload_statement = &amp;quot;
+            COPY {}.{}
+            FROM {}
+            IAM_ROLE {}
+            CSV;
+            COMMIT;
+    &amp;quot;.format(table_name, schema, file_name, iam_role)
+
+    try:
+        cur.execute(upload_statement)
+        print(&amp;quot;Upload successfully&amp;quot;)
+    except psycopg2.Error:
+        raise ExecuteFailure(&amp;quot;Failed to upload the file.&amp;quot;)
+    cur.close()
+    conn.close()
+
+if __name__ == &amp;quot;__main__&amp;quot;:
+    main()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;load-data-from-redshift-to-pandas&#34;&gt;Load data from Redshift to pandas&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import sqlalchemy as sa
+import pandas as pd
+surl = &#39;redshift+psycopg2://&#39;
+engine = sa.create_engine(surl+user+&#39;:&#39;+password+&#39;@&#39;+host+&#39;:&#39;+port+&#39;/&#39;+dbname,echo=False)
+df = pd.read_sql_query(&#39;SELECT * FROM table ;&#39;, engine)
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>博客由 Hexo 迁移至 Hugo</title>
+      <link>/post/447.html/</link>
+      <pubDate>Mon, 26 Aug 2019 23:49:00 -0400</pubDate>
+      <guid>/post/447.html/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本篇博文使用 org-mode 书就，耶！&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;从 2016 将博客迁移至 Hexo+Github 的方案后，我便一直采用此方案写博客。大体来说感受挺不错的，然而由于我有数百篇博客，build 速度永远很让我头大。尤其是有时 markdown 显示出问题了，我又得等上数分钟才能看到结果，体验很不好。所以一听说 Hugo 能一秒生成博客，哪怕要舍弃我花大功夫美化的 NeXT 主题，我依然心生向往，今天便将 Hexo 迁移至 Hugo，顺便达成了 Emacs 写博客的小目标。&lt;/p&gt;
+
+&lt;h2 id=&#34;安装-hugo-并初始化&#34;&gt;安装 Hugo 并初始化&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;首先使用 Homebrew 安装 Hugo:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!--listend--&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ brew install hugo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;然后建立站点&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!--listend--&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ hugo new site blog
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;安装主题，我采用比较简单的 even 主题&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!--listend--&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ git clone https://github.com/olOwOlo/hugo-theme-even themes/even
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;从-hexo-迁移&#34;&gt;从 Hexo 迁移&lt;/h2&gt;
+
+&lt;p&gt;好消息是，此迁移过程相当无痛。由于我之前将博客内容存在 Dropbox 上，所以只需要将相关文件 link 至 Hugo 的相关文件夹内。结构大致如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;.
+├── content
+│   ├── about
+│   │   └── index.md
+│   └── post
+│       ├── post1.md
+│       └── ...
+├── static
+│   ├── images
+│   │   ├── image1.png
+│   │   └── ...
+│   └── CNAME
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有一个需要注意的地方是 Hexo 与 Hugo 对于 markdown 头文件中的 url 定义不同，我采用 &lt;code&gt;grep&lt;/code&gt; 将其批量改成 &lt;code&gt;slug&lt;/code&gt; ，并在配置文件中添加了 permalinks 的生成方式，以保证超链接的稳定：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;[permalinks]
+  post = &amp;quot;/:year/:month/:slug&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;生成预览&#34;&gt;生成预览&lt;/h2&gt;
+
+&lt;p&gt;输入 &lt;code&gt;hugo server&lt;/code&gt; ，几乎是眨眼工夫，便已在内存中生成预览，而且对于博文可即时显示改动，非常方便。确实比 Hexo 快上百倍。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;                   | ZH-CN
++------------------+-------+
+  Pages            |   956
+  Paginator pages  |   139
+  Non-page files   |     0
+  Static files     |    85
+  Processed images |     0
+  Aliases          |   254
+  Sitemaps         |     1
+  Cleaned          |     0
+
+Total in 820 ms
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;配合-org-mode-使用更佳&#34;&gt;配合 org-mode 使用更佳&lt;/h2&gt;
+
+&lt;p&gt;以前使用 Hexo 写博客时，博文都分散于各种 &lt;code&gt;.md&lt;/code&gt; 文件中，管理起来很不方便。另一方面，由于我平时习惯用 org-mode 记记笔记，管理生活。有了好轮子，我干脆想着一鼓作气把车换了。在此我使用的是 &lt;code&gt;ox-hugo&lt;/code&gt; 的 One post per Org subtree 方案，配置如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-org&#34;&gt;#+HUGO_BASE_DIR: ~/Dropbox/Blog/
+#+HUGO_SECTION: post
+#+HUGO_WEIGHT: auto
+#+HUGO_AUTO_SET_LASTMOD: t
+#+author:
+#+hugo_custom_front_matter: :author &amp;quot;ziyunch&amp;quot;
+* Technical                                                       :@技术宅:
+** TODO 博客由 Hexo 迁移至 Hugo                           :Emacs:Hexo:Hugo:
+   :PROPERTIES:
+   :EXPORT_FILE_NAME: 20190826-hexo-2-hugo
+   :END:
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;也就是说采用标签继承的方式，将博文分类。写完当篇博文，将 &lt;code&gt;TODO&lt;/code&gt; 状态变更为 &lt;code&gt;DONE&lt;/code&gt; 时， &lt;code&gt;ox-hugo&lt;/code&gt; 会自动为文档生成时间戳。然后在 subtree 上 &lt;kbd&gt;C-c C-e H H&lt;/kbd&gt; 即可在相应目录生成 &lt;code&gt;.md&lt;/code&gt; 文档。此时如果后台正在运行着 &lt;code&gt;hugo server&lt;/code&gt; ，即可在 &lt;code&gt;http://localhost:1313/&lt;/code&gt; 看到即时更新。&lt;/p&gt;
+
+&lt;h2 id=&#34;在-github-上发布&#34;&gt;在 Github 上发布&lt;/h2&gt;
+
+&lt;p&gt;第一次部署，需要新建一个 public 文件夹，并将原来部署了 Hexo 博客的 repo 关联上，步骤如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ mkdir public
+$ hugo -t even
+$ cd public
+$ git init
+$ git remote add upstream https://github.com/ziyunch/ziyunch.github.io.git
+$ git add .
+$ git commit -m &amp;quot;switch to hugo&amp;quot;
+$ git push -f upstream master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;之后则可如官网&lt;a href=&#34;https://gohugo.io/hosting-and-deployment/hosting-on-github/&#34; target=&#34;_blank&#34;&gt;发布指南&lt;/a&gt;所示编写一个可执行的 &lt;code&gt;.sh&lt;/code&gt; 文件来自动化部署发布：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;#!/bin/sh
+
+# If a command fails then the deploy stops
+set -e
+
+printf &amp;quot;\033[0;32mDeploying updates to GitHub...\033[0m\n&amp;quot;
+
+# Build the project.
+hugo -t even
+
+# Go To Public folder
+cd public
+
+# Add changes to git.
+git add .
+
+# Commit changes.
+msg=&amp;quot;rebuilding site $(date)&amp;quot;
+if [ -n &amp;quot;$*&amp;quot; ]; then
+        msg=&amp;quot;$*&amp;quot;
+fi
+git commit -m &amp;quot;$msg&amp;quot;
+
+# Push source and build repos.
+git push upstream master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;自此大功告成&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>鼠须管傻瓜化配置</title>
+      <link>/post/445.html/</link>
+      <pubDate>Sat, 20 Jul 2019 20:58:00 -0400</pubDate>
+      <guid>/post/445.html/</guid>
+      <description>&lt;p&gt;This configuration:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Optimized for simplified Chinese;&lt;/li&gt;
+&lt;li&gt;Implement 朙月拼音 &lt;code&gt;luna-pinyin&lt;/code&gt;, 微软双拼 &lt;code&gt;double-pinyin-mspy&lt;/code&gt; and
+地球拼音 &lt;code&gt;terra-pinyin&lt;/code&gt; with 20+ dictionaries including symbols and
+emoji;&lt;/li&gt;
+&lt;li&gt;Feature 地球双拼 &lt;code&gt;terra-double-pinyin-mspy&lt;/code&gt;, a double pinyin input
+method supporting tone marks;&lt;/li&gt;
+&lt;li&gt;Use 地球双拼 &lt;code&gt;terra-double-pinyin-mspy&lt;/code&gt; to reverse lookup
+吴语（苏州话） &lt;code&gt;wugniu_soutseu&lt;/code&gt; with tone marks, toggled by &lt;code&gt;`&lt;/code&gt;;&lt;/li&gt;
+&lt;li&gt;Use ASCII mode for several applications.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;supported-rime-version&#34;&gt;Supported Rime Version&lt;/h2&gt;
+
+&lt;h3 id=&#34;macos&#34;&gt;MacOS&lt;/h3&gt;
+
+&lt;p&gt;The config should run on Squarrel 0.14.0 or greater.&lt;/p&gt;
+
+&lt;h2 id=&#34;installation&#34;&gt;Installation&lt;/h2&gt;
+
+&lt;h3 id=&#34;鼠鬚管-squirrel--macos&#34;&gt;&lt;a href=&#34;https://rime.im&#34; target=&#34;_blank&#34;&gt;鼠鬚管&lt;/a&gt; Squirrel (MacOS)&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;via &lt;a href=&#34;https://rime.im&#34; target=&#34;_blank&#34;&gt;Latest release&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;via &lt;a href=&#34;https://github.com/rime/squirrel&#34; target=&#34;_blank&#34;&gt;source code&lt;/a&gt;: &lt;a href=&#34;https://github.com/rime/squirrel/blob/master/INSTALL.md&#34; target=&#34;_blank&#34;&gt;Build instruction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;via &lt;a href=&#34;https://brew.sh&#34; target=&#34;_blank&#34;&gt;Homebrew&lt;/a&gt;: &lt;code&gt;brew cask install squirrel&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;東風破-plum&#34;&gt;&lt;a href=&#34;https://github.com/rime/plum&#34; target=&#34;_blank&#34;&gt;東風破&lt;/a&gt; &lt;em&gt;plum&lt;/em&gt;&lt;/h3&gt;
+
+&lt;p&gt;Install &lt;em&gt;plum&lt;/em&gt;, the configuration manager for Rime input method engine:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~/Library/Rime
+curl -fsSL https://git.io/rime-install | bash
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then install packages:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd plum
+bash rime-install :preset double-pinyin emoji NGLI/rime-wugniu_soutseu
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;Supported input methods ℞&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Essentials:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-prelude&#34; target=&#34;_blank&#34;&gt;prelude&lt;/a&gt; 基础配置 / &lt;a href=&#34;https://github.com/rime/rime-essay&#34; target=&#34;_blank&#34;&gt;essay&lt;/a&gt; 八股文&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Phonetic-based:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-luna-pinyin&#34; target=&#34;_blank&#34;&gt;luna-pinyin&lt;/a&gt; 朙月拼音 / &lt;a href=&#34;https://github.com/rime/rime-terra-pinyin&#34; target=&#34;_blank&#34;&gt;terra-pinyin&lt;/a&gt; 地球拼音 / &lt;a href=&#34;https://github.com/rime/rime-bopomofo&#34; target=&#34;_blank&#34;&gt;bopomofo&lt;/a&gt; 注音 / &lt;a href=&#34;https://github.com/rime/rime-pinyin-simp&#34; target=&#34;_blank&#34;&gt;pinyin-simp&lt;/a&gt; 袖珍简化字拼音&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Derivatives of Pinyin:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-double-pinyin&#34; target=&#34;_blank&#34;&gt;double-pinyin&lt;/a&gt; 双拼 / &lt;a href=&#34;https://github.com/rime/rime-combo-pinyin&#34; target=&#34;_blank&#34;&gt;combo-pinyin&lt;/a&gt; 宫保拼音 / &lt;a href=&#34;https://github.com/rime/rime-stenotype&#34; target=&#34;_blank&#34;&gt;stenotype&lt;/a&gt; 打字速记法&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Varieties of Chinese:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-jyutping&#34; target=&#34;_blank&#34;&gt;jyutping&lt;/a&gt; 粤拼 / &lt;a href=&#34;https://github.com/rime/rime-wugniu&#34; target=&#34;_blank&#34;&gt;wugniu&lt;/a&gt; 上海吴语 / &lt;a href=&#34;https://github.com/rime/rime-soutzoe&#34; target=&#34;_blank&#34;&gt;soutzoe&lt;/a&gt; 苏州吴语
+/ &lt;a href=&#34;https://github.com/rime/rime-middle-chinese&#34; target=&#34;_blank&#34;&gt;middle-chinese&lt;/a&gt; 中古汉语拼音&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Shape-based:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-stroke&#34; target=&#34;_blank&#34;&gt;stroke&lt;/a&gt; 笔画 / &lt;a href=&#34;https://github.com/rime/rime-cangjie&#34; target=&#34;_blank&#34;&gt;cangjie&lt;/a&gt; 仓颉输入法 / &lt;a href=&#34;https://github.com/rime/rime-quick&#34; target=&#34;_blank&#34;&gt;quick&lt;/a&gt; 速成 / &lt;a href=&#34;https://github.com/rime/rime-wubi&#34; target=&#34;_blank&#34;&gt;wubi&lt;/a&gt; 五笔字型 / &lt;a href=&#34;https://github.com/rime/rime-array&#34; target=&#34;_blank&#34;&gt;array&lt;/a&gt; 行列输入法 / &lt;a href=&#34;https://github.com/rime/rime-scj&#34; target=&#34;_blank&#34;&gt;scj&lt;/a&gt; 快速仓颉&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Miscellaneous:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-emoji&#34; target=&#34;_blank&#34;&gt;emoji&lt;/a&gt; 颜文字 / &lt;a href=&#34;https://github.com/rime/rime-ipa&#34; target=&#34;_blank&#34;&gt;ipa&lt;/a&gt;: 国际音标&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;personalized-configuration-and-dictionaries&#34;&gt;Personalized configuration and dictionaries&lt;/h3&gt;
+
+&lt;p&gt;To install, clone this repo to &lt;code&gt;~/Library/Rime&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~/Library/Rime
+git init
+echo -e &amp;quot;/*\n\!/README.org\n\!/dict\n\!/*.custom.yaml\n\!/*.extended.dict.yaml\n\!/terra_double_pinyin_mspy.*\n!/*pyim*&amp;quot; &amp;gt;&amp;gt; .gitignore
+git remote add origin https://github.com/ziyunch/Rime.git
+git pull origin master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Update: 2019-08-31&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;ln -s /Library/Input\ Methods/Squirrel.app/Contents/SharedSupport/opencc/* ./opencc/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;deploy&#34;&gt;Deploy&lt;/h2&gt;
+
+&lt;p&gt;Press &lt;kbd&gt;Control + Option + `&lt;/kbd&gt; to deploy current configuration.&lt;/p&gt;
+
+&lt;p&gt;Press &lt;kbd&gt;Control + `&lt;/kbd&gt; to select input method.&lt;/p&gt;
+
+&lt;h2 id=&#34;updates&#34;&gt;Updates&lt;/h2&gt;
+
+&lt;p&gt;To update &lt;em&gt;plum&lt;/em&gt; itself, run:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~/Library/Rime/plum
+bash rime-install plum
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To update the &lt;em&gt;plum&lt;/em&gt; packages, run:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~/Library/Rime/plum
+bash rime-install :preset double-pinyin emoji NGLI/rime-wugniu_soutseu
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To update the config, run:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~/Library/Rime
+git pull origin master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;customerization&#34;&gt;Customerization&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Modify &lt;code&gt;default.custom.yaml&lt;/code&gt; to select more input methods or comment
+out input methods no longer needed:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!--listend--&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;schema_list:
+  - schema: luna_pinyin          # 朙月拼音
+  - schema: terra_pinyin         # 地球拼音 dì qiú pīn yīn
+  - schema: terra_double_pinyin_mspy # 地球双拼
+  - schema: double_pinyin_mspy   # 微软双拼
+  - schema: double_pinyin        # 自然码双拼
+  - schema: double_pinyin_abc    # 智能ABC双拼
+  - schema: double_pinyin_flypy  # 小鹤双拼
+  - schema: wugniu_soutseu       # 吴语（苏州话）
+  - schema: stroke               # 笔画
+  - schema: cangjie              # 仓颉输入法
+  - schema: bopomofo             # 注音
+  - schema: emoji                # 颜文字
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Delete &lt;code&gt;wugniu_soutseu.custom.yaml&lt;/code&gt; to use the default 朙月拼音
+&lt;code&gt;luna_pinyin&lt;/code&gt; reverse lookup 吴语（苏州话） &lt;code&gt;wugniu_soutseu&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>Emacs 记帐</title>
+      <link>/post/444.html/</link>
+      <pubDate>Thu, 04 Jul 2019 12:58:00 -0400</pubDate>
+      <guid>/post/444.html/</guid>
+      <description>&lt;p&gt;昨天搞定 Emacs 的中文环境，今天想着好久没记帐了，随手记总是很花时间，干脆一鼓作气，将记帐一起搬过来。&lt;/p&gt;
+
+&lt;h2 id=&#34;复式记帐&#34;&gt;复式记帐&lt;/h2&gt;
+
+&lt;p&gt;我本科时双修了一门金融，其中最为繁琐，也是最令人头疼的一门课便是会计学。我不爱听讲，毕业之后也将会计的知识点忘得查差不多了，然而其&amp;rdquo;有借必有贷，借贷必相等&amp;rdquo;的复式记帐法，反而是我生活中运用最多的。&lt;/p&gt;
+
+&lt;p&gt;复式记帐法说起来复杂，对个人来说，就是将每笔交易分门别类，填入下面这条等式中：&lt;/p&gt;
+
+&lt;style&gt;.org-center { margin-left: auto; margin-right: auto; text-align: center; }&lt;/style&gt;
+
+&lt;div class=&#34;org-center&#34;&gt;
+  &lt;div&gt;&lt;/div&gt;
+
+&lt;p&gt;资产 + 费用 = 负债 + 所有者权益 + 收入&lt;/p&gt;
+
+&lt;p&gt;&lt;/div&gt;&lt;/p&gt;
+
+&lt;p&gt;在个人记帐中，这条等式辅以借贷概念会令人望而生畏，所以我将其略一变形：&lt;/p&gt;
+
+&lt;style&gt;.org-center { margin-left: auto; margin-right: auto; text-align: center; }&lt;/style&gt;
+
+&lt;div class=&#34;org-center&#34;&gt;
+  &lt;div&gt;&lt;/div&gt;
+
+&lt;p&gt;（+资产）+（-负债）+（+费用）+（-收入）+（-所有者权益）= 0&lt;/p&gt;
+
+&lt;p&gt;&lt;/div&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;资产与负债都是与金钱直接挂钩的，比如银行户头，比如人民币美钞，比如信用卡帐户，再比如借条，这些都可以算是货币的不同表示形式。&lt;/li&gt;
+&lt;li&gt;费用与收入则是与金钱间接挂钩的，比如工资，比如商品，比如服务，这些都可以算是生产资本与商品资本的不同表现形式。其中收入与字面意思不同，可以理解为生产资本（劳动力等）。&lt;/li&gt;
+&lt;li&gt;所有者权益对个人意义不大，一般用来记录历史盈余与糊涂帐。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;而这个变形公式中的正负号，则可以将各项目的符号关系，用作资金流向的参照。这么说有点玄乎，换个茨威格式的说法就是：&amp;rdquo;人们从命运得到的一切，冥冥之中都记下了它的价钱。&amp;rdquo;花钱买了服务，则是减少资产（花了钱），增加费用（得到服务）；工资到帐，则是增加资产（到帐），减少收入（既有劳动时间的减少）；别人跟你借了钱，则是资产减少（银行帐户或现金余额减少），负债增加（别人在你这儿的负债）。&lt;/p&gt;
+
+&lt;p&gt;总结一下，由于人类暂时无法操控时间，所以费用一般为正，收入一般为负。而没有破产的情况下资产一般为正，别人欠你的钱为正，信用卡债（你欠别人的钱）为负。&lt;/p&gt;
+
+&lt;h2 id=&#34;随手记帐本导出&#34;&gt;随手记帐本导出&lt;/h2&gt;
+
+&lt;p&gt;刚来美帝我就开始用随手记，一晃也七年过去了（随手记提醒：今天是您记帐的2524天）。虽然作为强迫症的我有着非常完整的消费记录，但是这也带来了非常大的迁移成本。随手记的问题在于想要使用复式记帐时，需要通过结算中转来完成一对多的转帐操作，在聚餐或者帮别人付钱的时候比较麻烦。所以每周都需要花费大量时间来输入帐单，费时费力。&lt;/p&gt;
+
+&lt;p&gt;首先尝试从随手记 app 导出，设置－高级功能－备份与同步－备份与恢复－本地备份与恢复－WIFI备份，得到一个 &lt;code&gt;.kbf&lt;/code&gt; 文件，将其后缀改为 &lt;code&gt;.zip&lt;/code&gt; ，解压得到一个 &lt;code&gt;.sqlite&lt;/code&gt; 文件。然而此文件经过加密，打开并不容易。&lt;/p&gt;
+
+&lt;p&gt;不过在那个入口还看到导出 EXCEL 文件的选项，乃会员专享，恰好首月免费，我又去意已决，遂开通并获取文件。&lt;/p&gt;
+
+&lt;h2 id=&#34;记帐方式选择&#34;&gt;记帐方式选择&lt;/h2&gt;
+
+&lt;p&gt;有了之前的记录，就可以着手选择一款好用的记帐软件了。虽然有可以连接 postgresql 的记帐软件 gnucash，但我还是想用 Emacs 来进行记录操作。网上一搜，有一个 &lt;a href=&#34;https://plaintextaccounting.org/&#34; target=&#34;_blank&#34;&gt;Plain Text Accounting&lt;/a&gt; 网站做了详尽的整合。一路看下来，虽然 Ledger 是老前辈，可是 Beancount 的前端 Fava 效果实在好看，有这么一个轮子，为何不用呢？同时还搜到了一位中文博主 wzyboy 的三年的使用经验（&lt;a href=&#34;https://wzyboy.im/post/1063.html&#34; target=&#34;_blank&#34;&gt;Beancount &amp;mdash;&amp;mdash; 命令行复式簿记&lt;/a&gt;，&lt;a href=&#34;https://wzyboy.im/post/1317.html&#34; target=&#34;_blank&#34;&gt;使用 Beancount 记录证券投资&lt;/a&gt;），感觉非常不错，遂选定 Beancount。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ pip install beancount
+$ pip install fava
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然而 pip 安装方式有两个问题，一是更新不如 source code 频繁，而是不带有 elisp code。若是自己 makefile，由于作者使用仅支持 Python 2.7 的 Mercurial 进行分布式文件管理，如何将 bitbucket 上得到的 sourse code 保持更新也是比较让人头疼的事。我只能暂时将 &lt;code&gt;.el&lt;/code&gt; 文件下载下来，以后手动进行更新，较为折腾。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(add-to-list &#39;load-path &amp;quot;/path/to/elisp/file/&amp;quot;)
+  (require &#39;beancount)
+  (add-to-list &#39;auto-mode-alist &#39;(&amp;quot;\\.bean\\&#39;&amp;quot; . beancount-mode))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;帐本结构&#34;&gt;帐本结构&lt;/h2&gt;
+
+&lt;p&gt;由于我已经通过随手记记了七年的帐，所以如果采用单一帐本的话，一方面会导致主帐本过于臃肿，另一方面也会给帐本导入增加障碍。经过考量，我的帐本结构如主帐本文件所示是这样的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;option &amp;quot;title&amp;quot; &amp;quot;我的帐本&amp;quot;
+option &amp;quot;operating_currency&amp;quot; &amp;quot;USD&amp;quot; ; 这样在前端USD外的货币会共享一栏
+
+include &amp;quot;accounts.bean&amp;quot; ; 货币相关的资产（Assets）负债（Liabilities）
+include &amp;quot;items.bean&amp;quot; ; 资本相关的收入（Income）费用（Expenses）
+include &amp;quot;commodities.bean&amp;quot; ; 货币
+include &amp;quot;balances.bean&amp;quot; ; 对帐记录
+
+include &amp;quot;2019.bean&amp;quot; ; 记录每年普通帐目
+
+include &amp;quot;event/event-a.bean&amp;quot; ; 记录事件帐目（旅游为主）
+
+include &amp;quot;points/bank-a.bean&amp;quot; ; 记录里程、积分、礼品卡、预扣款等
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;随手记帐本导入&#34;&gt;随手记帐本导入&lt;/h2&gt;
+
+&lt;p&gt;随手记帐本导出后是一个 EXCEL 文件，含有交易种类、类别、子类、帐户 1、帐户 2、花费、人员、商家、事件、日期、详细这些列，所以我的导入思路是：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;建立两个字典 &lt;code&gt;account_dict&lt;/code&gt; 与 &lt;code&gt;item_dict&lt;/code&gt; ，分别用于转换帐户1/2与子类；&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;通过不同交易种类判断交易条目的正负号：&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;交易种类&lt;/th&gt;
+&lt;th&gt;子类&lt;/th&gt;
+&lt;th&gt;帐户1&lt;/th&gt;
+&lt;th&gt;帐户2&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;支出&lt;/td&gt;
+&lt;td&gt;+&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;收入&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;+&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;转帐&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;逐行读取 CSV 文档并转换为 beancount 记帐格式并存储于每年的文件或事件文件中，同时记录四大项目的开始时间与事件标签；&lt;/p&gt;
+
+&lt;p&gt;如:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-csv&#34;&gt;      支出,日常,Hannaford,Chase Freedom,,12.34,,Hannaford,,1/1/19,
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;则转换为:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;2019-01-01 * &amp;quot;Hannaford&amp;quot; &amp;quot;支出&amp;quot;
+  Expenses:Grocery:Hannaford   +12.34 USD
+  Liabilities:US:Chase:Freedom -12.34 USD
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;之前使用随手记的时候，我使用&amp;rdquo;结算中转&amp;rdquo;条目来记录复杂交易。而在 beancount 中，由于复杂交易可以直接记录在一个交易事件中，这个&amp;rdquo;结算中转&amp;rdquo;其实没什么用处了。所以在导入帐本时，我将当日产生的结算事件都暂存在一个列表中，如果总额为 0，则仅记录其他类别/帐目的行为，添加 flag 并将&amp;rdquo;详细&amp;rdquo;做为注释记录在行为右边，如果不为 0,则添加 flag 并原样输出，后期再做修改。如:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-csv&#34;&gt;      转账,,,Chase Freedom,结算中转,12.34,,Hannaford,,1/1/19,买菜
+      转账,,,结算中转,朋友A,2.34,,Hannaford,,1/1/19,水果
+      转账,,,结算中转,朋友B,5.55,,Hannaford,,1/1/19,蔬菜
+      支出,日常,Hannaford,结算中转,,6.45,,Hannaford,,1/1/19,鸡蛋
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;则转换为:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;2019-01-01 ! &amp;quot;Hannaford&amp;quot; &amp;quot;买菜 水果 蔬菜 鸡蛋&amp;quot;
+  Liabilities:US:Chase:Freedom -12.34 USD ; 买菜
+  Liabilities:Payables:A        +2.34 USD ; 水果
+  Liabilities:Payables:B        +5.55 USD ; 蔬菜
+  Expenses:Grocery:Hannaford    +6.45 USD ; 鸡蛋
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;生成 &lt;code&gt;accounts.bean&lt;/code&gt; 、 &lt;code&gt;items.bean&lt;/code&gt; 、 &lt;code&gt;balances.bean&lt;/code&gt; 与主帐本 &lt;code&gt;main.bean&lt;/code&gt; ；&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;balances.bean&lt;/code&gt; 比较特殊，用于核对帐目。可以通过银行对帐单自动生成，但是由于我 17 年后的对帐单都没下载到本地来，所以直接在下载的同时手动输入数额了。由于 balance 仅核算当日以前的交易，所以有时需要修改 balance 日期来避免错误提示。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;2019-01-11 balance Liabilities:US:Chase:Freedom -123.45 USD
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对于现金来说由于比较零散，也不一定留有小票，所以我会用 pad 补齐：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;2019-01-31 pad Assets:US:Cash Expenses:Grocery:Other
+2019-02-01 balance Assets:US:Cash +50 USD
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;对于货币种类进行核算。&lt;/p&gt;
+
+&lt;p&gt;随手记导出的文件有个问题是不会记录货币种类，所以需要后期对涉及多货币的交易进行核对与修改，比如我帮国内的朋友 c 买了东西，对方还我人民币的话，可以记成：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;2019-01-01 * &amp;quot;&amp;quot; &amp;quot;C还钱&amp;quot;
+  Assets:CN:Cash  +68 CNY
+  Liabilities:Payables:C -10 USD @@ 68 CNY
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;查看报表&#34;&gt;查看报表&lt;/h2&gt;
+
+&lt;p&gt;Beancount 自带 &lt;code&gt;bean-web main.bean&lt;/code&gt; 语句，可以在 &lt;a href=&#34;http://localhost:8080/&#34; target=&#34;_blank&#34;&gt;http://localhost:8080/&lt;/a&gt; 查看简单报表。 不过装了 fava 的我，便可以欢乐地使用 &lt;code&gt;fava main.bean&lt;/code&gt; 语句，在 &lt;a href=&#34;http://localhost:5000/&#34; target=&#34;_blank&#34;&gt;http://localhost:5000/&lt;/a&gt; 查看比较华丽的报表。&lt;a href=&#34;https://fava.pythonanywhere.com/example-beancount-file/trial%5Fbalance/&#34; target=&#34;_blank&#34;&gt;这里&lt;/a&gt; 有官方演示，效果拔群。&lt;/p&gt;
+
+&lt;h2 id=&#34;快捷记账&#34;&gt;快捷记账&lt;/h2&gt;
+
+&lt;p&gt;我写了一个简单的 &lt;code&gt;org-capture-templates&lt;/code&gt; ，这样就可以通过 &lt;kbd&gt;C-c c-b&lt;/kbd&gt; 来进行快捷记账。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(setq org-capture-templates
+      &#39; ((&amp;quot;b&amp;quot; &amp;quot;Beancount&amp;quot; plain
+          (file &amp;quot;~/Dropbox/Beancount/2019.bean&amp;quot;)
+          &amp;quot;
+%(org-read-date) %^{标识|*|!} \&amp;quot;%^{商户}\&amp;quot; \&amp;quot;%^{描述}\&amp;quot;
+  %^{借记||Expenses:Grocery:Hannaford|Expenses:Grocery:Other|Expenses:Restaurant|Income:Paycheck|Assets:US:Cash|Assets:CN:Cash|Liabilities:Payables:A|Liabilities:Payables:B|Liabilities:Payables:C|Liabilities:US:Chase:Freedom}  +%^{金额} USD
+  %^{贷记||Expenses:Grocery:Hannaford|Expenses:Grocery:Other|Expenses:Restaurant|Income:Paycheck|Assets:US:Cash|Assets:CN:Cash|Liabilities:Payables:A|Liabilities:Payables:B|Liabilities:Payables:C|Liabilities:US:Chase:Freedom}  -%^{金额} USD&amp;quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;不过在这个模板中，帐户名称需要自定义，比较麻烦，不能通用。未来我会尝试写一个 lisp function 来优化，希望能够实现：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;记帐不限条目，可记录多项事件于同一笔交易中；&lt;/li&gt;
+&lt;li&gt;自动读取 &lt;code&gt;accounts.bean&lt;/code&gt; 与 &lt;code&gt;items.bean&lt;/code&gt; 文件中的项目并作为备选；&lt;/li&gt;
+&lt;li&gt;自动对齐金额。&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>Emacs 中文环境配置</title>
+      <link>/post/443.html/</link>
+      <pubDate>Wed, 03 Jul 2019 13:44:00 -0400</pubDate>
+      <guid>/post/443.html/</guid>
+      <description>&lt;p&gt;使用 Emacs 三年多了，当时受了 &lt;a href=&#34;https://github.com/redguardtoo/mastering-emacs-in-one-year-guide&#34; target=&#34;_blank&#34;&gt;一年成为 Emacs 高手&lt;/a&gt; 的蛊惑，且贪图便利，使用了 &lt;a href=&#34;https://github.com/purcell/emacs.d&#34; target=&#34;_blank&#34;&gt;Purcell 的配置&lt;/a&gt;。正如 Purcell 所说，此配置相当 reasonable，用来入门确实让我受益匪浅，少走了很多弯路。三年使用下来，我需要添加的插件只有 &lt;code&gt;org-ref&lt;/code&gt; 和 &lt;code&gt;ob-smiles&lt;/code&gt; ，配置更新也仅须 &lt;code&gt;git pull&lt;/code&gt; 外加 &lt;kbd&gt;M-x package-list-packages U x&lt;/kbd&gt; 即可，非常方便。&lt;/p&gt;
+
+&lt;p&gt;然而过去三年来，我主要是使用 Emacs 中的 org-mode 来记 Science 与 Tech 方面笔记，基于 Latex 的长文章 / 代码我更喜欢用 Atoms + Vim-mode 来写，基于 Markdown 的博客则用 MWeb 来写，中文笔记喜欢使用 Bears，最后却还是回到了苹果自带的免费 Notes。其他零零碎碎的场景则使用更为零碎的 app，餐馆用 DayGram + Workflowy，记账用随手记。非常不统一。&lt;/p&gt;
+
+&lt;p&gt;也就是说，我并不是一个“running my life with Emacs”的重症者，Purcell 配置的 Emacs 中也有大量我用不到，或者需要使用却不甚了解的插件。所以失业在家这个契机恰好也是让我重新审视 Emacs，看看我能否最大化地使用 Emacs。&lt;/p&gt;
+
+&lt;p&gt;对我而言，使用 Atoms 来写代码与 Latex，是由于我对使用 Emacs 调试还不甚熟练。所以这几天我花了一点时间重新阅读了 Emacs 手册。&lt;/p&gt;
+
+&lt;p&gt;使用 MWeb 来写博客与使用 Notes 来记笔记的原因则比较可笑，因为我基本上都是使用英文记录 Science &amp;amp; Tech 方面的笔记，我并没有配置 Emacs 的中文环境。所以需要使用中文来写东西时，我自然就得换用其他工具。这段时间准备面试，将 org-mode 的使用范围扩大到记录面试适宜，由于一亩三分地是一个主要资料来源，不免需要粘贴许多中文帖子进来。这时再将 Emacs 视为一个纯英文环境未免有些麻烦。而将 Emacs 中文化了，自然也不需要 MWeb 和 Notes 或者 Bear 什么事了。&lt;/p&gt;
+
+&lt;p&gt;而记录餐馆和消费的需求比较麻烦，本文暂且搁置，今后有空再来研究。&lt;/p&gt;
+
+&lt;h2 id=&#34;emacs-中文输入法&#34;&gt;Emacs 中文输入法&lt;/h2&gt;
+
+&lt;p&gt;Emacs 窗口左下角显示的是 character set 与 editing state，其中 character set 默认值为 U，即没有 input-mode 且使用 unicode 的 coding system，通过 &lt;kbd&gt;C-\&lt;/kbd&gt; ，可以非常方便地设置输入法并进行切换。&lt;/p&gt;
+
+&lt;p&gt;Emacs 有一些自带的中文输入法，比如拼音（chinese-py）、自然码（chinese-ziranma），还有一些四声（chinese-sisheng）、英汉（chinese-ecdict）等输入法。我将简体编码的一些输入法列于下表，详见 &lt;code&gt;leim-lisp.el&lt;/code&gt; （可通过 &lt;kbd&gt;M-x find-library&lt;/kbd&gt; 迅速查看）。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;input mode&lt;/th&gt;
+&lt;th&gt;输入法&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;chinese-ccdospy&lt;/td&gt;
+&lt;td&gt;缩写拼音&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;chinese-ctlau&lt;/td&gt;
+&lt;td&gt;刘锡祥式粤音&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;chinese-punct&lt;/td&gt;
+&lt;td&gt;标点符号&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;chinese-py&lt;/td&gt;
+&lt;td&gt;拼音&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;chinese-qj&lt;/td&gt;
+&lt;td&gt;全角&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;chinese-sw&lt;/td&gt;
+&lt;td&gt;首尾&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;chinese-tonepy&lt;/td&gt;
+&lt;td&gt;带调拼音&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;chinese-ziranma&lt;/td&gt;
+&lt;td&gt;自然码&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;由于我习惯用微软双拼，故另外安装 &lt;a href=&#34;https://github.com/tumashu/pyim&#34; target=&#34;_blank&#34;&gt;pyim&lt;/a&gt;，配置如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(require &#39;pyim)
+(require &#39;pyim-basedict)
+(pyim-basedict-enable)
+(setq default-input-method &amp;quot;pyim&amp;quot;)
+(setq pyim-default-scheme &#39;microsoft-shuangpin)
+(setq pyim-page-tooltip &#39;popup)
+(setq pyim-page-length 5)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;emacs-中文字体&#34;&gt;Emacs 中文字体&lt;/h2&gt;
+
+&lt;p&gt;Emacs 中默认的中文字体是 Arial Unicode MS，看着总觉得哪哪不顺眼，所以下一步就是更换个顺眼的中文字体。&lt;/p&gt;
+
+&lt;p&gt;此处我先参考了 &lt;a href=&#34;http://zhuoqiang.me/torture-emacs.html&#34; target=&#34;_blank&#34;&gt;zhuoqiang 的做法&lt;/a&gt;，将中英文字体设为等宽的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;;; Setting English Font
+(set-face-attribute &#39;default nil :font &amp;quot;DejaVu Sans Mono 14&amp;quot;)
+
+;; Chinese Font
+(dolist (charset &#39;(kana han symbol cjk-misc bopomofo))
+  (set-fontset-font (frame-parameter nil &#39;font)
+                    charset (font-spec :family &amp;quot;PingFang SC&amp;quot;
+                                       :size 16)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;并将他写的更为通用的设置字体的函数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(defun qiang-set-font (english-fonts
+                       english-font-size
+                       chinese-fonts
+                       &amp;amp;optional chinese-font-size))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;略加修改为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(defun qiang-set-font (english-fonts
+                       english-font-size
+                       chinese-fonts
+                       &amp;amp;optional chinese-font-scale)
+    ...
+    :size (* chinese-font-scale english-font-size))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然而当我用 &lt;kbd&gt;C-x C-+&lt;/kbd&gt; 动态调整字体大小时，发现只有英文字体会缩放，中文则仍然蠢蠢地处于初始大小。查手册得可通过 &lt;code&gt;face-font-rescale-alist&lt;/code&gt; 来设定特定字体缩放值。简单来说就是这样：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(setq face-font-rescale-alist &#39;((&amp;quot;PingFang SC&amp;quot; . chinese-font-scale))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是这样只能对苹方字体起效，如果一个一个对 font-list 中的字体修改 scale-factor 看起来又不简洁。于是我想到两种较为简便的设定方式：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;;; First method
+(setq face-font-rescale-alist
+      (loop for x in zh-font-list
+            collect (cons x chinese-font-scale)))
+;; Second method
+(setq face-font-rescale-alist
+      (pairlis zh-font-list
+               (make-list (list-length zh-font-list)
+                           chinese-font-scale)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;效果拔群。&lt;/p&gt;
+
+&lt;p&gt;详细配置如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(defun qiang-font-existsp (font)
+  (if (null (x-list-fonts font))
+      nil
+    t))
+
+(defvar zh-font-list &#39;(&amp;quot;PingFang SC&amp;quot; &amp;quot;Hiragino Sans GB&amp;quot; &amp;quot;Microsoft Yahei&amp;quot; &amp;quot;Source Han Sans Normal&amp;quot; &amp;quot;STHeiti&amp;quot; &amp;quot;黑体&amp;quot; &amp;quot;新宋体&amp;quot; &amp;quot;宋体&amp;quot;))
+(defvar en-font-list &#39;(&amp;quot;DejaVu Sans Mono&amp;quot; &amp;quot;Monaco&amp;quot; &amp;quot;Consolas&amp;quot; &amp;quot;Monospace&amp;quot; &amp;quot;Courier New&amp;quot;))
+
+(defun qiang-make-font-string (font-name font-size)
+  (if (and (stringp font-size)
+           (equal &amp;quot;:&amp;quot; (string (elt font-size 0))))
+      (format &amp;quot;%s%s&amp;quot; font-name font-size)
+    (format &amp;quot;%s %s&amp;quot; font-name font-size)))
+
+(defun qiang-set-font (english-fonts
+                       english-font-size
+                       chinese-fonts
+                       &amp;amp;optional chinese-font-scale)
+
+  (setq chinese-font-scale (or chinese-font-scale 1.2))
+
+  (setq face-font-rescale-alist
+        (loop for x in zh-font-list
+              collect (cons x chinese-font-scale)))
+
+  &amp;quot;english-font-size could be set to \&amp;quot;:pixelsize=18\&amp;quot; or a integer.
+If set/leave chinese-font-scale to nil, it will follow english-font-size&amp;quot;
+
+  (require &#39;cl)                         ; for find if
+  (let ((en-font (qiang-make-font-string
+                  (find-if #&#39;qiang-font-existsp english-fonts)
+                  english-font-size))
+        (zh-font (font-spec :family (find-if #&#39;qiang-font-existsp chinese-fonts))))
+
+    ;; Set the default English font
+    (message &amp;quot;Set English Font to %s&amp;quot; en-font)
+    (set-face-attribute &#39;default nil :font en-font)
+
+    ;; Set Chinese font
+    ;; Do not use &#39;unicode charset, it will cause the English font setting invalid
+    (message &amp;quot;Set Chinese Font to %s&amp;quot; zh-font)
+    (dolist (charset &#39;(kana han symbol cjk-misc bopomofo))
+      (set-fontset-font (frame-parameter nil &#39;font)
+                        charset zh-font))))
+
+(qiang-set-font en-font-list 14 zh-font-list)
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

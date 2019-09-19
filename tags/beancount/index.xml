@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Beancount | RUNHAN YU</title>
+    <link>/tags/beancount/</link>
+      <atom:link href="/tags/beancount/index.xml" rel="self" type="application/rss+xml" />
+    <description>Beancount</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Thu, 04 Jul 2019 12:58:00 -0400</lastBuildDate>
+    <image>
+      <url>/img/icon-192.png</url>
+      <title>Beancount</title>
+      <link>/tags/beancount/</link>
+    </image>
+    
+    <item>
+      <title>Emacs 记帐</title>
+      <link>/post/444.html/</link>
+      <pubDate>Thu, 04 Jul 2019 12:58:00 -0400</pubDate>
+      <guid>/post/444.html/</guid>
+      <description>&lt;p&gt;昨天搞定 Emacs 的中文环境，今天想着好久没记帐了，随手记总是很花时间，干脆一鼓作气，将记帐一起搬过来。&lt;/p&gt;
+
+&lt;h2 id=&#34;复式记帐&#34;&gt;复式记帐&lt;/h2&gt;
+
+&lt;p&gt;我本科时双修了一门金融，其中最为繁琐，也是最令人头疼的一门课便是会计学。我不爱听讲，毕业之后也将会计的知识点忘得查差不多了，然而其&amp;rdquo;有借必有贷，借贷必相等&amp;rdquo;的复式记帐法，反而是我生活中运用最多的。&lt;/p&gt;
+
+&lt;p&gt;复式记帐法说起来复杂，对个人来说，就是将每笔交易分门别类，填入下面这条等式中：&lt;/p&gt;
+
+&lt;style&gt;.org-center { margin-left: auto; margin-right: auto; text-align: center; }&lt;/style&gt;
+
+&lt;div class=&#34;org-center&#34;&gt;
+  &lt;div&gt;&lt;/div&gt;
+
+&lt;p&gt;资产 + 费用 = 负债 + 所有者权益 + 收入&lt;/p&gt;
+
+&lt;p&gt;&lt;/div&gt;&lt;/p&gt;
+
+&lt;p&gt;在个人记帐中，这条等式辅以借贷概念会令人望而生畏，所以我将其略一变形：&lt;/p&gt;
+
+&lt;style&gt;.org-center { margin-left: auto; margin-right: auto; text-align: center; }&lt;/style&gt;
+
+&lt;div class=&#34;org-center&#34;&gt;
+  &lt;div&gt;&lt;/div&gt;
+
+&lt;p&gt;（+资产）+（-负债）+（+费用）+（-收入）+（-所有者权益）= 0&lt;/p&gt;
+
+&lt;p&gt;&lt;/div&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;资产与负债都是与金钱直接挂钩的，比如银行户头，比如人民币美钞，比如信用卡帐户，再比如借条，这些都可以算是货币的不同表示形式。&lt;/li&gt;
+&lt;li&gt;费用与收入则是与金钱间接挂钩的，比如工资，比如商品，比如服务，这些都可以算是生产资本与商品资本的不同表现形式。其中收入与字面意思不同，可以理解为生产资本（劳动力等）。&lt;/li&gt;
+&lt;li&gt;所有者权益对个人意义不大，一般用来记录历史盈余与糊涂帐。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;而这个变形公式中的正负号，则可以将各项目的符号关系，用作资金流向的参照。这么说有点玄乎，换个茨威格式的说法就是：&amp;rdquo;人们从命运得到的一切，冥冥之中都记下了它的价钱。&amp;rdquo;花钱买了服务，则是减少资产（花了钱），增加费用（得到服务）；工资到帐，则是增加资产（到帐），减少收入（既有劳动时间的减少）；别人跟你借了钱，则是资产减少（银行帐户或现金余额减少），负债增加（别人在你这儿的负债）。&lt;/p&gt;
+
+&lt;p&gt;总结一下，由于人类暂时无法操控时间，所以费用一般为正，收入一般为负。而没有破产的情况下资产一般为正，别人欠你的钱为正，信用卡债（你欠别人的钱）为负。&lt;/p&gt;
+
+&lt;h2 id=&#34;随手记帐本导出&#34;&gt;随手记帐本导出&lt;/h2&gt;
+
+&lt;p&gt;刚来美帝我就开始用随手记，一晃也七年过去了（随手记提醒：今天是您记帐的2524天）。虽然作为强迫症的我有着非常完整的消费记录，但是这也带来了非常大的迁移成本。随手记的问题在于想要使用复式记帐时，需要通过结算中转来完成一对多的转帐操作，在聚餐或者帮别人付钱的时候比较麻烦。所以每周都需要花费大量时间来输入帐单，费时费力。&lt;/p&gt;
+
+&lt;p&gt;首先尝试从随手记 app 导出，设置－高级功能－备份与同步－备份与恢复－本地备份与恢复－WIFI备份，得到一个 &lt;code&gt;.kbf&lt;/code&gt; 文件，将其后缀改为 &lt;code&gt;.zip&lt;/code&gt; ，解压得到一个 &lt;code&gt;.sqlite&lt;/code&gt; 文件。然而此文件经过加密，打开并不容易。&lt;/p&gt;
+
+&lt;p&gt;不过在那个入口还看到导出 EXCEL 文件的选项，乃会员专享，恰好首月免费，我又去意已决，遂开通并获取文件。&lt;/p&gt;
+
+&lt;h2 id=&#34;记帐方式选择&#34;&gt;记帐方式选择&lt;/h2&gt;
+
+&lt;p&gt;有了之前的记录，就可以着手选择一款好用的记帐软件了。虽然有可以连接 postgresql 的记帐软件 gnucash，但我还是想用 Emacs 来进行记录操作。网上一搜，有一个 &lt;a href=&#34;https://plaintextaccounting.org/&#34; target=&#34;_blank&#34;&gt;Plain Text Accounting&lt;/a&gt; 网站做了详尽的整合。一路看下来，虽然 Ledger 是老前辈，可是 Beancount 的前端 Fava 效果实在好看，有这么一个轮子，为何不用呢？同时还搜到了一位中文博主 wzyboy 的三年的使用经验（&lt;a href=&#34;https://wzyboy.im/post/1063.html&#34; target=&#34;_blank&#34;&gt;Beancount &amp;mdash;&amp;mdash; 命令行复式簿记&lt;/a&gt;，&lt;a href=&#34;https://wzyboy.im/post/1317.html&#34; target=&#34;_blank&#34;&gt;使用 Beancount 记录证券投资&lt;/a&gt;），感觉非常不错，遂选定 Beancount。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ pip install beancount
+$ pip install fava
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然而 pip 安装方式有两个问题，一是更新不如 source code 频繁，而是不带有 elisp code。若是自己 makefile，由于作者使用仅支持 Python 2.7 的 Mercurial 进行分布式文件管理，如何将 bitbucket 上得到的 sourse code 保持更新也是比较让人头疼的事。我只能暂时将 &lt;code&gt;.el&lt;/code&gt; 文件下载下来，以后手动进行更新，较为折腾。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(add-to-list &#39;load-path &amp;quot;/path/to/elisp/file/&amp;quot;)
+  (require &#39;beancount)
+  (add-to-list &#39;auto-mode-alist &#39;(&amp;quot;\\.bean\\&#39;&amp;quot; . beancount-mode))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;帐本结构&#34;&gt;帐本结构&lt;/h2&gt;
+
+&lt;p&gt;由于我已经通过随手记记了七年的帐，所以如果采用单一帐本的话，一方面会导致主帐本过于臃肿，另一方面也会给帐本导入增加障碍。经过考量，我的帐本结构如主帐本文件所示是这样的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;option &amp;quot;title&amp;quot; &amp;quot;我的帐本&amp;quot;
+option &amp;quot;operating_currency&amp;quot; &amp;quot;USD&amp;quot; ; 这样在前端USD外的货币会共享一栏
+
+include &amp;quot;accounts.bean&amp;quot; ; 货币相关的资产（Assets）负债（Liabilities）
+include &amp;quot;items.bean&amp;quot; ; 资本相关的收入（Income）费用（Expenses）
+include &amp;quot;commodities.bean&amp;quot; ; 货币
+include &amp;quot;balances.bean&amp;quot; ; 对帐记录
+
+include &amp;quot;2019.bean&amp;quot; ; 记录每年普通帐目
+
+include &amp;quot;event/event-a.bean&amp;quot; ; 记录事件帐目（旅游为主）
+
+include &amp;quot;points/bank-a.bean&amp;quot; ; 记录里程、积分、礼品卡、预扣款等
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;随手记帐本导入&#34;&gt;随手记帐本导入&lt;/h2&gt;
+
+&lt;p&gt;随手记帐本导出后是一个 EXCEL 文件，含有交易种类、类别、子类、帐户 1、帐户 2、花费、人员、商家、事件、日期、详细这些列，所以我的导入思路是：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;建立两个字典 &lt;code&gt;account_dict&lt;/code&gt; 与 &lt;code&gt;item_dict&lt;/code&gt; ，分别用于转换帐户1/2与子类；&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;通过不同交易种类判断交易条目的正负号：&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;交易种类&lt;/th&gt;
+&lt;th&gt;子类&lt;/th&gt;
+&lt;th&gt;帐户1&lt;/th&gt;
+&lt;th&gt;帐户2&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;支出&lt;/td&gt;
+&lt;td&gt;+&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;收入&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;+&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;转帐&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;逐行读取 CSV 文档并转换为 beancount 记帐格式并存储于每年的文件或事件文件中，同时记录四大项目的开始时间与事件标签；&lt;/p&gt;
+
+&lt;p&gt;如:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-csv&#34;&gt;      支出,日常,Hannaford,Chase Freedom,,12.34,,Hannaford,,1/1/19,
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;则转换为:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;2019-01-01 * &amp;quot;Hannaford&amp;quot; &amp;quot;支出&amp;quot;
+  Expenses:Grocery:Hannaford   +12.34 USD
+  Liabilities:US:Chase:Freedom -12.34 USD
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;之前使用随手记的时候，我使用&amp;rdquo;结算中转&amp;rdquo;条目来记录复杂交易。而在 beancount 中，由于复杂交易可以直接记录在一个交易事件中，这个&amp;rdquo;结算中转&amp;rdquo;其实没什么用处了。所以在导入帐本时，我将当日产生的结算事件都暂存在一个列表中，如果总额为 0，则仅记录其他类别/帐目的行为，添加 flag 并将&amp;rdquo;详细&amp;rdquo;做为注释记录在行为右边，如果不为 0,则添加 flag 并原样输出，后期再做修改。如:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-csv&#34;&gt;      转账,,,Chase Freedom,结算中转,12.34,,Hannaford,,1/1/19,买菜
+      转账,,,结算中转,朋友A,2.34,,Hannaford,,1/1/19,水果
+      转账,,,结算中转,朋友B,5.55,,Hannaford,,1/1/19,蔬菜
+      支出,日常,Hannaford,结算中转,,6.45,,Hannaford,,1/1/19,鸡蛋
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;则转换为:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;2019-01-01 ! &amp;quot;Hannaford&amp;quot; &amp;quot;买菜 水果 蔬菜 鸡蛋&amp;quot;
+  Liabilities:US:Chase:Freedom -12.34 USD ; 买菜
+  Liabilities:Payables:A        +2.34 USD ; 水果
+  Liabilities:Payables:B        +5.55 USD ; 蔬菜
+  Expenses:Grocery:Hannaford    +6.45 USD ; 鸡蛋
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;生成 &lt;code&gt;accounts.bean&lt;/code&gt; 、 &lt;code&gt;items.bean&lt;/code&gt; 、 &lt;code&gt;balances.bean&lt;/code&gt; 与主帐本 &lt;code&gt;main.bean&lt;/code&gt; ；&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;balances.bean&lt;/code&gt; 比较特殊，用于核对帐目。可以通过银行对帐单自动生成，但是由于我 17 年后的对帐单都没下载到本地来，所以直接在下载的同时手动输入数额了。由于 balance 仅核算当日以前的交易，所以有时需要修改 balance 日期来避免错误提示。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;2019-01-11 balance Liabilities:US:Chase:Freedom -123.45 USD
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对于现金来说由于比较零散，也不一定留有小票，所以我会用 pad 补齐：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;2019-01-31 pad Assets:US:Cash Expenses:Grocery:Other
+2019-02-01 balance Assets:US:Cash +50 USD
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;对于货币种类进行核算。&lt;/p&gt;
+
+&lt;p&gt;随手记导出的文件有个问题是不会记录货币种类，所以需要后期对涉及多货币的交易进行核对与修改，比如我帮国内的朋友 c 买了东西，对方还我人民币的话，可以记成：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;2019-01-01 * &amp;quot;&amp;quot; &amp;quot;C还钱&amp;quot;
+  Assets:CN:Cash  +68 CNY
+  Liabilities:Payables:C -10 USD @@ 68 CNY
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;查看报表&#34;&gt;查看报表&lt;/h2&gt;
+
+&lt;p&gt;Beancount 自带 &lt;code&gt;bean-web main.bean&lt;/code&gt; 语句，可以在 &lt;a href=&#34;http://localhost:8080/&#34; target=&#34;_blank&#34;&gt;http://localhost:8080/&lt;/a&gt; 查看简单报表。 不过装了 fava 的我，便可以欢乐地使用 &lt;code&gt;fava main.bean&lt;/code&gt; 语句，在 &lt;a href=&#34;http://localhost:5000/&#34; target=&#34;_blank&#34;&gt;http://localhost:5000/&lt;/a&gt; 查看比较华丽的报表。&lt;a href=&#34;https://fava.pythonanywhere.com/example-beancount-file/trial%5Fbalance/&#34; target=&#34;_blank&#34;&gt;这里&lt;/a&gt; 有官方演示，效果拔群。&lt;/p&gt;
+
+&lt;h2 id=&#34;快捷记账&#34;&gt;快捷记账&lt;/h2&gt;
+
+&lt;p&gt;我写了一个简单的 &lt;code&gt;org-capture-templates&lt;/code&gt; ，这样就可以通过 &lt;kbd&gt;C-c c-b&lt;/kbd&gt; 来进行快捷记账。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(setq org-capture-templates
+      &#39; ((&amp;quot;b&amp;quot; &amp;quot;Beancount&amp;quot; plain
+          (file &amp;quot;~/Dropbox/Beancount/2019.bean&amp;quot;)
+          &amp;quot;
+%(org-read-date) %^{标识|*|!} \&amp;quot;%^{商户}\&amp;quot; \&amp;quot;%^{描述}\&amp;quot;
+  %^{借记||Expenses:Grocery:Hannaford|Expenses:Grocery:Other|Expenses:Restaurant|Income:Paycheck|Assets:US:Cash|Assets:CN:Cash|Liabilities:Payables:A|Liabilities:Payables:B|Liabilities:Payables:C|Liabilities:US:Chase:Freedom}  +%^{金额} USD
+  %^{贷记||Expenses:Grocery:Hannaford|Expenses:Grocery:Other|Expenses:Restaurant|Income:Paycheck|Assets:US:Cash|Assets:CN:Cash|Liabilities:Payables:A|Liabilities:Payables:B|Liabilities:Payables:C|Liabilities:US:Chase:Freedom}  -%^{金额} USD&amp;quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;不过在这个模板中，帐户名称需要自定义，比较麻烦，不能通用。未来我会尝试写一个 lisp function 来优化，希望能够实现：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;记帐不限条目，可记录多项事件于同一笔交易中；&lt;/li&gt;
+&lt;li&gt;自动读取 &lt;code&gt;accounts.bean&lt;/code&gt; 与 &lt;code&gt;items.bean&lt;/code&gt; 文件中的项目并作为备选；&lt;/li&gt;
+&lt;li&gt;自动对齐金额。&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

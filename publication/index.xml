@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Publications | RUNHAN YU</title>
+    <link>/publication/</link>
+      <atom:link href="/publication/index.xml" rel="self" type="application/rss+xml" />
+    <description>Publications</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Wed, 03 Jul 2019 13:44:00 -0400</lastBuildDate>
+    <image>
+      <url>/img/icon-192.png</url>
+      <title>Publications</title>
+      <link>/publication/</link>
+    </image>
+    
+    <item>
+      <title>Yang Wei, Petr Kuzmič, Runhan Yu, Gyan Modi, Lizbeth Hedstrom. Inhibition of Inosine-5&#39;-Monophosphate Dehydrogenase from Bacillus Anthracis: Mechanism Revealed by Pre-Steady-State Kinetics. Biochemistry 2016, 55 (37), 5279-5288.</title>
+      <link>/publication/wei-2016-bi/</link>
+      <pubDate>Wed, 03 Jul 2019 13:44:00 -0400</pubDate>
+      <guid>/publication/wei-2016-bi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ann P Lawson, Daniel W Bak, D Alexander Shannon, Marcus JC Long, Tushara Vijaykumar, Runhan Yu, Farid El Oualid, Eranthie Weerapana, Lizbeth Hedstrom. Identification of deubiquitinase targets of isothiocyanates using SILAC-assisted quantitative mass spectrometry. Oncotarget. 2017, 8(31) 51296–51316.</title>
+      <link>/publication/an-2017-oncotarget/</link>
+      <pubDate>Mon, 03 Jul 2017 13:44:00 -0400</pubDate>
+      <guid>/publication/an-2017-oncotarget/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Runhan Yu, Youngchang Kim, Natalia Maltseva, Philip Braunstein, Andrzej Joachimiak, Lizbeth Hedstrom. Oxanosine Monophosphate Is a Covalent Inhibitor of Inosine 5&#39;-Monophosphate Dehydrogenase. Chemical Research in Toxicology 2019, 32 (3) , 456-466.</title>
+      <link>/publication/yu-2016-bi/</link>
+      <pubDate>Sun, 03 Jul 2016 13:44:00 -0400</pubDate>
+      <guid>/publication/yu-2016-bi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Fang Zou, Runhan Yu, Rongguan Li, Wei Li. Microwave-Assisted Synthesis of HKUST-1 and Functionalized HKUST-1-@ H3PW12O40: Selective Adsorption of Heavy Metal Ions in Water Analyzed with Synchrotron Radiation. ChemPhysChem. 2013, 14(12) 2825-2832.</title>
+      <link>/publication/zou-2013-chemphyschem/</link>
+      <pubDate>Wed, 03 Jul 2013 13:44:00 -0400</pubDate>
+      <guid>/publication/zou-2013-chemphyschem/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

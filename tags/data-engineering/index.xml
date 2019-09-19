@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data-Engineering | RUNHAN YU</title>
+    <link>/tags/data-engineering/</link>
+      <atom:link href="/tags/data-engineering/index.xml" rel="self" type="application/rss+xml" />
+    <description>Data-Engineering</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Fri, 30 Aug 2019 11:14:00 -0400</lastBuildDate>
+    <image>
+      <url>/img/icon-192.png</url>
+      <title>Data-Engineering</title>
+      <link>/tags/data-engineering/</link>
+    </image>
+    
+    <item>
+      <title>Hacking the Data Transformation Interview</title>
+      <link>/post/448.html/</link>
+      <pubDate>Fri, 30 Aug 2019 11:14:00 -0400</pubDate>
+      <guid>/post/448.html/</guid>
+      <description>&lt;p&gt;I am currently (still) seeking a job in data/software engineering area, and I am preparing for all kinds of technical interviews, ranging from coding, algorithm, system design, SQL to computer science fundamental quiz. Data engineer is a role with vague definition, and people with this title functions as an ETL (extract, transformation, load) engineer in some companies. Thus, topics on data transformation could be covered during the interview. In this blog, I am trying to hack interview focusing on data tranformation.&lt;/p&gt;
+
+&lt;h2 id=&#34;prerequisites-boto3&#34;&gt;Prerequisites: boto3&lt;/h2&gt;
+
+&lt;p&gt;Boto is the AWS SDK for python, which provides easy-to-use, object-oriented API and low-level access to AWS services. We could find the documentation &lt;a href=&#34;https://boto3.amazonaws.com/v1/documentation/api/latest/index.html&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;We could easily install the latest Boto 3 release via pip:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ pip install boto3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then configure the credential file at &lt;code&gt;~/.aws/credentials&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-nil&#34;&gt;[default]
+aws_access_key_id = YOUR_ACCESS_KEY
+aws_secret_access_key = YOUR_SECRET_KEY
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And set the default region at &lt;code&gt;~/.aws/config&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-nil&#34;&gt;[default]
+region=us-east-1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To use boto3, we could import it and pass the service-to-use to it. For example, to use Amazon S3, we could choose a resource by:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import boto3
+s3 = boto3.resource(&#39;s3&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Create a s3 bucket over client level:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;s3_client = boto3.client(&#39;s3&#39;)
+s3_client.create_bucket(Bucket=&#39;BUCKET_NAME&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;List existing buckets for the AWS account:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;response = s3_client.list_buckets()
+for bucket in response[&#39;Buckets&#39;]:
+    print(f&#39;  {bucket[&amp;quot;Name&amp;quot;]}&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Upload file into a s3 bucket:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;response = s3_client.upload_file(file_name, bucket, object_name)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or upload object in binary mode into a s3 bucket:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;with open(&#39;test.jpg&#39;, &#39;rb&#39;) as f:
+    s3.upload_fileobj(f, &amp;quot;BUCKET_NAME&amp;quot;, &amp;quot;OBJECT_NAME&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or directly put object into a s3 bucket over the bucket level:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;data = open(&#39;test.jpg&#39;, &#39;rb&#39;)
+bucket = s3.Bucket(&#39;my-bucket&#39;)
+bucket.put_object(Key=object_name, Body=data)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To download file from a S3 bucket, we could:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;s3.download_file(&#39;BUCKET_NAME&#39;, &#39;OBJECT_NAME&#39;, &#39;FILE_NAME&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;with open(&#39;FILE_NAME&#39;, &#39;wb&#39;) as f:
+    s3.download_fileobj(&#39;BUCKET_NAME&#39;, &#39;OBJECT_NAME&#39;, f)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We could also set configuration when uploading, downloading, or copying a file or S3 object by:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from boto3.s3.transfer import TransferConfig
+GB = 1024 ** 3
+config = TransferConfig(multipart_threshold=5*GB)
+config = TransferConfig(max_concurrency=5)
+config = TransferConfig(use_threads=False)
+s3.upload_file(&#39;FILE_NAME&#39;, &#39;BUCKET_NAME&#39;, &#39;OBJECT_NAME&#39;, Config=config)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;prerequisites-psycopg2&#34;&gt;Prerequisites: psycopg2&lt;/h2&gt;
+
+&lt;p&gt;Psycopg2 is a popular PostgreSQL database adapter for python. We could find documentation &lt;a href=&#34;http://initd.org/psycopg/docs/&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;We could easily install psycopg2 via pip:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ pip install psycopg2-binary
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To use psycopg2, we could import it, connect to an existing database and open a cursor to perform database operations:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import psycopg2
+conn = psycopg2.connect(dbname=&amp;quot;DATABASE_NAME&amp;quot;, user=&amp;quot;USER&amp;quot;, host=&amp;quot;HOST&amp;quot;, port=&amp;quot;PORT&amp;quot;, password=&amp;quot;PASSWORD&amp;quot;)
+cur = conn.cursor()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Query the database and fetch data in an iteration-like way:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cur.execute(sql_query)
+cur.fetchone()
+cur.fetchmany(2)
+cur.fetchall()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Pass parameters to SQL queries:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cur.execute(&amp;quot;&amp;quot;&amp;quot;
+    INSERT INTO some_table (an_int, a_date, another_date, a_string)
+    VALUES (%(int)s, %(date)s, %(date)s, %(str)s);
+    &amp;quot;&amp;quot;&amp;quot;,
+    {&#39;int&#39;: 10, &#39;str&#39;: &amp;quot;O&#39;Reilly&amp;quot;, &#39;date&#39;: datetime.date(2005, 11, 18)})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Make the changes to the database persistent:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;conn.commit()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Close communication with the database&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cur.close()
+conn.close()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;upload-data-from-s3-into-redshift&#34;&gt;Upload data from S3 into Redshift&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def main():
+    connection_parameters = {
+        &#39;dbname&#39;: dbname,
+        &#39;user&#39;: user,
+        &#39;host&#39;: host,
+        &#39;port&#39;: port,
+        &#39;password&#39;: password
+    }
+    try:
+        conn = psycopg2.connect(**connection_parameters)
+        print(&amp;quot;Connected to Redshift.&amp;quot;)
+    except:
+        print(&amp;quot;Unable to connect to Redshift.&amp;quot;)
+
+    cur = conn.cursor()
+
+    upload_statement = &amp;quot;
+            COPY {}.{}
+            FROM {}
+            IAM_ROLE {}
+            CSV;
+            COMMIT;
+    &amp;quot;.format(table_name, schema, file_name, iam_role)
+
+    try:
+        cur.execute(upload_statement)
+        print(&amp;quot;Upload successfully&amp;quot;)
+    except psycopg2.Error:
+        raise ExecuteFailure(&amp;quot;Failed to upload the file.&amp;quot;)
+    cur.close()
+    conn.close()
+
+if __name__ == &amp;quot;__main__&amp;quot;:
+    main()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;load-data-from-redshift-to-pandas&#34;&gt;Load data from Redshift to pandas&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import sqlalchemy as sa
+import pandas as pd
+surl = &#39;redshift+psycopg2://&#39;
+engine = sa.create_engine(surl+user+&#39;:&#39;+password+&#39;@&#39;+host+&#39;:&#39;+port+&#39;/&#39;+dbname,echo=False)
+df = pd.read_sql_query(&#39;SELECT * FROM table ;&#39;, engine)
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

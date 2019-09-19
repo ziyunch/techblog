@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>pyim | RUNHAN YU</title>
+    <link>/tags/pyim/</link>
+      <atom:link href="/tags/pyim/index.xml" rel="self" type="application/rss+xml" />
+    <description>pyim</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 31 Aug 2019 20:40:00 -0400</lastBuildDate>
+    <image>
+      <url>/img/icon-192.png</url>
+      <title>pyim</title>
+      <link>/tags/pyim/</link>
+    </image>
+    
+    <item>
+      <title>Mac 版 Emacs 中使用 Rime 输入法打带调双拼</title>
+      <link>/post/449.html/</link>
+      <pubDate>Sat, 31 Aug 2019 20:40:00 -0400</pubDate>
+      <guid>/post/449.html/</guid>
+      <description>&lt;p&gt;由于我习惯写中文博客，所以将写博客这件事也转移到 Emacs 后，我渐渐感觉到 pyim 的不足。所以今天研究一下如何让 pyim 调用 Rime 的词库。&lt;/p&gt;
+
+&lt;h2 id=&#34;基础配置&#34;&gt;基础配置&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;首先安装鼠须管，此一节可见 &lt;a href=&#34;https://blindwith.science/2019/07/445.html/&#34; target=&#34;_blank&#34;&gt;鼠须管傻瓜化配置&lt;/a&gt;，一句话概括呢就是：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;brew cask install squirrel
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;然后参考&lt;a href=&#34;https://manateelazycat.github.io/emacs/2019/07/24/use-rime-in-emacs.html&#34; target=&#34;_blank&#34;&gt;前人经验&lt;/a&gt;，下载 librime 获取源码并从鼠须管中获取编译好的 &lt;code&gt;librime.dylib&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~
+git clone --recursive https://github.com/rime/librime.git --depth=1
+mkdir -p ~/librime/xbuild/lib/Release/
+cp /Library/Input\ Methods/Squirrel.app/Contents/Frameworks/librime.1.dylib ~/librime/xbuild/lib/Release/librime.dylib
+sudo cp /Library/Input\ Methods/Squirrel.app/Contents/Frameworks/librime.1.dylib /usr/local/lib
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;然后下载并编译 liberime，需要提前安装 cmake 库来进行编译：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;git clone https://gitlab.com/liberime/liberime.git --depth=1
+cd ~/liberime
+export RIME_PATH=~/librime
+make liberime
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;然后需要在 emacs 中安装 pyim，此一节详见 &lt;a href=&#34;https://blindwith.science/2019/07/443.html/&#34; target=&#34;_blank&#34;&gt;Emacs 中文环境配置&lt;/a&gt; ，当然不看也行，毕竟具体设置在本篇中需要推倒重来；
+&lt;kbd&gt;M-x package-install RET pyim RET&lt;/kbd&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;将 &lt;code&gt;liberime.so&lt;/code&gt; 动态库存至 pyim 文件夹中：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cp ~/liberime/buid/liberime.so ~/.emacs.d/pyim/
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;初试啼声&#34;&gt;初试啼声&lt;/h2&gt;
+
+&lt;p&gt;接下来就是添加 emacs 对于 liberime 的配置，我先想当然地试了这个配置：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(liberime-start (expand-file-name &amp;quot;~/Library/Rime&amp;quot;)
+                (expand-file-name &amp;quot;~/.emacs.d/pyim/rime/&amp;quot;))
+(liberime-select-schema &amp;quot;terra_double_pinyin_mspy&amp;quot;)
+(setq pyim-default-scheme &#39;rime)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个方法有几个问题，一是哪怕我在设置中采用了简体，输出依然为繁体字；二是不支持分号与声调，所以在微软双拼中不能输入元音为 ing 的字，也不能通过声调来选词；三则是由于引入了诸多词库，打字特别卡顿。&lt;/p&gt;
+
+&lt;h2 id=&#34;再接再厉&#34;&gt;再接再厉&lt;/h2&gt;
+
+&lt;p&gt;然后我可以通过添加新的 schema 来提供对分号的支持，但是声调比较麻烦。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(add-to-list
+ &#39;pyim-schemes
+ &#39;(rime-mspy
+   :document &amp;quot;support ;&amp;quot;
+   :class rime
+   :first-chars &amp;quot;abcdefghijklmnopqrstuvwxyz&amp;quot;
+   :rest-chars &amp;quot;abcdefghijklmnopqrstuvwxyz;&amp;quot;
+   :prefer-trigger-chars nil
+   ))
+
+(liberime-start (expand-file-name &amp;quot;/Library/Input Methods/Squirrel.app/Contents/SharedSupport&amp;quot;)
+                (expand-file-name &amp;quot;~/.emacs.d/pyim/rime/&amp;quot;))
+(liberime-select-schema &amp;quot;double_pinyin_mspy&amp;quot;)
+(setq pyim-default-scheme &#39;rime-mspy)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是我发现只要改回共享库，打出来的就是简体，但是我不明白为什么只能使用共享库，却不能使用个人库，毕竟我还魔改了我的鼠须管呀，万一我想打 emoji 呢，万一我想引用个古诗词呢？&lt;/p&gt;
+
+&lt;h2 id=&#34;最终解决方案&#34;&gt;最终解决方案&lt;/h2&gt;
+
+&lt;p&gt;一番折腾之后，终于找出了合适的方案：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;个人库无法显示繁体的原因其实很简单，由于鼠须管默认将 &lt;a href=&#34;https://github.com/BYVoid/OpenCC&#34; target=&#34;_blank&#34;&gt;opencc 开放中文转换库&lt;/a&gt; 放在共享库中，所以个人库中并不包含 opencc，这样 build 的时候就不能调用这些转换文件。所以，一行代码搞定。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;ln -s /Library/Input\ Methods/Squirrel.app/Contents/SharedSupport/opencc/* ~/Library/Rime/opencc/
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;输入分号的问题前面通过调用新写的 schema 解决，但是声调问题比较麻烦。由于 pyim 作者给减号键（我用作平声调的）赋予了太多用途，我这半调子 lisp 水平一时半会儿也写不了一个新的函数使此键在非后翻页状态作为简单的 &lt;code&gt;pyim-self-insert-command&lt;/code&gt; ，而且还得把后面那个函数改了，事情实在太多，所以我将方括号改作翻页，并将长得差不多的等号键用作平声。以后有时间，可能还是会把它改回减号键，毕竟长得更像一点。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;其次则是卡顿的问题。我发现当 liberime build 时，由于在个人库中已经有过 build 好的文件，所以不会在 liberime 的库中重新 build 一份，这样非常影响速度。所以我复制了一份我写的地球双拼给 liberime 专用（yaml 文件见&lt;a href=&#34;https://github.com/ziyunch/Rime/blob/master/terra%5Fdouble%5Fpinyin%5Fpyim.schema.yaml&#34; target=&#34;_blank&#34;&gt;这儿&lt;/a&gt;），效果拔群。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;具体配置如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(require &#39;use-package)
+(use-package pyim
+    :ensure nil
+    :demand t
+    :config
+    (setq default-input-method &amp;quot;pyim&amp;quot;)
+    (setq pyim-page-length 9)
+    :bind
+    (:map pyim-mode-map
+          (&amp;quot;]&amp;quot; . pyim-page-next-page)
+          (&amp;quot;[&amp;quot; . pyim-page-previous-page)
+          (&amp;quot;-&amp;quot; . pyim-self-insert-command)
+          (&amp;quot;=&amp;quot; . pyim-self-insert-command))
+    )
+(use-package liberime
+    :load-path &amp;quot;~/.emacs.d/pyim/&amp;quot;
+    :config
+    (liberime-start (expand-file-name &amp;quot;~/Library/Rime/&amp;quot;)
+                    (expand-file-name &amp;quot;~/.emacs.d/pyim/rime&amp;quot;))
+    (liberime-select-schema &amp;quot;terra_double_pinyin_pyim&amp;quot;)
+    (add-to-list
+     &#39;pyim-schemes
+     &#39;(rime-mspy
+       :document &amp;quot;support ;&amp;quot;
+       :class rime
+       :first-chars &amp;quot;abcdefghijklmnopqrstuvwxyz/&amp;quot;
+       :rest-chars &amp;quot;abcdefghijklmnopqrstuvwxyz;=/,\\&amp;quot;
+       :prefer-trigger-chars nil
+       ))
+    (setq pyim-default-scheme &#39;rime-mspy)
+    )
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;另外，我在 &lt;code&gt;~/.emacs.d/pyim/rime/&lt;/code&gt; 文件夹中添加了 pyim 作者推荐的优化配置文件 &lt;code&gt;default.custom.yaml&lt;/code&gt; ，详见其 &lt;a href=&#34;https://github.com/tumashu/pyim/blob/master/README.md&#34; target=&#34;_blank&#34;&gt;github&lt;/a&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;patch:
+  schema_list:
+    - schema: terra_double_pinyin_pyim
+  &amp;quot;menu/page_size&amp;quot;: 50
+  &amp;quot;speller/auto_select&amp;quot;: false
+  &amp;quot;speller/auto_select_unique_candidate&amp;quot;: false
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>Emacs 中文环境配置</title>
+      <link>/post/443.html/</link>
+      <pubDate>Wed, 03 Jul 2019 13:44:00 -0400</pubDate>
+      <guid>/post/443.html/</guid>
+      <description>&lt;p&gt;使用 Emacs 三年多了，当时受了 &lt;a href=&#34;https://github.com/redguardtoo/mastering-emacs-in-one-year-guide&#34; target=&#34;_blank&#34;&gt;一年成为 Emacs 高手&lt;/a&gt; 的蛊惑，且贪图便利，使用了 &lt;a href=&#34;https://github.com/purcell/emacs.d&#34; target=&#34;_blank&#34;&gt;Purcell 的配置&lt;/a&gt;。正如 Purcell 所说，此配置相当 reasonable，用来入门确实让我受益匪浅，少走了很多弯路。三年使用下来，我需要添加的插件只有 &lt;code&gt;org-ref&lt;/code&gt; 和 &lt;code&gt;ob-smiles&lt;/code&gt; ，配置更新也仅须 &lt;code&gt;git pull&lt;/code&gt; 外加 &lt;kbd&gt;M-x package-list-packages U x&lt;/kbd&gt; 即可，非常方便。&lt;/p&gt;
+
+&lt;p&gt;然而过去三年来，我主要是使用 Emacs 中的 org-mode 来记 Science 与 Tech 方面笔记，基于 Latex 的长文章 / 代码我更喜欢用 Atoms + Vim-mode 来写，基于 Markdown 的博客则用 MWeb 来写，中文笔记喜欢使用 Bears，最后却还是回到了苹果自带的免费 Notes。其他零零碎碎的场景则使用更为零碎的 app，餐馆用 DayGram + Workflowy，记账用随手记。非常不统一。&lt;/p&gt;
+
+&lt;p&gt;也就是说，我并不是一个“running my life with Emacs”的重症者，Purcell 配置的 Emacs 中也有大量我用不到，或者需要使用却不甚了解的插件。所以失业在家这个契机恰好也是让我重新审视 Emacs，看看我能否最大化地使用 Emacs。&lt;/p&gt;
+
+&lt;p&gt;对我而言，使用 Atoms 来写代码与 Latex，是由于我对使用 Emacs 调试还不甚熟练。所以这几天我花了一点时间重新阅读了 Emacs 手册。&lt;/p&gt;
+
+&lt;p&gt;使用 MWeb 来写博客与使用 Notes 来记笔记的原因则比较可笑，因为我基本上都是使用英文记录 Science &amp;amp; Tech 方面的笔记，我并没有配置 Emacs 的中文环境。所以需要使用中文来写东西时，我自然就得换用其他工具。这段时间准备面试，将 org-mode 的使用范围扩大到记录面试适宜，由于一亩三分地是一个主要资料来源，不免需要粘贴许多中文帖子进来。这时再将 Emacs 视为一个纯英文环境未免有些麻烦。而将 Emacs 中文化了，自然也不需要 MWeb 和 Notes 或者 Bear 什么事了。&lt;/p&gt;
+
+&lt;p&gt;而记录餐馆和消费的需求比较麻烦，本文暂且搁置，今后有空再来研究。&lt;/p&gt;
+
+&lt;h2 id=&#34;emacs-中文输入法&#34;&gt;Emacs 中文输入法&lt;/h2&gt;
+
+&lt;p&gt;Emacs 窗口左下角显示的是 character set 与 editing state，其中 character set 默认值为 U，即没有 input-mode 且使用 unicode 的 coding system，通过 &lt;kbd&gt;C-\&lt;/kbd&gt; ，可以非常方便地设置输入法并进行切换。&lt;/p&gt;
+
+&lt;p&gt;Emacs 有一些自带的中文输入法，比如拼音（chinese-py）、自然码（chinese-ziranma），还有一些四声（chinese-sisheng）、英汉（chinese-ecdict）等输入法。我将简体编码的一些输入法列于下表，详见 &lt;code&gt;leim-lisp.el&lt;/code&gt; （可通过 &lt;kbd&gt;M-x find-library&lt;/kbd&gt; 迅速查看）。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;input mode&lt;/th&gt;
+&lt;th&gt;输入法&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;chinese-ccdospy&lt;/td&gt;
+&lt;td&gt;缩写拼音&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;chinese-ctlau&lt;/td&gt;
+&lt;td&gt;刘锡祥式粤音&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;chinese-punct&lt;/td&gt;
+&lt;td&gt;标点符号&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;chinese-py&lt;/td&gt;
+&lt;td&gt;拼音&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;chinese-qj&lt;/td&gt;
+&lt;td&gt;全角&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;chinese-sw&lt;/td&gt;
+&lt;td&gt;首尾&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;chinese-tonepy&lt;/td&gt;
+&lt;td&gt;带调拼音&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;chinese-ziranma&lt;/td&gt;
+&lt;td&gt;自然码&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;由于我习惯用微软双拼，故另外安装 &lt;a href=&#34;https://github.com/tumashu/pyim&#34; target=&#34;_blank&#34;&gt;pyim&lt;/a&gt;，配置如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(require &#39;pyim)
+(require &#39;pyim-basedict)
+(pyim-basedict-enable)
+(setq default-input-method &amp;quot;pyim&amp;quot;)
+(setq pyim-default-scheme &#39;microsoft-shuangpin)
+(setq pyim-page-tooltip &#39;popup)
+(setq pyim-page-length 5)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;emacs-中文字体&#34;&gt;Emacs 中文字体&lt;/h2&gt;
+
+&lt;p&gt;Emacs 中默认的中文字体是 Arial Unicode MS，看着总觉得哪哪不顺眼，所以下一步就是更换个顺眼的中文字体。&lt;/p&gt;
+
+&lt;p&gt;此处我先参考了 &lt;a href=&#34;http://zhuoqiang.me/torture-emacs.html&#34; target=&#34;_blank&#34;&gt;zhuoqiang 的做法&lt;/a&gt;，将中英文字体设为等宽的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;;; Setting English Font
+(set-face-attribute &#39;default nil :font &amp;quot;DejaVu Sans Mono 14&amp;quot;)
+
+;; Chinese Font
+(dolist (charset &#39;(kana han symbol cjk-misc bopomofo))
+  (set-fontset-font (frame-parameter nil &#39;font)
+                    charset (font-spec :family &amp;quot;PingFang SC&amp;quot;
+                                       :size 16)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;并将他写的更为通用的设置字体的函数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(defun qiang-set-font (english-fonts
+                       english-font-size
+                       chinese-fonts
+                       &amp;amp;optional chinese-font-size))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;略加修改为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(defun qiang-set-font (english-fonts
+                       english-font-size
+                       chinese-fonts
+                       &amp;amp;optional chinese-font-scale)
+    ...
+    :size (* chinese-font-scale english-font-size))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然而当我用 &lt;kbd&gt;C-x C-+&lt;/kbd&gt; 动态调整字体大小时，发现只有英文字体会缩放，中文则仍然蠢蠢地处于初始大小。查手册得可通过 &lt;code&gt;face-font-rescale-alist&lt;/code&gt; 来设定特定字体缩放值。简单来说就是这样：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(setq face-font-rescale-alist &#39;((&amp;quot;PingFang SC&amp;quot; . chinese-font-scale))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是这样只能对苹方字体起效，如果一个一个对 font-list 中的字体修改 scale-factor 看起来又不简洁。于是我想到两种较为简便的设定方式：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;;; First method
+(setq face-font-rescale-alist
+      (loop for x in zh-font-list
+            collect (cons x chinese-font-scale)))
+;; Second method
+(setq face-font-rescale-alist
+      (pairlis zh-font-list
+               (make-list (list-length zh-font-list)
+                           chinese-font-scale)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;效果拔群。&lt;/p&gt;
+
+&lt;p&gt;详细配置如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(defun qiang-font-existsp (font)
+  (if (null (x-list-fonts font))
+      nil
+    t))
+
+(defvar zh-font-list &#39;(&amp;quot;PingFang SC&amp;quot; &amp;quot;Hiragino Sans GB&amp;quot; &amp;quot;Microsoft Yahei&amp;quot; &amp;quot;Source Han Sans Normal&amp;quot; &amp;quot;STHeiti&amp;quot; &amp;quot;黑体&amp;quot; &amp;quot;新宋体&amp;quot; &amp;quot;宋体&amp;quot;))
+(defvar en-font-list &#39;(&amp;quot;DejaVu Sans Mono&amp;quot; &amp;quot;Monaco&amp;quot; &amp;quot;Consolas&amp;quot; &amp;quot;Monospace&amp;quot; &amp;quot;Courier New&amp;quot;))
+
+(defun qiang-make-font-string (font-name font-size)
+  (if (and (stringp font-size)
+           (equal &amp;quot;:&amp;quot; (string (elt font-size 0))))
+      (format &amp;quot;%s%s&amp;quot; font-name font-size)
+    (format &amp;quot;%s %s&amp;quot; font-name font-size)))
+
+(defun qiang-set-font (english-fonts
+                       english-font-size
+                       chinese-fonts
+                       &amp;amp;optional chinese-font-scale)
+
+  (setq chinese-font-scale (or chinese-font-scale 1.2))
+
+  (setq face-font-rescale-alist
+        (loop for x in zh-font-list
+              collect (cons x chinese-font-scale)))
+
+  &amp;quot;english-font-size could be set to \&amp;quot;:pixelsize=18\&amp;quot; or a integer.
+If set/leave chinese-font-scale to nil, it will follow english-font-size&amp;quot;
+
+  (require &#39;cl)                         ; for find if
+  (let ((en-font (qiang-make-font-string
+                  (find-if #&#39;qiang-font-existsp english-fonts)
+                  english-font-size))
+        (zh-font (font-spec :family (find-if #&#39;qiang-font-existsp chinese-fonts))))
+
+    ;; Set the default English font
+    (message &amp;quot;Set English Font to %s&amp;quot; en-font)
+    (set-face-attribute &#39;default nil :font en-font)
+
+    ;; Set Chinese font
+    ;; Do not use &#39;unicode charset, it will cause the English font setting invalid
+    (message &amp;quot;Set Chinese Font to %s&amp;quot; zh-font)
+    (dolist (charset &#39;(kana han symbol cjk-misc bopomofo))
+      (set-fontset-font (frame-parameter nil &#39;font)
+                        charset zh-font))))
+
+(qiang-set-font en-font-list 14 zh-font-list)
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

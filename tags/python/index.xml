@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python | RUNHAN YU</title>
+    <link>/tags/python/</link>
+      <atom:link href="/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <description>Python</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Fri, 30 Aug 2019 11:14:00 -0400</lastBuildDate>
+    <image>
+      <url>/img/icon-192.png</url>
+      <title>Python</title>
+      <link>/tags/python/</link>
+    </image>
+    
+    <item>
+      <title>Hacking the Data Transformation Interview</title>
+      <link>/post/448.html/</link>
+      <pubDate>Fri, 30 Aug 2019 11:14:00 -0400</pubDate>
+      <guid>/post/448.html/</guid>
+      <description>&lt;p&gt;I am currently (still) seeking a job in data/software engineering area, and I am preparing for all kinds of technical interviews, ranging from coding, algorithm, system design, SQL to computer science fundamental quiz. Data engineer is a role with vague definition, and people with this title functions as an ETL (extract, transformation, load) engineer in some companies. Thus, topics on data transformation could be covered during the interview. In this blog, I am trying to hack interview focusing on data tranformation.&lt;/p&gt;
+
+&lt;h2 id=&#34;prerequisites-boto3&#34;&gt;Prerequisites: boto3&lt;/h2&gt;
+
+&lt;p&gt;Boto is the AWS SDK for python, which provides easy-to-use, object-oriented API and low-level access to AWS services. We could find the documentation &lt;a href=&#34;https://boto3.amazonaws.com/v1/documentation/api/latest/index.html&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;We could easily install the latest Boto 3 release via pip:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ pip install boto3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then configure the credential file at &lt;code&gt;~/.aws/credentials&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-nil&#34;&gt;[default]
+aws_access_key_id = YOUR_ACCESS_KEY
+aws_secret_access_key = YOUR_SECRET_KEY
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And set the default region at &lt;code&gt;~/.aws/config&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-nil&#34;&gt;[default]
+region=us-east-1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To use boto3, we could import it and pass the service-to-use to it. For example, to use Amazon S3, we could choose a resource by:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import boto3
+s3 = boto3.resource(&#39;s3&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Create a s3 bucket over client level:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;s3_client = boto3.client(&#39;s3&#39;)
+s3_client.create_bucket(Bucket=&#39;BUCKET_NAME&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;List existing buckets for the AWS account:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;response = s3_client.list_buckets()
+for bucket in response[&#39;Buckets&#39;]:
+    print(f&#39;  {bucket[&amp;quot;Name&amp;quot;]}&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Upload file into a s3 bucket:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;response = s3_client.upload_file(file_name, bucket, object_name)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or upload object in binary mode into a s3 bucket:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;with open(&#39;test.jpg&#39;, &#39;rb&#39;) as f:
+    s3.upload_fileobj(f, &amp;quot;BUCKET_NAME&amp;quot;, &amp;quot;OBJECT_NAME&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or directly put object into a s3 bucket over the bucket level:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;data = open(&#39;test.jpg&#39;, &#39;rb&#39;)
+bucket = s3.Bucket(&#39;my-bucket&#39;)
+bucket.put_object(Key=object_name, Body=data)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To download file from a S3 bucket, we could:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;s3.download_file(&#39;BUCKET_NAME&#39;, &#39;OBJECT_NAME&#39;, &#39;FILE_NAME&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;with open(&#39;FILE_NAME&#39;, &#39;wb&#39;) as f:
+    s3.download_fileobj(&#39;BUCKET_NAME&#39;, &#39;OBJECT_NAME&#39;, f)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We could also set configuration when uploading, downloading, or copying a file or S3 object by:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from boto3.s3.transfer import TransferConfig
+GB = 1024 ** 3
+config = TransferConfig(multipart_threshold=5*GB)
+config = TransferConfig(max_concurrency=5)
+config = TransferConfig(use_threads=False)
+s3.upload_file(&#39;FILE_NAME&#39;, &#39;BUCKET_NAME&#39;, &#39;OBJECT_NAME&#39;, Config=config)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;prerequisites-psycopg2&#34;&gt;Prerequisites: psycopg2&lt;/h2&gt;
+
+&lt;p&gt;Psycopg2 is a popular PostgreSQL database adapter for python. We could find documentation &lt;a href=&#34;http://initd.org/psycopg/docs/&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;We could easily install psycopg2 via pip:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ pip install psycopg2-binary
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To use psycopg2, we could import it, connect to an existing database and open a cursor to perform database operations:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import psycopg2
+conn = psycopg2.connect(dbname=&amp;quot;DATABASE_NAME&amp;quot;, user=&amp;quot;USER&amp;quot;, host=&amp;quot;HOST&amp;quot;, port=&amp;quot;PORT&amp;quot;, password=&amp;quot;PASSWORD&amp;quot;)
+cur = conn.cursor()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Query the database and fetch data in an iteration-like way:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cur.execute(sql_query)
+cur.fetchone()
+cur.fetchmany(2)
+cur.fetchall()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Pass parameters to SQL queries:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cur.execute(&amp;quot;&amp;quot;&amp;quot;
+    INSERT INTO some_table (an_int, a_date, another_date, a_string)
+    VALUES (%(int)s, %(date)s, %(date)s, %(str)s);
+    &amp;quot;&amp;quot;&amp;quot;,
+    {&#39;int&#39;: 10, &#39;str&#39;: &amp;quot;O&#39;Reilly&amp;quot;, &#39;date&#39;: datetime.date(2005, 11, 18)})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Make the changes to the database persistent:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;conn.commit()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Close communication with the database&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cur.close()
+conn.close()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;upload-data-from-s3-into-redshift&#34;&gt;Upload data from S3 into Redshift&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def main():
+    connection_parameters = {
+        &#39;dbname&#39;: dbname,
+        &#39;user&#39;: user,
+        &#39;host&#39;: host,
+        &#39;port&#39;: port,
+        &#39;password&#39;: password
+    }
+    try:
+        conn = psycopg2.connect(**connection_parameters)
+        print(&amp;quot;Connected to Redshift.&amp;quot;)
+    except:
+        print(&amp;quot;Unable to connect to Redshift.&amp;quot;)
+
+    cur = conn.cursor()
+
+    upload_statement = &amp;quot;
+            COPY {}.{}
+            FROM {}
+            IAM_ROLE {}
+            CSV;
+            COMMIT;
+    &amp;quot;.format(table_name, schema, file_name, iam_role)
+
+    try:
+        cur.execute(upload_statement)
+        print(&amp;quot;Upload successfully&amp;quot;)
+    except psycopg2.Error:
+        raise ExecuteFailure(&amp;quot;Failed to upload the file.&amp;quot;)
+    cur.close()
+    conn.close()
+
+if __name__ == &amp;quot;__main__&amp;quot;:
+    main()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;load-data-from-redshift-to-pandas&#34;&gt;Load data from Redshift to pandas&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import sqlalchemy as sa
+import pandas as pd
+surl = &#39;redshift+psycopg2://&#39;
+engine = sa.create_engine(surl+user+&#39;:&#39;+password+&#39;@&#39;+host+&#39;:&#39;+port+&#39;/&#39;+dbname,echo=False)
+df = pd.read_sql_query(&#39;SELECT * FROM table ;&#39;, engine)
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>Emacs 记帐</title>
+      <link>/post/444.html/</link>
+      <pubDate>Thu, 04 Jul 2019 12:58:00 -0400</pubDate>
+      <guid>/post/444.html/</guid>
+      <description>&lt;p&gt;昨天搞定 Emacs 的中文环境，今天想着好久没记帐了，随手记总是很花时间，干脆一鼓作气，将记帐一起搬过来。&lt;/p&gt;
+
+&lt;h2 id=&#34;复式记帐&#34;&gt;复式记帐&lt;/h2&gt;
+
+&lt;p&gt;我本科时双修了一门金融，其中最为繁琐，也是最令人头疼的一门课便是会计学。我不爱听讲，毕业之后也将会计的知识点忘得查差不多了，然而其&amp;rdquo;有借必有贷，借贷必相等&amp;rdquo;的复式记帐法，反而是我生活中运用最多的。&lt;/p&gt;
+
+&lt;p&gt;复式记帐法说起来复杂，对个人来说，就是将每笔交易分门别类，填入下面这条等式中：&lt;/p&gt;
+
+&lt;style&gt;.org-center { margin-left: auto; margin-right: auto; text-align: center; }&lt;/style&gt;
+
+&lt;div class=&#34;org-center&#34;&gt;
+  &lt;div&gt;&lt;/div&gt;
+
+&lt;p&gt;资产 + 费用 = 负债 + 所有者权益 + 收入&lt;/p&gt;
+
+&lt;p&gt;&lt;/div&gt;&lt;/p&gt;
+
+&lt;p&gt;在个人记帐中，这条等式辅以借贷概念会令人望而生畏，所以我将其略一变形：&lt;/p&gt;
+
+&lt;style&gt;.org-center { margin-left: auto; margin-right: auto; text-align: center; }&lt;/style&gt;
+
+&lt;div class=&#34;org-center&#34;&gt;
+  &lt;div&gt;&lt;/div&gt;
+
+&lt;p&gt;（+资产）+（-负债）+（+费用）+（-收入）+（-所有者权益）= 0&lt;/p&gt;
+
+&lt;p&gt;&lt;/div&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;资产与负债都是与金钱直接挂钩的，比如银行户头，比如人民币美钞，比如信用卡帐户，再比如借条，这些都可以算是货币的不同表示形式。&lt;/li&gt;
+&lt;li&gt;费用与收入则是与金钱间接挂钩的，比如工资，比如商品，比如服务，这些都可以算是生产资本与商品资本的不同表现形式。其中收入与字面意思不同，可以理解为生产资本（劳动力等）。&lt;/li&gt;
+&lt;li&gt;所有者权益对个人意义不大，一般用来记录历史盈余与糊涂帐。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;而这个变形公式中的正负号，则可以将各项目的符号关系，用作资金流向的参照。这么说有点玄乎，换个茨威格式的说法就是：&amp;rdquo;人们从命运得到的一切，冥冥之中都记下了它的价钱。&amp;rdquo;花钱买了服务，则是减少资产（花了钱），增加费用（得到服务）；工资到帐，则是增加资产（到帐），减少收入（既有劳动时间的减少）；别人跟你借了钱，则是资产减少（银行帐户或现金余额减少），负债增加（别人在你这儿的负债）。&lt;/p&gt;
+
+&lt;p&gt;总结一下，由于人类暂时无法操控时间，所以费用一般为正，收入一般为负。而没有破产的情况下资产一般为正，别人欠你的钱为正，信用卡债（你欠别人的钱）为负。&lt;/p&gt;
+
+&lt;h2 id=&#34;随手记帐本导出&#34;&gt;随手记帐本导出&lt;/h2&gt;
+
+&lt;p&gt;刚来美帝我就开始用随手记，一晃也七年过去了（随手记提醒：今天是您记帐的2524天）。虽然作为强迫症的我有着非常完整的消费记录，但是这也带来了非常大的迁移成本。随手记的问题在于想要使用复式记帐时，需要通过结算中转来完成一对多的转帐操作，在聚餐或者帮别人付钱的时候比较麻烦。所以每周都需要花费大量时间来输入帐单，费时费力。&lt;/p&gt;
+
+&lt;p&gt;首先尝试从随手记 app 导出，设置－高级功能－备份与同步－备份与恢复－本地备份与恢复－WIFI备份，得到一个 &lt;code&gt;.kbf&lt;/code&gt; 文件，将其后缀改为 &lt;code&gt;.zip&lt;/code&gt; ，解压得到一个 &lt;code&gt;.sqlite&lt;/code&gt; 文件。然而此文件经过加密，打开并不容易。&lt;/p&gt;
+
+&lt;p&gt;不过在那个入口还看到导出 EXCEL 文件的选项，乃会员专享，恰好首月免费，我又去意已决，遂开通并获取文件。&lt;/p&gt;
+
+&lt;h2 id=&#34;记帐方式选择&#34;&gt;记帐方式选择&lt;/h2&gt;
+
+&lt;p&gt;有了之前的记录，就可以着手选择一款好用的记帐软件了。虽然有可以连接 postgresql 的记帐软件 gnucash，但我还是想用 Emacs 来进行记录操作。网上一搜，有一个 &lt;a href=&#34;https://plaintextaccounting.org/&#34; target=&#34;_blank&#34;&gt;Plain Text Accounting&lt;/a&gt; 网站做了详尽的整合。一路看下来，虽然 Ledger 是老前辈，可是 Beancount 的前端 Fava 效果实在好看，有这么一个轮子，为何不用呢？同时还搜到了一位中文博主 wzyboy 的三年的使用经验（&lt;a href=&#34;https://wzyboy.im/post/1063.html&#34; target=&#34;_blank&#34;&gt;Beancount &amp;mdash;&amp;mdash; 命令行复式簿记&lt;/a&gt;，&lt;a href=&#34;https://wzyboy.im/post/1317.html&#34; target=&#34;_blank&#34;&gt;使用 Beancount 记录证券投资&lt;/a&gt;），感觉非常不错，遂选定 Beancount。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ pip install beancount
+$ pip install fava
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然而 pip 安装方式有两个问题，一是更新不如 source code 频繁，而是不带有 elisp code。若是自己 makefile，由于作者使用仅支持 Python 2.7 的 Mercurial 进行分布式文件管理，如何将 bitbucket 上得到的 sourse code 保持更新也是比较让人头疼的事。我只能暂时将 &lt;code&gt;.el&lt;/code&gt; 文件下载下来，以后手动进行更新，较为折腾。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(add-to-list &#39;load-path &amp;quot;/path/to/elisp/file/&amp;quot;)
+  (require &#39;beancount)
+  (add-to-list &#39;auto-mode-alist &#39;(&amp;quot;\\.bean\\&#39;&amp;quot; . beancount-mode))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;帐本结构&#34;&gt;帐本结构&lt;/h2&gt;
+
+&lt;p&gt;由于我已经通过随手记记了七年的帐，所以如果采用单一帐本的话，一方面会导致主帐本过于臃肿，另一方面也会给帐本导入增加障碍。经过考量，我的帐本结构如主帐本文件所示是这样的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;option &amp;quot;title&amp;quot; &amp;quot;我的帐本&amp;quot;
+option &amp;quot;operating_currency&amp;quot; &amp;quot;USD&amp;quot; ; 这样在前端USD外的货币会共享一栏
+
+include &amp;quot;accounts.bean&amp;quot; ; 货币相关的资产（Assets）负债（Liabilities）
+include &amp;quot;items.bean&amp;quot; ; 资本相关的收入（Income）费用（Expenses）
+include &amp;quot;commodities.bean&amp;quot; ; 货币
+include &amp;quot;balances.bean&amp;quot; ; 对帐记录
+
+include &amp;quot;2019.bean&amp;quot; ; 记录每年普通帐目
+
+include &amp;quot;event/event-a.bean&amp;quot; ; 记录事件帐目（旅游为主）
+
+include &amp;quot;points/bank-a.bean&amp;quot; ; 记录里程、积分、礼品卡、预扣款等
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;随手记帐本导入&#34;&gt;随手记帐本导入&lt;/h2&gt;
+
+&lt;p&gt;随手记帐本导出后是一个 EXCEL 文件，含有交易种类、类别、子类、帐户 1、帐户 2、花费、人员、商家、事件、日期、详细这些列，所以我的导入思路是：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;建立两个字典 &lt;code&gt;account_dict&lt;/code&gt; 与 &lt;code&gt;item_dict&lt;/code&gt; ，分别用于转换帐户1/2与子类；&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;通过不同交易种类判断交易条目的正负号：&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;交易种类&lt;/th&gt;
+&lt;th&gt;子类&lt;/th&gt;
+&lt;th&gt;帐户1&lt;/th&gt;
+&lt;th&gt;帐户2&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;支出&lt;/td&gt;
+&lt;td&gt;+&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;收入&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;+&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;转帐&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;逐行读取 CSV 文档并转换为 beancount 记帐格式并存储于每年的文件或事件文件中，同时记录四大项目的开始时间与事件标签；&lt;/p&gt;
+
+&lt;p&gt;如:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-csv&#34;&gt;      支出,日常,Hannaford,Chase Freedom,,12.34,,Hannaford,,1/1/19,
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;则转换为:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;2019-01-01 * &amp;quot;Hannaford&amp;quot; &amp;quot;支出&amp;quot;
+  Expenses:Grocery:Hannaford   +12.34 USD
+  Liabilities:US:Chase:Freedom -12.34 USD
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;之前使用随手记的时候，我使用&amp;rdquo;结算中转&amp;rdquo;条目来记录复杂交易。而在 beancount 中，由于复杂交易可以直接记录在一个交易事件中，这个&amp;rdquo;结算中转&amp;rdquo;其实没什么用处了。所以在导入帐本时，我将当日产生的结算事件都暂存在一个列表中，如果总额为 0，则仅记录其他类别/帐目的行为，添加 flag 并将&amp;rdquo;详细&amp;rdquo;做为注释记录在行为右边，如果不为 0,则添加 flag 并原样输出，后期再做修改。如:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-csv&#34;&gt;      转账,,,Chase Freedom,结算中转,12.34,,Hannaford,,1/1/19,买菜
+      转账,,,结算中转,朋友A,2.34,,Hannaford,,1/1/19,水果
+      转账,,,结算中转,朋友B,5.55,,Hannaford,,1/1/19,蔬菜
+      支出,日常,Hannaford,结算中转,,6.45,,Hannaford,,1/1/19,鸡蛋
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;则转换为:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;2019-01-01 ! &amp;quot;Hannaford&amp;quot; &amp;quot;买菜 水果 蔬菜 鸡蛋&amp;quot;
+  Liabilities:US:Chase:Freedom -12.34 USD ; 买菜
+  Liabilities:Payables:A        +2.34 USD ; 水果
+  Liabilities:Payables:B        +5.55 USD ; 蔬菜
+  Expenses:Grocery:Hannaford    +6.45 USD ; 鸡蛋
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;生成 &lt;code&gt;accounts.bean&lt;/code&gt; 、 &lt;code&gt;items.bean&lt;/code&gt; 、 &lt;code&gt;balances.bean&lt;/code&gt; 与主帐本 &lt;code&gt;main.bean&lt;/code&gt; ；&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;balances.bean&lt;/code&gt; 比较特殊，用于核对帐目。可以通过银行对帐单自动生成，但是由于我 17 年后的对帐单都没下载到本地来，所以直接在下载的同时手动输入数额了。由于 balance 仅核算当日以前的交易，所以有时需要修改 balance 日期来避免错误提示。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;2019-01-11 balance Liabilities:US:Chase:Freedom -123.45 USD
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对于现金来说由于比较零散，也不一定留有小票，所以我会用 pad 补齐：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;2019-01-31 pad Assets:US:Cash Expenses:Grocery:Other
+2019-02-01 balance Assets:US:Cash +50 USD
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;对于货币种类进行核算。&lt;/p&gt;
+
+&lt;p&gt;随手记导出的文件有个问题是不会记录货币种类，所以需要后期对涉及多货币的交易进行核对与修改，比如我帮国内的朋友 c 买了东西，对方还我人民币的话，可以记成：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-beancount&#34;&gt;2019-01-01 * &amp;quot;&amp;quot; &amp;quot;C还钱&amp;quot;
+  Assets:CN:Cash  +68 CNY
+  Liabilities:Payables:C -10 USD @@ 68 CNY
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;查看报表&#34;&gt;查看报表&lt;/h2&gt;
+
+&lt;p&gt;Beancount 自带 &lt;code&gt;bean-web main.bean&lt;/code&gt; 语句，可以在 &lt;a href=&#34;http://localhost:8080/&#34; target=&#34;_blank&#34;&gt;http://localhost:8080/&lt;/a&gt; 查看简单报表。 不过装了 fava 的我，便可以欢乐地使用 &lt;code&gt;fava main.bean&lt;/code&gt; 语句，在 &lt;a href=&#34;http://localhost:5000/&#34; target=&#34;_blank&#34;&gt;http://localhost:5000/&lt;/a&gt; 查看比较华丽的报表。&lt;a href=&#34;https://fava.pythonanywhere.com/example-beancount-file/trial%5Fbalance/&#34; target=&#34;_blank&#34;&gt;这里&lt;/a&gt; 有官方演示，效果拔群。&lt;/p&gt;
+
+&lt;h2 id=&#34;快捷记账&#34;&gt;快捷记账&lt;/h2&gt;
+
+&lt;p&gt;我写了一个简单的 &lt;code&gt;org-capture-templates&lt;/code&gt; ，这样就可以通过 &lt;kbd&gt;C-c c-b&lt;/kbd&gt; 来进行快捷记账。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(setq org-capture-templates
+      &#39; ((&amp;quot;b&amp;quot; &amp;quot;Beancount&amp;quot; plain
+          (file &amp;quot;~/Dropbox/Beancount/2019.bean&amp;quot;)
+          &amp;quot;
+%(org-read-date) %^{标识|*|!} \&amp;quot;%^{商户}\&amp;quot; \&amp;quot;%^{描述}\&amp;quot;
+  %^{借记||Expenses:Grocery:Hannaford|Expenses:Grocery:Other|Expenses:Restaurant|Income:Paycheck|Assets:US:Cash|Assets:CN:Cash|Liabilities:Payables:A|Liabilities:Payables:B|Liabilities:Payables:C|Liabilities:US:Chase:Freedom}  +%^{金额} USD
+  %^{贷记||Expenses:Grocery:Hannaford|Expenses:Grocery:Other|Expenses:Restaurant|Income:Paycheck|Assets:US:Cash|Assets:CN:Cash|Liabilities:Payables:A|Liabilities:Payables:B|Liabilities:Payables:C|Liabilities:US:Chase:Freedom}  -%^{金额} USD&amp;quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;不过在这个模板中，帐户名称需要自定义，比较麻烦，不能通用。未来我会尝试写一个 lisp function 来优化，希望能够实现：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;记帐不限条目，可记录多项事件于同一笔交易中；&lt;/li&gt;
+&lt;li&gt;自动读取 &lt;code&gt;accounts.bean&lt;/code&gt; 与 &lt;code&gt;items.bean&lt;/code&gt; 文件中的项目并作为备选；&lt;/li&gt;
+&lt;li&gt;自动对齐金额。&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>CSV2Bean</title>
+      <link>/project/csv2bean/</link>
+      <pubDate>Fri, 15 Mar 2019 13:44:00 -0400</pubDate>
+      <guid>/project/csv2bean/</guid>
+      <description>&lt;p&gt;• Provide smooth transition from accounting app to plain text accounting tools.&lt;/p&gt;
+
+&lt;p&gt;• Convert &lt;code&gt;.csv&lt;/code&gt; file exported from Sui accounting app to a Beancount text ledger.&lt;/p&gt;
+
+&lt;p&gt;• Feature a &lt;code&gt;lisp&lt;/code&gt; function to quickly add transactions into Beancount using Emacs.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Gene Variation Analysis of Stomach Cancer</title>
+      <link>/project/gistic/</link>
+      <pubDate>Fri, 15 Mar 2019 13:44:00 -0400</pubDate>
+      <guid>/project/gistic/</guid>
+      <description>&lt;p&gt;• Extracted cancer research data from the Cancer Genome Atlas Network &amp;reg;.&lt;/p&gt;
+
+&lt;p&gt;• Applied GISTIC clustering analysis to patient-indexed tables to identify molecular subgroups (Bioinformatics).&lt;/p&gt;
+
+&lt;p&gt;• Mapped gene list with biological annotations with functional annotation tool DAVID (Python).&lt;/p&gt;
+
+&lt;p&gt;• Summarized and visualized stomach cancer-related gene candidates with R package MAFtools &amp;reg;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Multithread Web Crawler</title>
+      <link>/project/multicrawler/</link>
+      <pubDate>Fri, 15 Mar 2019 13:44:00 -0400</pubDate>
+      <guid>/project/multicrawler/</guid>
+      <description>&lt;p&gt;• Write a class to handle multithreading website crawling inside the given domain.&lt;/p&gt;
+
+&lt;p&gt;• Feature a breath-first search algorithm and a multithread pool to visit all urls asynchronously.&lt;/p&gt;
+
+&lt;p&gt;• Handle various status code, time-out and exceptions in a structured manner.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>RxMiner</title>
+      <link>/project/rxminer/</link>
+      <pubDate>Fri, 15 Mar 2019 13:44:00 -0400</pubDate>
+      <guid>/project/rxminer/</guid>
+      <description>
+
+&lt;p&gt;• Developed an ETL pipeline to extract, integrate and transform prescription data from multiple providers in AWS cloud computing to enable nation-wide queries on prescription drug usage (Python, AWS, Airflow).&lt;/p&gt;
+
+&lt;p&gt;• Validated and combined public available Medicaid and Medicare datasets with NIH, FDA and NPPES sources into a SQL queryable databases in Redshift, visualized in website (Redshift, Tableau, JavaScript, CSS).&lt;/p&gt;
+
+&lt;p&gt;• Implemented custom connector to Redshift/PostgreSQL with 20 times more efficiency (Python).&lt;/p&gt;
+
+&lt;h2 id=&#34;rxminer&#34;&gt;RxMiner&lt;/h2&gt;
+
+&lt;p&gt;RxMiner is a scalable data pipeline for prescription drug analytics that standardizes Medicaid and Medicare prescriptions using NIH drug, FDA drug, and NEPPS provider information.&lt;/p&gt;
+
+&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;
+
+&lt;p&gt;With a switch to electronic prescriptions, healthcare and insurance companies are providing large drug usage datasets. However, since each provider has their own way to log prescriptions the data sets are non-standard. Using publicly available drug datasets, RxMiner standardizes and joins prescription datasets.&lt;/p&gt;
+
+&lt;p&gt;RxMiner features:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;100 million standardized prescriptions queryable in Redshift&lt;/li&gt;
+&lt;li&gt;Automated ingestion of Medicaid, Medicare, NIH, FDA and NEPPS data&lt;/li&gt;
+&lt;li&gt;Validation of prescriptions against NIH, FDA and NEPPS&lt;/li&gt;
+&lt;li&gt;Union of prescription from Medicaid and Medicare&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;RxMiner is scalable and built on Amazon S3, EC2, and Redshift on AWS. Tableau can be used to visualize and analyze the standardized dataset or each data source.&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure&gt;
+
+
+  &lt;a data-fancybox=&#34;&#34; href=&#34;https://github.com/ziyunch/RxMiner/raw/master/docs/pipeline.png&#34; &gt;
+&lt;img src=&#34;https://github.com/ziyunch/RxMiner/raw/master/docs/pipeline.png&#34; alt=&#34;&#34; &gt;&lt;/a&gt;
+
+
+
+&lt;/figure&gt;
+
+
+&lt;h2 id=&#34;requirments&#34;&gt;Requirments&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Python 3.7&lt;/li&gt;
+&lt;li&gt;Amazon AWS Account&lt;/li&gt;
+&lt;li&gt;SODA API&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;installation&#34;&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;Clone the RxMiner project to your local computer or `m4.4xlarge` EC2 instance and install awscli and other requirements.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;git clone https://github.com/ziyunch/RxMiner.git
+pip install awscli
+pip install ./requirements.txt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next add the following credentials as environment variables to your &lt;code&gt;~/.bash_profile&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;# AWS Credentials
+export AWS_BUCKET_NAME=XXXX
+export AWS_ACCESS_KEY_ID=XXXX
+export AWS_SECRET_ACCESS_KEY=XXXX
+# SODA API
+export SODAPY_APPTOKEN=XXXX
+# Redshift configuration
+export REDSHIFT_USER=XXXX
+export REDSHIFT_PASSWORD=XXXX
+export REDSHIFT_HOST_IP=XXXX
+export REDSHIFT_PORT=XXXX
+export REDSHIFT_DATABASE=XXXX
+# PostgreSQL configuration
+export POSTGRESQL_USER=XXXX
+export POSTGRESQL_PASSWORD=XXXX
+export POSTGRESQL_HOST_IP=XXXX
+export POSTGRESQL_PORT=XXXX
+export POSTGRESQL_DATABASE=XXXX
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Source the &lt;code&gt;.bash_profile&lt;/code&gt; when finished.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;source ~/.bash_profile
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then import data into S3 bucket.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;. ./deployment/import.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ingest data and stage them in SQL database.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;. ./deployment/ingest.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Prepare sample table based on queries.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;. ./deployment/sql.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;getting-started&#34;&gt;Getting Started&lt;/h2&gt;
+
+&lt;p&gt;Open the website at &lt;a href=&#34;http://rxminer.net&#34; target=&#34;_blank&#34;&gt;http://rxminer.net&lt;/a&gt;. Four graphs are shown in the interactive dashboard. On the top is the market size of all or chosen drugs over the states. Bottom left shows the Top 10 categories of drugs shared most markets for the whole nation or chosen state. Bottom middle shows the market of each drug in the descending order. Bottom right shows the drug usage for each year.&lt;/p&gt;
+
+&lt;p&gt;The sample visualization of national drug usage during 2013-2016 was also published on &lt;a href=&#34;https://public.tableau.com/profile/runhan.yu#!/vizhome/rxminer2/Dashboard1&#34; target=&#34;_blank&#34;&gt;Tableau public server&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The standardized dataset or each data source could be connected by &lt;code&gt;Tableau Desktop 2018.3&lt;/code&gt; or other data analysis or visualization tools.&lt;/p&gt;
+
+&lt;h2 id=&#34;credits&#34;&gt;Credits&lt;/h2&gt;
+
+&lt;p&gt;RxMiner was built as a project at Insight Data Engineering in the Winter 2019 session by Runhan Yu. It is availble as open source and is free to use and modify by anyone.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

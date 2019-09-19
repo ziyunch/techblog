@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hexo | RUNHAN YU</title>
+    <link>/tags/hexo/</link>
+      <atom:link href="/tags/hexo/index.xml" rel="self" type="application/rss+xml" />
+    <description>Hexo</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Mon, 26 Aug 2019 23:49:00 -0400</lastBuildDate>
+    <image>
+      <url>/img/icon-192.png</url>
+      <title>Hexo</title>
+      <link>/tags/hexo/</link>
+    </image>
+    
+    <item>
+      <title>博客由 Hexo 迁移至 Hugo</title>
+      <link>/post/447.html/</link>
+      <pubDate>Mon, 26 Aug 2019 23:49:00 -0400</pubDate>
+      <guid>/post/447.html/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本篇博文使用 org-mode 书就，耶！&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;从 2016 将博客迁移至 Hexo+Github 的方案后，我便一直采用此方案写博客。大体来说感受挺不错的，然而由于我有数百篇博客，build 速度永远很让我头大。尤其是有时 markdown 显示出问题了，我又得等上数分钟才能看到结果，体验很不好。所以一听说 Hugo 能一秒生成博客，哪怕要舍弃我花大功夫美化的 NeXT 主题，我依然心生向往，今天便将 Hexo 迁移至 Hugo，顺便达成了 Emacs 写博客的小目标。&lt;/p&gt;
+
+&lt;h2 id=&#34;安装-hugo-并初始化&#34;&gt;安装 Hugo 并初始化&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;首先使用 Homebrew 安装 Hugo:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!--listend--&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ brew install hugo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;然后建立站点&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!--listend--&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ hugo new site blog
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;安装主题，我采用比较简单的 even 主题&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!--listend--&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ git clone https://github.com/olOwOlo/hugo-theme-even themes/even
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;从-hexo-迁移&#34;&gt;从 Hexo 迁移&lt;/h2&gt;
+
+&lt;p&gt;好消息是，此迁移过程相当无痛。由于我之前将博客内容存在 Dropbox 上，所以只需要将相关文件 link 至 Hugo 的相关文件夹内。结构大致如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;.
+├── content
+│   ├── about
+│   │   └── index.md
+│   └── post
+│       ├── post1.md
+│       └── ...
+├── static
+│   ├── images
+│   │   ├── image1.png
+│   │   └── ...
+│   └── CNAME
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有一个需要注意的地方是 Hexo 与 Hugo 对于 markdown 头文件中的 url 定义不同，我采用 &lt;code&gt;grep&lt;/code&gt; 将其批量改成 &lt;code&gt;slug&lt;/code&gt; ，并在配置文件中添加了 permalinks 的生成方式，以保证超链接的稳定：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;[permalinks]
+  post = &amp;quot;/:year/:month/:slug&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;生成预览&#34;&gt;生成预览&lt;/h2&gt;
+
+&lt;p&gt;输入 &lt;code&gt;hugo server&lt;/code&gt; ，几乎是眨眼工夫，便已在内存中生成预览，而且对于博文可即时显示改动，非常方便。确实比 Hexo 快上百倍。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;                   | ZH-CN
++------------------+-------+
+  Pages            |   956
+  Paginator pages  |   139
+  Non-page files   |     0
+  Static files     |    85
+  Processed images |     0
+  Aliases          |   254
+  Sitemaps         |     1
+  Cleaned          |     0
+
+Total in 820 ms
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;配合-org-mode-使用更佳&#34;&gt;配合 org-mode 使用更佳&lt;/h2&gt;
+
+&lt;p&gt;以前使用 Hexo 写博客时，博文都分散于各种 &lt;code&gt;.md&lt;/code&gt; 文件中，管理起来很不方便。另一方面，由于我平时习惯用 org-mode 记记笔记，管理生活。有了好轮子，我干脆想着一鼓作气把车换了。在此我使用的是 &lt;code&gt;ox-hugo&lt;/code&gt; 的 One post per Org subtree 方案，配置如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-org&#34;&gt;#+HUGO_BASE_DIR: ~/Dropbox/Blog/
+#+HUGO_SECTION: post
+#+HUGO_WEIGHT: auto
+#+HUGO_AUTO_SET_LASTMOD: t
+#+author:
+#+hugo_custom_front_matter: :author &amp;quot;ziyunch&amp;quot;
+* Technical                                                       :@技术宅:
+** TODO 博客由 Hexo 迁移至 Hugo                           :Emacs:Hexo:Hugo:
+   :PROPERTIES:
+   :EXPORT_FILE_NAME: 20190826-hexo-2-hugo
+   :END:
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;也就是说采用标签继承的方式，将博文分类。写完当篇博文，将 &lt;code&gt;TODO&lt;/code&gt; 状态变更为 &lt;code&gt;DONE&lt;/code&gt; 时， &lt;code&gt;ox-hugo&lt;/code&gt; 会自动为文档生成时间戳。然后在 subtree 上 &lt;kbd&gt;C-c C-e H H&lt;/kbd&gt; 即可在相应目录生成 &lt;code&gt;.md&lt;/code&gt; 文档。此时如果后台正在运行着 &lt;code&gt;hugo server&lt;/code&gt; ，即可在 &lt;code&gt;http://localhost:1313/&lt;/code&gt; 看到即时更新。&lt;/p&gt;
+
+&lt;h2 id=&#34;在-github-上发布&#34;&gt;在 Github 上发布&lt;/h2&gt;
+
+&lt;p&gt;第一次部署，需要新建一个 public 文件夹，并将原来部署了 Hexo 博客的 repo 关联上，步骤如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ mkdir public
+$ hugo -t even
+$ cd public
+$ git init
+$ git remote add upstream https://github.com/ziyunch/ziyunch.github.io.git
+$ git add .
+$ git commit -m &amp;quot;switch to hugo&amp;quot;
+$ git push -f upstream master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;之后则可如官网&lt;a href=&#34;https://gohugo.io/hosting-and-deployment/hosting-on-github/&#34; target=&#34;_blank&#34;&gt;发布指南&lt;/a&gt;所示编写一个可执行的 &lt;code&gt;.sh&lt;/code&gt; 文件来自动化部署发布：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;#!/bin/sh
+
+# If a command fails then the deploy stops
+set -e
+
+printf &amp;quot;\033[0;32mDeploying updates to GitHub...\033[0m\n&amp;quot;
+
+# Build the project.
+hugo -t even
+
+# Go To Public folder
+cd public
+
+# Add changes to git.
+git add .
+
+# Commit changes.
+msg=&amp;quot;rebuilding site $(date)&amp;quot;
+if [ -n &amp;quot;$*&amp;quot; ]; then
+        msg=&amp;quot;$*&amp;quot;
+fi
+git commit -m &amp;quot;$msg&amp;quot;
+
+# Push source and build repos.
+git push upstream master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;自此大功告成&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

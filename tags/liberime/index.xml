@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>liberime | RUNHAN YU</title>
+    <link>/tags/liberime/</link>
+      <atom:link href="/tags/liberime/index.xml" rel="self" type="application/rss+xml" />
+    <description>liberime</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 31 Aug 2019 20:40:00 -0400</lastBuildDate>
+    <image>
+      <url>/img/icon-192.png</url>
+      <title>liberime</title>
+      <link>/tags/liberime/</link>
+    </image>
+    
+    <item>
+      <title>Mac 版 Emacs 中使用 Rime 输入法打带调双拼</title>
+      <link>/post/449.html/</link>
+      <pubDate>Sat, 31 Aug 2019 20:40:00 -0400</pubDate>
+      <guid>/post/449.html/</guid>
+      <description>&lt;p&gt;由于我习惯写中文博客，所以将写博客这件事也转移到 Emacs 后，我渐渐感觉到 pyim 的不足。所以今天研究一下如何让 pyim 调用 Rime 的词库。&lt;/p&gt;
+
+&lt;h2 id=&#34;基础配置&#34;&gt;基础配置&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;首先安装鼠须管，此一节可见 &lt;a href=&#34;https://blindwith.science/2019/07/445.html/&#34; target=&#34;_blank&#34;&gt;鼠须管傻瓜化配置&lt;/a&gt;，一句话概括呢就是：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;brew cask install squirrel
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;然后参考&lt;a href=&#34;https://manateelazycat.github.io/emacs/2019/07/24/use-rime-in-emacs.html&#34; target=&#34;_blank&#34;&gt;前人经验&lt;/a&gt;，下载 librime 获取源码并从鼠须管中获取编译好的 &lt;code&gt;librime.dylib&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~
+git clone --recursive https://github.com/rime/librime.git --depth=1
+mkdir -p ~/librime/xbuild/lib/Release/
+cp /Library/Input\ Methods/Squirrel.app/Contents/Frameworks/librime.1.dylib ~/librime/xbuild/lib/Release/librime.dylib
+sudo cp /Library/Input\ Methods/Squirrel.app/Contents/Frameworks/librime.1.dylib /usr/local/lib
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;然后下载并编译 liberime，需要提前安装 cmake 库来进行编译：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;git clone https://gitlab.com/liberime/liberime.git --depth=1
+cd ~/liberime
+export RIME_PATH=~/librime
+make liberime
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;然后需要在 emacs 中安装 pyim，此一节详见 &lt;a href=&#34;https://blindwith.science/2019/07/443.html/&#34; target=&#34;_blank&#34;&gt;Emacs 中文环境配置&lt;/a&gt; ，当然不看也行，毕竟具体设置在本篇中需要推倒重来；
+&lt;kbd&gt;M-x package-install RET pyim RET&lt;/kbd&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;将 &lt;code&gt;liberime.so&lt;/code&gt; 动态库存至 pyim 文件夹中：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cp ~/liberime/buid/liberime.so ~/.emacs.d/pyim/
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;初试啼声&#34;&gt;初试啼声&lt;/h2&gt;
+
+&lt;p&gt;接下来就是添加 emacs 对于 liberime 的配置，我先想当然地试了这个配置：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(liberime-start (expand-file-name &amp;quot;~/Library/Rime&amp;quot;)
+                (expand-file-name &amp;quot;~/.emacs.d/pyim/rime/&amp;quot;))
+(liberime-select-schema &amp;quot;terra_double_pinyin_mspy&amp;quot;)
+(setq pyim-default-scheme &#39;rime)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个方法有几个问题，一是哪怕我在设置中采用了简体，输出依然为繁体字；二是不支持分号与声调，所以在微软双拼中不能输入元音为 ing 的字，也不能通过声调来选词；三则是由于引入了诸多词库，打字特别卡顿。&lt;/p&gt;
+
+&lt;h2 id=&#34;再接再厉&#34;&gt;再接再厉&lt;/h2&gt;
+
+&lt;p&gt;然后我可以通过添加新的 schema 来提供对分号的支持，但是声调比较麻烦。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(add-to-list
+ &#39;pyim-schemes
+ &#39;(rime-mspy
+   :document &amp;quot;support ;&amp;quot;
+   :class rime
+   :first-chars &amp;quot;abcdefghijklmnopqrstuvwxyz&amp;quot;
+   :rest-chars &amp;quot;abcdefghijklmnopqrstuvwxyz;&amp;quot;
+   :prefer-trigger-chars nil
+   ))
+
+(liberime-start (expand-file-name &amp;quot;/Library/Input Methods/Squirrel.app/Contents/SharedSupport&amp;quot;)
+                (expand-file-name &amp;quot;~/.emacs.d/pyim/rime/&amp;quot;))
+(liberime-select-schema &amp;quot;double_pinyin_mspy&amp;quot;)
+(setq pyim-default-scheme &#39;rime-mspy)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是我发现只要改回共享库，打出来的就是简体，但是我不明白为什么只能使用共享库，却不能使用个人库，毕竟我还魔改了我的鼠须管呀，万一我想打 emoji 呢，万一我想引用个古诗词呢？&lt;/p&gt;
+
+&lt;h2 id=&#34;最终解决方案&#34;&gt;最终解决方案&lt;/h2&gt;
+
+&lt;p&gt;一番折腾之后，终于找出了合适的方案：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;个人库无法显示繁体的原因其实很简单，由于鼠须管默认将 &lt;a href=&#34;https://github.com/BYVoid/OpenCC&#34; target=&#34;_blank&#34;&gt;opencc 开放中文转换库&lt;/a&gt; 放在共享库中，所以个人库中并不包含 opencc，这样 build 的时候就不能调用这些转换文件。所以，一行代码搞定。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;ln -s /Library/Input\ Methods/Squirrel.app/Contents/SharedSupport/opencc/* ~/Library/Rime/opencc/
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;输入分号的问题前面通过调用新写的 schema 解决，但是声调问题比较麻烦。由于 pyim 作者给减号键（我用作平声调的）赋予了太多用途，我这半调子 lisp 水平一时半会儿也写不了一个新的函数使此键在非后翻页状态作为简单的 &lt;code&gt;pyim-self-insert-command&lt;/code&gt; ，而且还得把后面那个函数改了，事情实在太多，所以我将方括号改作翻页，并将长得差不多的等号键用作平声。以后有时间，可能还是会把它改回减号键，毕竟长得更像一点。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;其次则是卡顿的问题。我发现当 liberime build 时，由于在个人库中已经有过 build 好的文件，所以不会在 liberime 的库中重新 build 一份，这样非常影响速度。所以我复制了一份我写的地球双拼给 liberime 专用（yaml 文件见&lt;a href=&#34;https://github.com/ziyunch/Rime/blob/master/terra%5Fdouble%5Fpinyin%5Fpyim.schema.yaml&#34; target=&#34;_blank&#34;&gt;这儿&lt;/a&gt;），效果拔群。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;具体配置如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(require &#39;use-package)
+(use-package pyim
+    :ensure nil
+    :demand t
+    :config
+    (setq default-input-method &amp;quot;pyim&amp;quot;)
+    (setq pyim-page-length 9)
+    :bind
+    (:map pyim-mode-map
+          (&amp;quot;]&amp;quot; . pyim-page-next-page)
+          (&amp;quot;[&amp;quot; . pyim-page-previous-page)
+          (&amp;quot;-&amp;quot; . pyim-self-insert-command)
+          (&amp;quot;=&amp;quot; . pyim-self-insert-command))
+    )
+(use-package liberime
+    :load-path &amp;quot;~/.emacs.d/pyim/&amp;quot;
+    :config
+    (liberime-start (expand-file-name &amp;quot;~/Library/Rime/&amp;quot;)
+                    (expand-file-name &amp;quot;~/.emacs.d/pyim/rime&amp;quot;))
+    (liberime-select-schema &amp;quot;terra_double_pinyin_pyim&amp;quot;)
+    (add-to-list
+     &#39;pyim-schemes
+     &#39;(rime-mspy
+       :document &amp;quot;support ;&amp;quot;
+       :class rime
+       :first-chars &amp;quot;abcdefghijklmnopqrstuvwxyz/&amp;quot;
+       :rest-chars &amp;quot;abcdefghijklmnopqrstuvwxyz;=/,\\&amp;quot;
+       :prefer-trigger-chars nil
+       ))
+    (setq pyim-default-scheme &#39;rime-mspy)
+    )
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;另外，我在 &lt;code&gt;~/.emacs.d/pyim/rime/&lt;/code&gt; 文件夹中添加了 pyim 作者推荐的优化配置文件 &lt;code&gt;default.custom.yaml&lt;/code&gt; ，详见其 &lt;a href=&#34;https://github.com/tumashu/pyim/blob/master/README.md&#34; target=&#34;_blank&#34;&gt;github&lt;/a&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;patch:
+  schema_list:
+    - schema: terra_double_pinyin_pyim
+  &amp;quot;menu/page_size&amp;quot;: 50
+  &amp;quot;speller/auto_select&amp;quot;: false
+  &amp;quot;speller/auto_select_unique_candidate&amp;quot;: false
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

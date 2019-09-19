@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Org-mode | RUNHAN YU</title>
+    <link>/tags/org-mode/</link>
+      <atom:link href="/tags/org-mode/index.xml" rel="self" type="application/rss+xml" />
+    <description>Org-mode</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Wed, 04 Sep 2019 20:06:00 -0400</lastBuildDate>
+    <image>
+      <url>/img/icon-192.png</url>
+      <title>Org-mode</title>
+      <link>/tags/org-mode/</link>
+    </image>
+    
+    <item>
+      <title>Org-mode 中添加结构模板</title>
+      <link>/post/450.html/</link>
+      <pubDate>Wed, 04 Sep 2019 20:06:00 -0400</pubDate>
+      <guid>/post/450.html/</guid>
+      <description>&lt;p&gt;作为文学编程利器，org-mode 中有一个非常方便的功能来插入常用结构，比如 &lt;code&gt;&amp;lt;s&lt;/code&gt; &lt;kbd&gt;TAB&lt;/kbd&gt; 会自动生成&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-org&#34;&gt;#+BEGIN_SRC
+
+#+END_SRC
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样插入代码或者引用这类结构非常方便。&lt;/p&gt;
+
+&lt;p&gt;在 &lt;code&gt;org-structure-template-alist&lt;/code&gt; 这个列表中预置了许多常用结构，如&lt;a href=&#34;https://orgmode.org/manual/Structure-Templates.html&#34; target=&#34;_blank&#34;&gt;官方文档&lt;/a&gt;所示:&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Key&lt;/th&gt;
+&lt;th&gt;Structure Template&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;a&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_EXPORT ascii’ … ‘#+END_EXPORT’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;c&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_CENTER’ … ‘#+END_CENTER’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;C&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_COMMENT’ … ‘#+END_COMMENT’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;e&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_EXAMPLE’ … ‘#+END_EXAMPLE’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_EXPORT’ … ‘#+END_EXPORT’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_EXPORT html’ … ‘#+END_EXPORT’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;l&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_EXPORT latex’ … ‘#+END_EXPORT’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;q&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_QUOTE’ … ‘#+END_QUOTE’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;s&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_SRC’ … ‘#+END_SRC’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;v&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_VERSE’ … ‘#+END_VERSE’&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;不过有时也会想要自己造个轮子，比如我平时写博客，有时需要插入按键标签 &lt;code&gt;&amp;lt;kbd&amp;gt;&lt;/code&gt; 。此时可用 lisp 的 &lt;a href=&#34;https://www.gnu.org/software/emacs/manual/html%5Fnode/elisp/List-Variables.html&#34; target=&#34;_blank&#34;&gt;add-to-list 语法&lt;/a&gt;来添加新的结构模板：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;add-to-list symbol element &amp;amp;optional append compare-fn
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;即&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(add-to-list &#39;org-structure-template-alist
+             &#39;(&amp;quot;k&amp;quot; &amp;quot;@@html:&amp;lt;kbd&amp;gt;@@?@@html:&amp;lt;/kbd&amp;gt;@@&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个语法的优点在于它会对比原列表内的元素以避免添加重复元素。&lt;/p&gt;
+
+&lt;p&gt;这个 &lt;code&gt;add-to-list&lt;/code&gt; 语法每次只能添加一个元素进入列表，并不能添加多个元素。而简单执行 &lt;a href=&#34;http://clhs.lisp.se/Body/f%5Fappend.htm&#34; target=&#34;_blank&#34;&gt;append&lt;/a&gt; ，则无法避免重复元素的添加。所以我采用 &lt;a href=&#34;http://clhs.lisp.se/Body/m%5Fdolist.htm&#34; target=&#34;_blank&#34;&gt;dolist&lt;/a&gt; 指令来添加多个元素：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(dolist
+    (my-org-structure-template
+     &#39;((&amp;quot;k&amp;quot; &amp;quot;@@html:&amp;lt;kbd&amp;gt;@@?@@html:&amp;lt;/kbd&amp;gt;@@&amp;quot;)
+       (&amp;quot;spy&amp;quot; &amp;quot;#+BEGIN_SRC python\n?\n#+END_SRC&amp;quot;)
+       (&amp;quot;son&amp;quot; &amp;quot;#+BEGIN_SRC org :eval never-export\n,?\n#+END_SRC&amp;quot;)))
+  (add-to-list &#39;org-structure-template-alist my-org-structure-template))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;效果拔群。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

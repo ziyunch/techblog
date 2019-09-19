@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Javascript | RUNHAN YU</title>
+    <link>/tags/javascript/</link>
+      <atom:link href="/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
+    <description>Javascript</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Fri, 15 Mar 2019 13:44:00 -0400</lastBuildDate>
+    <image>
+      <url>/img/icon-192.png</url>
+      <title>Javascript</title>
+      <link>/tags/javascript/</link>
+    </image>
+    
+    <item>
+      <title>NavPage</title>
+      <link>/project/navpage/</link>
+      <pubDate>Fri, 15 Mar 2019 13:44:00 -0400</pubDate>
+      <guid>/project/navpage/</guid>
+      <description>&lt;p&gt;• Provide a personalized websites collection and naviation page.&lt;/p&gt;
+
+&lt;p&gt;• Built with Javascript, CSS and npm.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

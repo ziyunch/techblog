@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R | RUNHAN YU</title>
+    <link>/tags/r/</link>
+      <atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <description>R</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Fri, 15 Mar 2019 13:44:00 -0400</lastBuildDate>
+    <image>
+      <url>/img/icon-192.png</url>
+      <title>R</title>
+      <link>/tags/r/</link>
+    </image>
+    
+    <item>
+      <title>Gene Variation Analysis of Stomach Cancer</title>
+      <link>/project/gistic/</link>
+      <pubDate>Fri, 15 Mar 2019 13:44:00 -0400</pubDate>
+      <guid>/project/gistic/</guid>
+      <description>&lt;p&gt;• Extracted cancer research data from the Cancer Genome Atlas Network &amp;reg;.&lt;/p&gt;
+
+&lt;p&gt;• Applied GISTIC clustering analysis to patient-indexed tables to identify molecular subgroups (Bioinformatics).&lt;/p&gt;
+
+&lt;p&gt;• Mapped gene list with biological annotations with functional annotation tool DAVID (Python).&lt;/p&gt;
+
+&lt;p&gt;• Summarized and visualized stomach cancer-related gene candidates with R package MAFtools &amp;reg;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
