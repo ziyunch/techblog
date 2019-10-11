@@ -13,18 +13,18 @@
     </image>
     
     <item>
-      <title>Org-mode 中添加结构模板</title>
+      <title>Add structure template in Org-mode</title>
       <link>/post/450.html/</link>
       <pubDate>Wed, 04 Sep 2019 20:06:00 -0400</pubDate>
       <guid>/post/450.html/</guid>
-      <description>&lt;p&gt;作为文学编程利器，org-mode 中有一个非常方便的功能来插入常用结构，比如 &lt;code&gt;&amp;lt;s&lt;/code&gt; &lt;kbd&gt;TAB&lt;/kbd&gt; 会自动生成&lt;/p&gt;
+      <description>&lt;p&gt;The org-mode code blocks can be used for literate programming and creating executable snippets. There is also a quick way to insert some common code blocks, for example, &lt;code&gt;&amp;lt;s&lt;/code&gt; &lt;kbd&gt;TAB&lt;/kbd&gt; would expand as&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-org&#34;&gt;#+BEGIN_SRC
 
 #+END_SRC
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;这样插入代码或者引用这类结构非常方便。&lt;/p&gt;
+&lt;p&gt;Thus, it is pretty convenient to insert code blocks or examples.&lt;/p&gt;
 
 &lt;p&gt;在 &lt;code&gt;org-structure-template-alist&lt;/code&gt; 这个列表中预置了许多常用结构，如&lt;a href=&#34;https://orgmode.org/manual/Structure-Templates.html&#34; target=&#34;_blank&#34;&gt;官方文档&lt;/a&gt;所示:&lt;/p&gt;
 
@@ -116,7 +116,7 @@
     </item>
     
     <item>
-      <title>Emacs 中文环境配置</title>
+      <title>Emacs configuration with support for Chinese input</title>
       <link>/post/443.html/</link>
       <pubDate>Wed, 03 Jul 2019 13:44:00 -0400</pubDate>
       <guid>/post/443.html/</guid>

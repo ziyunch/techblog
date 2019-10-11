@@ -13,18 +13,18 @@
     </image>
     
     <item>
-      <title>Org-mode 中添加结构模板</title>
+      <title>Add structure template in Org-mode</title>
       <link>/post/450.html/</link>
       <pubDate>Wed, 04 Sep 2019 20:06:00 -0400</pubDate>
       <guid>/post/450.html/</guid>
-      <description>&lt;p&gt;作为文学编程利器，org-mode 中有一个非常方便的功能来插入常用结构，比如 &lt;code&gt;&amp;lt;s&lt;/code&gt; &lt;kbd&gt;TAB&lt;/kbd&gt; 会自动生成&lt;/p&gt;
+      <description>&lt;p&gt;The org-mode code blocks can be used for literate programming and creating executable snippets. There is also a quick way to insert some common code blocks, for example, &lt;code&gt;&amp;lt;s&lt;/code&gt; &lt;kbd&gt;TAB&lt;/kbd&gt; would expand as&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-org&#34;&gt;#+BEGIN_SRC
 
 #+END_SRC
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;这样插入代码或者引用这类结构非常方便。&lt;/p&gt;
+&lt;p&gt;Thus, it is pretty convenient to insert code blocks or examples.&lt;/p&gt;
 
 &lt;p&gt;在 &lt;code&gt;org-structure-template-alist&lt;/code&gt; 这个列表中预置了许多常用结构，如&lt;a href=&#34;https://orgmode.org/manual/Structure-Templates.html&#34; target=&#34;_blank&#34;&gt;官方文档&lt;/a&gt;所示:&lt;/p&gt;
 
@@ -116,7 +116,7 @@
     </item>
     
     <item>
-      <title>Mac 版 Emacs 中使用 Rime 输入法打带调双拼</title>
+      <title>Integrate Mac version Emacs with Rime input engine</title>
       <link>/post/449.html/</link>
       <pubDate>Sat, 31 Aug 2019 20:40:00 -0400</pubDate>
       <guid>/post/449.html/</guid>
@@ -252,12 +252,12 @@ make liberime
     </item>
     
     <item>
-      <title>博客由 Hexo 迁移至 Hugo</title>
+      <title>Manage personal blog in org-mode and host on Github using Hugo</title>
       <link>/post/447.html/</link>
       <pubDate>Mon, 26 Aug 2019 23:49:00 -0400</pubDate>
       <guid>/post/447.html/</guid>
       <description>&lt;blockquote&gt;
-&lt;p&gt;本篇博文使用 org-mode 书就，耶！&lt;/p&gt;
+&lt;p&gt;This post is prepared completely in org-mode. YEAH!&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;从 2016 将博客迁移至 Hexo+Github 的方案后，我便一直采用此方案写博客。大体来说感受挺不错的，然而由于我有数百篇博客，build 速度永远很让我头大。尤其是有时 markdown 显示出问题了，我又得等上数分钟才能看到结果，体验很不好。所以一听说 Hugo 能一秒生成博客，哪怕要舍弃我花大功夫美化的 NeXT 主题，我依然心生向往，今天便将 Hexo 迁移至 Hugo，顺便达成了 Emacs 写博客的小目标。&lt;/p&gt;
@@ -400,7 +400,7 @@ git push upstream master
     </item>
     
     <item>
-      <title>Emacs 记帐</title>
+      <title>Plain text accounting tool Beancount in Emacs</title>
       <link>/post/444.html/</link>
       <pubDate>Thu, 04 Jul 2019 12:58:00 -0400</pubDate>
       <guid>/post/444.html/</guid>
@@ -608,7 +608,7 @@ include &amp;quot;points/bank-a.bean&amp;quot; ; 记录里程、积分、礼品�
     </item>
     
     <item>
-      <title>Emacs 中文环境配置</title>
+      <title>Emacs configuration with support for Chinese input</title>
       <link>/post/443.html/</link>
       <pubDate>Wed, 03 Jul 2019 13:44:00 -0400</pubDate>
       <guid>/post/443.html/</guid>

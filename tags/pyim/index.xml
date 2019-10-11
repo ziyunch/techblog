@@ -13,7 +13,7 @@
     </image>
     
     <item>
-      <title>Mac 版 Emacs 中使用 Rime 输入法打带调双拼</title>
+      <title>Integrate Mac version Emacs with Rime input engine</title>
       <link>/post/449.html/</link>
       <pubDate>Sat, 31 Aug 2019 20:40:00 -0400</pubDate>
       <guid>/post/449.html/</guid>
@@ -149,7 +149,7 @@ make liberime
     </item>
     
     <item>
-      <title>Emacs 中文环境配置</title>
+      <title>Emacs configuration with support for Chinese input</title>
       <link>/post/443.html/</link>
       <pubDate>Wed, 03 Jul 2019 13:44:00 -0400</pubDate>
       <guid>/post/443.html/</guid>
