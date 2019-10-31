@@ -29,12 +29,42 @@
   
   <url>
     <loc>/post/444.html/</loc>
+    <lastmod>2019-10-31T00:17:27-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/444.html/</loc>
     <lastmod>2019-09-19T13:50:57-04:00</lastmod>
   </url>
   
   <url>
     <loc>/post/443.html/</loc>
     <lastmod>2019-09-19T13:50:53-04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/django/</loc>
+    <lastmod>2019-10-31T00:17:27-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2019-10-31T00:17:27-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/python/</loc>
+    <lastmod>2019-10-31T00:17:27-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2019-10-31T00:17:27-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2019-10-31T00:17:27-07:00</lastmod>
   </url>
   
   <url>
@@ -49,21 +79,6 @@
   
   <url>
     <loc>/tags/org-mode/</loc>
-    <lastmod>2019-09-19T13:55:05-04:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/</loc>
-    <lastmod>2019-09-19T13:55:05-04:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/</loc>
-    <lastmod>2019-09-19T13:55:05-04:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
     <lastmod>2019-09-19T13:55:05-04:00</lastmod>
   </url>
   
@@ -95,11 +110,6 @@
   <url>
     <loc>/tags/interview/</loc>
     <lastmod>2019-09-19T00:54:05-04:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/python/</loc>
-    <lastmod>2019-09-19T13:50:57-04:00</lastmod>
   </url>
   
   <url>
@@ -173,7 +183,12 @@
   </url>
   
   <url>
-    <loc>/publication/yu-2016-bi/</loc>
+    <loc>/publication/yu-2019-proteinsci/</loc>
+    <lastmod>2019-09-19T00:54:06-04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/publication/yu-2019-chemrestox/</loc>
     <lastmod>2019-09-19T00:54:06-04:00</lastmod>
   </url>
   
