@@ -3,6 +3,16 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/post/452.html/</loc>
+    <lastmod>2019-11-05T22:49:44-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/451.html/</loc>
+    <lastmod>2019-11-05T22:49:41-08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/post/450.html/</loc>
     <lastmod>2019-09-19T13:55:05-04:00</lastmod>
   </url>
@@ -29,11 +39,6 @@
   
   <url>
     <loc>/post/444.html/</loc>
-    <lastmod>2019-10-31T00:17:27-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/444.html/</loc>
     <lastmod>2019-09-19T13:50:57-04:00</lastmod>
   </url>
   
@@ -43,28 +48,33 @@
   </url>
   
   <url>
-    <loc>/tags/django/</loc>
-    <lastmod>2019-10-31T00:17:27-07:00</lastmod>
+    <loc>/tags/postgresql/</loc>
+    <lastmod>2019-11-05T22:49:44-08:00</lastmod>
   </url>
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2019-10-31T00:17:27-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/python/</loc>
-    <lastmod>2019-10-31T00:17:27-07:00</lastmod>
+    <lastmod>2019-11-05T22:49:44-08:00</lastmod>
   </url>
   
   <url>
     <loc>/</loc>
-    <lastmod>2019-10-31T00:17:27-07:00</lastmod>
+    <lastmod>2019-11-05T22:49:44-08:00</lastmod>
   </url>
   
   <url>
     <loc>/tags/</loc>
-    <lastmod>2019-10-31T00:17:27-07:00</lastmod>
+    <lastmod>2019-11-05T22:49:44-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/django/</loc>
+    <lastmod>2019-11-05T22:49:41-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/python/</loc>
+    <lastmod>2019-11-05T22:49:41-08:00</lastmod>
   </url>
   
   <url>

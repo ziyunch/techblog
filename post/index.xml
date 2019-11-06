@@ -5,7 +5,7 @@
     <link>/post/</link>
       <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     <description>Posts</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Fri, 11 Oct 2019 13:58:00 -0700</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Tue, 05 Nov 2019 11:23:00 -0800</lastBuildDate>
     <image>
       <url>/img/icon-192.png</url>
       <title>Posts</title>
@@ -13,709 +13,51 @@
     </image>
     
     <item>
-      <title>Add structure template in Org-mode</title>
-      <link>/post/450.html/</link>
-      <pubDate>Wed, 04 Sep 2019 20:06:00 -0400</pubDate>
-      <guid>/post/450.html/</guid>
-      <description>&lt;p&gt;The org-mode code blocks can be used for literate programming and creating executable snippets. There is also a quick way to insert some common code blocks, for example, &lt;code&gt;&amp;lt;s&lt;/code&gt; &lt;kbd&gt;TAB&lt;/kbd&gt; would expand as&lt;/p&gt;
+      <title>Postgresql server did not shutdown correctly</title>
+      <link>/post/452.html/</link>
+      <pubDate>Tue, 05 Nov 2019 11:23:00 -0800</pubDate>
+      <guid>/post/452.html/</guid>
+      <description>&lt;p&gt;I setup Postgresql as database for Django and it works as a charm. However, today I got a error message when I tried to migrate my django.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-org&#34;&gt;#+BEGIN_SRC
-
-#+END_SRC
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+django.db.utils.OperationalError: could not connect to server: Connection refused
+        Is the server running on host &amp;quot;localhost&amp;quot; (::1) and accepting
+        TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+        Is the server running on host &amp;quot;localhost&amp;quot; (127.0.0.1) and accepting
+        TCP/IP connections on port 5432?
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Thus, it is pretty convenient to insert code blocks or examples.&lt;/p&gt;
+&lt;p&gt;And &lt;code&gt;sudo lsof -i :5432&lt;/code&gt; returned nothing. It looks that my local database is down, so I tried &lt;code&gt;brew services start postgresql@10&lt;/code&gt;, and got message:&lt;/p&gt;
 
-&lt;p&gt;在 &lt;code&gt;org-structure-template-alist&lt;/code&gt; 这个列表中预置了许多常用结构，如&lt;a href=&#34;https://orgmode.org/manual/Structure-Templates.html&#34; target=&#34;_blank&#34;&gt;官方文档&lt;/a&gt;所示:&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Key&lt;/th&gt;
-&lt;th&gt;Structure Template&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;a&lt;/td&gt;
-&lt;td&gt;‘#+BEGIN_EXPORT ascii’ … ‘#+END_EXPORT’&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;c&lt;/td&gt;
-&lt;td&gt;‘#+BEGIN_CENTER’ … ‘#+END_CENTER’&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;C&lt;/td&gt;
-&lt;td&gt;‘#+BEGIN_COMMENT’ … ‘#+END_COMMENT’&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;e&lt;/td&gt;
-&lt;td&gt;‘#+BEGIN_EXAMPLE’ … ‘#+END_EXAMPLE’&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;‘#+BEGIN_EXPORT’ … ‘#+END_EXPORT’&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;‘#+BEGIN_EXPORT html’ … ‘#+END_EXPORT’&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;l&lt;/td&gt;
-&lt;td&gt;‘#+BEGIN_EXPORT latex’ … ‘#+END_EXPORT’&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;q&lt;/td&gt;
-&lt;td&gt;‘#+BEGIN_QUOTE’ … ‘#+END_QUOTE’&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;s&lt;/td&gt;
-&lt;td&gt;‘#+BEGIN_SRC’ … ‘#+END_SRC’&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;v&lt;/td&gt;
-&lt;td&gt;‘#+BEGIN_VERSE’ … ‘#+END_VERSE’&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;不过有时也会想要自己造个轮子，比如我平时写博客，有时需要插入按键标签 &lt;code&gt;&amp;lt;kbd&amp;gt;&lt;/code&gt; 。此时可用 lisp 的 &lt;a href=&#34;https://www.gnu.org/software/emacs/manual/html%5Fnode/elisp/List-Variables.html&#34; target=&#34;_blank&#34;&gt;add-to-list 语法&lt;/a&gt;来添加新的结构模板：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;add-to-list symbol element &amp;amp;optional append compare-fn
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;Service `postgresql@10` already started, use `brew services restart postgresql@10` to restart.
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;即&lt;/p&gt;
+&lt;p&gt;I tried to restart postgresql, but it did not help.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(add-to-list &#39;org-structure-template-alist
-             &#39;(&amp;quot;k&amp;quot; &amp;quot;@@html:&amp;lt;kbd&amp;gt;@@?@@html:&amp;lt;/kbd&amp;gt;@@&amp;quot;))
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Maybe there is a stuck lockfile somewhere? Here is a &lt;a href=&#34;https://stackoverflow.com/questions/37307346/is-the-server-running-on-host-localhost-1-and-accepting-tcp-ip-connections/37307420&#34; target=&#34;_blank&#34;&gt;clue&lt;/a&gt; as well as a few workarounds. I examine the content of &lt;code&gt;postmaster.pid&lt;/code&gt; by &lt;code&gt;cat /usr/local/var/postgresql@10/postmaster.pid&lt;/code&gt; and kill the lock file by &lt;code&gt;kill -9 &amp;lt;PID&amp;gt;&lt;/code&gt;. Upon restarting the services, now it works again.&lt;/p&gt;
 
-&lt;p&gt;这个语法的优点在于它会对比原列表内的元素以避免添加重复元素。&lt;/p&gt;
+&lt;p&gt;p.s. &lt;code&gt;kill -9&lt;/code&gt; might not be a good way to kill the process here. See the &lt;a href=&#34;http://web.archive.org/web/20110730051506/http://partmaps.org/era/unix/award.html#uuk9letter&#34; target=&#34;_blank&#34;&gt;quote&lt;/a&gt; here:&lt;/p&gt;
 
-&lt;p&gt;这个 &lt;code&gt;add-to-list&lt;/code&gt; 语法每次只能添加一个元素进入列表，并不能添加多个元素。而简单执行 &lt;a href=&#34;http://clhs.lisp.se/Body/f%5Fappend.htm&#34; target=&#34;_blank&#34;&gt;append&lt;/a&gt; ，则无法避免重复元素的添加。所以我采用 &lt;a href=&#34;http://clhs.lisp.se/Body/m%5Fdolist.htm&#34; target=&#34;_blank&#34;&gt;dolist&lt;/a&gt; 指令来添加多个元素：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(dolist
-    (my-org-structure-template
-     &#39;((&amp;quot;k&amp;quot; &amp;quot;@@html:&amp;lt;kbd&amp;gt;@@?@@html:&amp;lt;/kbd&amp;gt;@@&amp;quot;)
-       (&amp;quot;spy&amp;quot; &amp;quot;#+BEGIN_SRC python\n?\n#+END_SRC&amp;quot;)
-       (&amp;quot;son&amp;quot; &amp;quot;#+BEGIN_SRC org :eval never-export\n,?\n#+END_SRC&amp;quot;)))
-  (add-to-list &#39;org-structure-template-alist my-org-structure-template))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;效果拔群。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Integrate Mac version Emacs with Rime input engine</title>
-      <link>/post/449.html/</link>
-      <pubDate>Sat, 31 Aug 2019 20:40:00 -0400</pubDate>
-      <guid>/post/449.html/</guid>
-      <description>&lt;p&gt;由于我习惯写中文博客，所以将写博客这件事也转移到 Emacs 后，我渐渐感觉到 pyim 的不足。所以今天研究一下如何让 pyim 调用 Rime 的词库。&lt;/p&gt;
-
-&lt;h2 id=&#34;基础配置&#34;&gt;基础配置&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;No no no.  Don&amp;rsquo;t use kill -9.
+It doesn&amp;rsquo;t give the process a chance to cleanly:&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;&lt;p&gt;首先安装鼠须管，此一节可见 &lt;a href=&#34;https://blindwith.science/2019/07/445.html/&#34; target=&#34;_blank&#34;&gt;鼠须管傻瓜化配置&lt;/a&gt;，一句话概括呢就是：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;brew cask install squirrel
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;然后参考&lt;a href=&#34;https://manateelazycat.github.io/emacs/2019/07/24/use-rime-in-emacs.html&#34; target=&#34;_blank&#34;&gt;前人经验&lt;/a&gt;，下载 librime 获取源码并从鼠须管中获取编译好的 &lt;code&gt;librime.dylib&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~
-git clone --recursive https://github.com/rime/librime.git --depth=1
-mkdir -p ~/librime/xbuild/lib/Release/
-cp /Library/Input\ Methods/Squirrel.app/Contents/Frameworks/librime.1.dylib ~/librime/xbuild/lib/Release/librime.dylib
-sudo cp /Library/Input\ Methods/Squirrel.app/Contents/Frameworks/librime.1.dylib /usr/local/lib
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;然后下载并编译 liberime，需要提前安装 cmake 库来进行编译：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;git clone https://gitlab.com/liberime/liberime.git --depth=1
-cd ~/liberime
-export RIME_PATH=~/librime
-make liberime
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;然后需要在 emacs 中安装 pyim，此一节详见 &lt;a href=&#34;https://blindwith.science/2019/07/443.html/&#34; target=&#34;_blank&#34;&gt;Emacs 中文环境配置&lt;/a&gt; ，当然不看也行，毕竟具体设置在本篇中需要推倒重来；
-&lt;kbd&gt;M-x package-install RET pyim RET&lt;/kbd&gt;&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;将 &lt;code&gt;liberime.so&lt;/code&gt; 动态库存至 pyim 文件夹中：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cp ~/liberime/buid/liberime.so ~/.emacs.d/pyim/
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;shut down socket connections&lt;/li&gt;
+&lt;li&gt;clean up temp files&lt;/li&gt;
+&lt;li&gt;inform its children that it is going away&lt;/li&gt;
+&lt;li&gt;reset its terminal characteristics&lt;/li&gt;
 &lt;/ol&gt;
-
-&lt;h2 id=&#34;初试啼声&#34;&gt;初试啼声&lt;/h2&gt;
-
-&lt;p&gt;接下来就是添加 emacs 对于 liberime 的配置，我先想当然地试了这个配置：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(liberime-start (expand-file-name &amp;quot;~/Library/Rime&amp;quot;)
-                (expand-file-name &amp;quot;~/.emacs.d/pyim/rime/&amp;quot;))
-(liberime-select-schema &amp;quot;terra_double_pinyin_mspy&amp;quot;)
-(setq pyim-default-scheme &#39;rime)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这个方法有几个问题，一是哪怕我在设置中采用了简体，输出依然为繁体字；二是不支持分号与声调，所以在微软双拼中不能输入元音为 ing 的字，也不能通过声调来选词；三则是由于引入了诸多词库，打字特别卡顿。&lt;/p&gt;
-
-&lt;h2 id=&#34;再接再厉&#34;&gt;再接再厉&lt;/h2&gt;
-
-&lt;p&gt;然后我可以通过添加新的 schema 来提供对分号的支持，但是声调比较麻烦。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(add-to-list
- &#39;pyim-schemes
- &#39;(rime-mspy
-   :document &amp;quot;support ;&amp;quot;
-   :class rime
-   :first-chars &amp;quot;abcdefghijklmnopqrstuvwxyz&amp;quot;
-   :rest-chars &amp;quot;abcdefghijklmnopqrstuvwxyz;&amp;quot;
-   :prefer-trigger-chars nil
-   ))
-
-(liberime-start (expand-file-name &amp;quot;/Library/Input Methods/Squirrel.app/Contents/SharedSupport&amp;quot;)
-                (expand-file-name &amp;quot;~/.emacs.d/pyim/rime/&amp;quot;))
-(liberime-select-schema &amp;quot;double_pinyin_mspy&amp;quot;)
-(setq pyim-default-scheme &#39;rime-mspy)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;但是我发现只要改回共享库，打出来的就是简体，但是我不明白为什么只能使用共享库，却不能使用个人库，毕竟我还魔改了我的鼠须管呀，万一我想打 emoji 呢，万一我想引用个古诗词呢？&lt;/p&gt;
-
-&lt;h2 id=&#34;最终解决方案&#34;&gt;最终解决方案&lt;/h2&gt;
-
-&lt;p&gt;一番折腾之后，终于找出了合适的方案：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;个人库无法显示繁体的原因其实很简单，由于鼠须管默认将 &lt;a href=&#34;https://github.com/BYVoid/OpenCC&#34; target=&#34;_blank&#34;&gt;opencc 开放中文转换库&lt;/a&gt; 放在共享库中，所以个人库中并不包含 opencc，这样 build 的时候就不能调用这些转换文件。所以，一行代码搞定。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;ln -s /Library/Input\ Methods/Squirrel.app/Contents/SharedSupport/opencc/* ~/Library/Rime/opencc/
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;输入分号的问题前面通过调用新写的 schema 解决，但是声调问题比较麻烦。由于 pyim 作者给减号键（我用作平声调的）赋予了太多用途，我这半调子 lisp 水平一时半会儿也写不了一个新的函数使此键在非后翻页状态作为简单的 &lt;code&gt;pyim-self-insert-command&lt;/code&gt; ，而且还得把后面那个函数改了，事情实在太多，所以我将方括号改作翻页，并将长得差不多的等号键用作平声。以后有时间，可能还是会把它改回减号键，毕竟长得更像一点。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;其次则是卡顿的问题。我发现当 liberime build 时，由于在个人库中已经有过 build 好的文件，所以不会在 liberime 的库中重新 build 一份，这样非常影响速度。所以我复制了一份我写的地球双拼给 liberime 专用（yaml 文件见&lt;a href=&#34;https://github.com/ziyunch/Rime/blob/master/terra%5Fdouble%5Fpinyin%5Fpyim.schema.yaml&#34; target=&#34;_blank&#34;&gt;这儿&lt;/a&gt;），效果拔群。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;具体配置如下：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(require &#39;use-package)
-(use-package pyim
-    :ensure nil
-    :demand t
-    :config
-    (setq default-input-method &amp;quot;pyim&amp;quot;)
-    (setq pyim-page-length 9)
-    :bind
-    (:map pyim-mode-map
-          (&amp;quot;]&amp;quot; . pyim-page-next-page)
-          (&amp;quot;[&amp;quot; . pyim-page-previous-page)
-          (&amp;quot;-&amp;quot; . pyim-self-insert-command)
-          (&amp;quot;=&amp;quot; . pyim-self-insert-command))
-    )
-(use-package liberime
-    :load-path &amp;quot;~/.emacs.d/pyim/&amp;quot;
-    :config
-    (liberime-start (expand-file-name &amp;quot;~/Library/Rime/&amp;quot;)
-                    (expand-file-name &amp;quot;~/.emacs.d/pyim/rime&amp;quot;))
-    (liberime-select-schema &amp;quot;terra_double_pinyin_pyim&amp;quot;)
-    (add-to-list
-     &#39;pyim-schemes
-     &#39;(rime-mspy
-       :document &amp;quot;support ;&amp;quot;
-       :class rime
-       :first-chars &amp;quot;abcdefghijklmnopqrstuvwxyz/&amp;quot;
-       :rest-chars &amp;quot;abcdefghijklmnopqrstuvwxyz;=/,\\&amp;quot;
-       :prefer-trigger-chars nil
-       ))
-    (setq pyim-default-scheme &#39;rime-mspy)
-    )
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;另外，我在 &lt;code&gt;~/.emacs.d/pyim/rime/&lt;/code&gt; 文件夹中添加了 pyim 作者推荐的优化配置文件 &lt;code&gt;default.custom.yaml&lt;/code&gt; ，详见其 &lt;a href=&#34;https://github.com/tumashu/pyim/blob/master/README.md&#34; target=&#34;_blank&#34;&gt;github&lt;/a&gt;：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;patch:
-  schema_list:
-    - schema: terra_double_pinyin_pyim
-  &amp;quot;menu/page_size&amp;quot;: 50
-  &amp;quot;speller/auto_select&amp;quot;: false
-  &amp;quot;speller/auto_select_unique_candidate&amp;quot;: false
-&lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-    <item>
-      <title>Hacking the Data Transformation Interview</title>
-      <link>/post/448.html/</link>
-      <pubDate>Fri, 30 Aug 2019 11:14:00 -0400</pubDate>
-      <guid>/post/448.html/</guid>
-      <description>&lt;p&gt;I am currently (still) seeking a job in data/software engineering area, and I am preparing for all kinds of technical interviews, ranging from coding, algorithm, system design, SQL to computer science fundamental quiz. Data engineer is a role with vague definition, and people with this title functions as an ETL (extract, transformation, load) engineer in some companies. Thus, topics on data transformation could be covered during the interview. In this blog, I am trying to hack interview focusing on data tranformation.&lt;/p&gt;
-
-&lt;h2 id=&#34;prerequisites-boto3&#34;&gt;Prerequisites: boto3&lt;/h2&gt;
-
-&lt;p&gt;Boto is the AWS SDK for python, which provides easy-to-use, object-oriented API and low-level access to AWS services. We could find the documentation &lt;a href=&#34;https://boto3.amazonaws.com/v1/documentation/api/latest/index.html&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;We could easily install the latest Boto 3 release via pip:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ pip install boto3
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then configure the credential file at &lt;code&gt;~/.aws/credentials&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-nil&#34;&gt;[default]
-aws_access_key_id = YOUR_ACCESS_KEY
-aws_secret_access_key = YOUR_SECRET_KEY
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And set the default region at &lt;code&gt;~/.aws/config&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-nil&#34;&gt;[default]
-region=us-east-1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To use boto3, we could import it and pass the service-to-use to it. For example, to use Amazon S3, we could choose a resource by:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import boto3
-s3 = boto3.resource(&#39;s3&#39;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Create a s3 bucket over client level:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;s3_client = boto3.client(&#39;s3&#39;)
-s3_client.create_bucket(Bucket=&#39;BUCKET_NAME&#39;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;List existing buckets for the AWS account:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;response = s3_client.list_buckets()
-for bucket in response[&#39;Buckets&#39;]:
-    print(f&#39;  {bucket[&amp;quot;Name&amp;quot;]}&#39;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Upload file into a s3 bucket:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;response = s3_client.upload_file(file_name, bucket, object_name)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Or upload object in binary mode into a s3 bucket:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;with open(&#39;test.jpg&#39;, &#39;rb&#39;) as f:
-    s3.upload_fileobj(f, &amp;quot;BUCKET_NAME&amp;quot;, &amp;quot;OBJECT_NAME&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Or directly put object into a s3 bucket over the bucket level:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;data = open(&#39;test.jpg&#39;, &#39;rb&#39;)
-bucket = s3.Bucket(&#39;my-bucket&#39;)
-bucket.put_object(Key=object_name, Body=data)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To download file from a S3 bucket, we could:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;s3.download_file(&#39;BUCKET_NAME&#39;, &#39;OBJECT_NAME&#39;, &#39;FILE_NAME&#39;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Or:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;with open(&#39;FILE_NAME&#39;, &#39;wb&#39;) as f:
-    s3.download_fileobj(&#39;BUCKET_NAME&#39;, &#39;OBJECT_NAME&#39;, f)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We could also set configuration when uploading, downloading, or copying a file or S3 object by:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from boto3.s3.transfer import TransferConfig
-GB = 1024 ** 3
-config = TransferConfig(multipart_threshold=5*GB)
-config = TransferConfig(max_concurrency=5)
-config = TransferConfig(use_threads=False)
-s3.upload_file(&#39;FILE_NAME&#39;, &#39;BUCKET_NAME&#39;, &#39;OBJECT_NAME&#39;, Config=config)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;prerequisites-psycopg2&#34;&gt;Prerequisites: psycopg2&lt;/h2&gt;
-
-&lt;p&gt;Psycopg2 is a popular PostgreSQL database adapter for python. We could find documentation &lt;a href=&#34;http://initd.org/psycopg/docs/&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;We could easily install psycopg2 via pip:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ pip install psycopg2-binary
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To use psycopg2, we could import it, connect to an existing database and open a cursor to perform database operations:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import psycopg2
-conn = psycopg2.connect(dbname=&amp;quot;DATABASE_NAME&amp;quot;, user=&amp;quot;USER&amp;quot;, host=&amp;quot;HOST&amp;quot;, port=&amp;quot;PORT&amp;quot;, password=&amp;quot;PASSWORD&amp;quot;)
-cur = conn.cursor()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Query the database and fetch data in an iteration-like way:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cur.execute(sql_query)
-cur.fetchone()
-cur.fetchmany(2)
-cur.fetchall()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Pass parameters to SQL queries:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cur.execute(&amp;quot;&amp;quot;&amp;quot;
-    INSERT INTO some_table (an_int, a_date, another_date, a_string)
-    VALUES (%(int)s, %(date)s, %(date)s, %(str)s);
-    &amp;quot;&amp;quot;&amp;quot;,
-    {&#39;int&#39;: 10, &#39;str&#39;: &amp;quot;O&#39;Reilly&amp;quot;, &#39;date&#39;: datetime.date(2005, 11, 18)})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Make the changes to the database persistent:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;conn.commit()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Close communication with the database&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cur.close()
-conn.close()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;upload-data-from-s3-into-redshift&#34;&gt;Upload data from S3 into Redshift&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def main():
-    connection_parameters = {
-        &#39;dbname&#39;: dbname,
-        &#39;user&#39;: user,
-        &#39;host&#39;: host,
-        &#39;port&#39;: port,
-        &#39;password&#39;: password
-    }
-    try:
-        conn = psycopg2.connect(**connection_parameters)
-        print(&amp;quot;Connected to Redshift.&amp;quot;)
-    except:
-        print(&amp;quot;Unable to connect to Redshift.&amp;quot;)
-
-    cur = conn.cursor()
-
-    upload_statement = &amp;quot;
-            COPY {}.{}
-            FROM {}
-            IAM_ROLE {}
-            CSV;
-            COMMIT;
-    &amp;quot;.format(table_name, schema, file_name, iam_role)
-
-    try:
-        cur.execute(upload_statement)
-        print(&amp;quot;Upload successfully&amp;quot;)
-    except psycopg2.Error:
-        raise ExecuteFailure(&amp;quot;Failed to upload the file.&amp;quot;)
-    cur.close()
-    conn.close()
-
-if __name__ == &amp;quot;__main__&amp;quot;:
-    main()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;load-data-from-redshift-to-pandas&#34;&gt;Load data from Redshift to pandas&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import sqlalchemy as sa
-import pandas as pd
-surl = &#39;redshift+psycopg2://&#39;
-engine = sa.create_engine(surl+user+&#39;:&#39;+password+&#39;@&#39;+host+&#39;:&#39;+port+&#39;/&#39;+dbname,echo=False)
-df = pd.read_sql_query(&#39;SELECT * FROM table ;&#39;, engine)
-&lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-    <item>
-      <title>Manage personal blog in org-mode and host on Github using Hugo</title>
-      <link>/post/447.html/</link>
-      <pubDate>Mon, 26 Aug 2019 23:49:00 -0400</pubDate>
-      <guid>/post/447.html/</guid>
-      <description>&lt;blockquote&gt;
-&lt;p&gt;This post is prepared completely in org-mode. YEAH!&lt;/p&gt;
 &lt;/blockquote&gt;
-
-&lt;p&gt;从 2016 将博客迁移至 Hexo+Github 的方案后，我便一直采用此方案写博客。大体来说感受挺不错的，然而由于我有数百篇博客，build 速度永远很让我头大。尤其是有时 markdown 显示出问题了，我又得等上数分钟才能看到结果，体验很不好。所以一听说 Hugo 能一秒生成博客，哪怕要舍弃我花大功夫美化的 NeXT 主题，我依然心生向往，今天便将 Hexo 迁移至 Hugo，顺便达成了 Emacs 写博客的小目标。&lt;/p&gt;
-
-&lt;h2 id=&#34;安装-hugo-并初始化&#34;&gt;安装 Hugo 并初始化&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;首先使用 Homebrew 安装 Hugo:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;!--listend--&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ brew install hugo
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;然后建立站点&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;!--listend--&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ hugo new site blog
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;安装主题，我采用比较简单的 even 主题&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;!--listend--&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ git clone https://github.com/olOwOlo/hugo-theme-even themes/even
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;从-hexo-迁移&#34;&gt;从 Hexo 迁移&lt;/h2&gt;
-
-&lt;p&gt;好消息是，此迁移过程相当无痛。由于我之前将博客内容存在 Dropbox 上，所以只需要将相关文件 link 至 Hugo 的相关文件夹内。结构大致如下：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;.
-├── content
-│   ├── about
-│   │   └── index.md
-│   └── post
-│       ├── post1.md
-│       └── ...
-├── static
-│   ├── images
-│   │   ├── image1.png
-│   │   └── ...
-│   └── CNAME
-...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;有一个需要注意的地方是 Hexo 与 Hugo 对于 markdown 头文件中的 url 定义不同，我采用 &lt;code&gt;grep&lt;/code&gt; 将其批量改成 &lt;code&gt;slug&lt;/code&gt; ，并在配置文件中添加了 permalinks 的生成方式，以保证超链接的稳定：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;[permalinks]
-  post = &amp;quot;/:year/:month/:slug&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;生成预览&#34;&gt;生成预览&lt;/h2&gt;
-
-&lt;p&gt;输入 &lt;code&gt;hugo server&lt;/code&gt; ，几乎是眨眼工夫，便已在内存中生成预览，而且对于博文可即时显示改动，非常方便。确实比 Hexo 快上百倍。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;                   | ZH-CN
-+------------------+-------+
-  Pages            |   956
-  Paginator pages  |   139
-  Non-page files   |     0
-  Static files     |    85
-  Processed images |     0
-  Aliases          |   254
-  Sitemaps         |     1
-  Cleaned          |     0
-
-Total in 820 ms
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;配合-org-mode-使用更佳&#34;&gt;配合 org-mode 使用更佳&lt;/h2&gt;
-
-&lt;p&gt;以前使用 Hexo 写博客时，博文都分散于各种 &lt;code&gt;.md&lt;/code&gt; 文件中，管理起来很不方便。另一方面，由于我平时习惯用 org-mode 记记笔记，管理生活。有了好轮子，我干脆想着一鼓作气把车换了。在此我使用的是 &lt;code&gt;ox-hugo&lt;/code&gt; 的 One post per Org subtree 方案，配置如下：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-org&#34;&gt;#+HUGO_BASE_DIR: ~/Dropbox/Blog/
-#+HUGO_SECTION: post
-#+HUGO_WEIGHT: auto
-#+HUGO_AUTO_SET_LASTMOD: t
-#+author:
-#+hugo_custom_front_matter: :author &amp;quot;ziyunch&amp;quot;
-* Technical                                                       :@技术宅:
-** TODO 博客由 Hexo 迁移至 Hugo                           :Emacs:Hexo:Hugo:
-   :PROPERTIES:
-   :EXPORT_FILE_NAME: 20190826-hexo-2-hugo
-   :END:
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;也就是说采用标签继承的方式，将博文分类。写完当篇博文，将 &lt;code&gt;TODO&lt;/code&gt; 状态变更为 &lt;code&gt;DONE&lt;/code&gt; 时， &lt;code&gt;ox-hugo&lt;/code&gt; 会自动为文档生成时间戳。然后在 subtree 上 &lt;kbd&gt;C-c C-e H H&lt;/kbd&gt; 即可在相应目录生成 &lt;code&gt;.md&lt;/code&gt; 文档。此时如果后台正在运行着 &lt;code&gt;hugo server&lt;/code&gt; ，即可在 &lt;code&gt;http://localhost:1313/&lt;/code&gt; 看到即时更新。&lt;/p&gt;
-
-&lt;h2 id=&#34;在-github-上发布&#34;&gt;在 Github 上发布&lt;/h2&gt;
-
-&lt;p&gt;第一次部署，需要新建一个 public 文件夹，并将原来部署了 Hexo 博客的 repo 关联上，步骤如下：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ mkdir public
-$ hugo -t even
-$ cd public
-$ git init
-$ git remote add upstream https://github.com/ziyunch/ziyunch.github.io.git
-$ git add .
-$ git commit -m &amp;quot;switch to hugo&amp;quot;
-$ git push -f upstream master
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;之后则可如官网&lt;a href=&#34;https://gohugo.io/hosting-and-deployment/hosting-on-github/&#34; target=&#34;_blank&#34;&gt;发布指南&lt;/a&gt;所示编写一个可执行的 &lt;code&gt;.sh&lt;/code&gt; 文件来自动化部署发布：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;#!/bin/sh
-
-# If a command fails then the deploy stops
-set -e
-
-printf &amp;quot;\033[0;32mDeploying updates to GitHub...\033[0m\n&amp;quot;
-
-# Build the project.
-hugo -t even
-
-# Go To Public folder
-cd public
-
-# Add changes to git.
-git add .
-
-# Commit changes.
-msg=&amp;quot;rebuilding site $(date)&amp;quot;
-if [ -n &amp;quot;$*&amp;quot; ]; then
-        msg=&amp;quot;$*&amp;quot;
-fi
-git commit -m &amp;quot;$msg&amp;quot;
-
-# Push source and build repos.
-git push upstream master
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;自此大功告成&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>An optimized Rime configuration</title>
-      <link>/post/445.html/</link>
-      <pubDate>Sat, 20 Jul 2019 20:58:00 -0400</pubDate>
-      <guid>/post/445.html/</guid>
-      <description>&lt;p&gt;This configuration:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Optimized for simplified Chinese;&lt;/li&gt;
-&lt;li&gt;Implement 朙月拼音 &lt;code&gt;luna-pinyin&lt;/code&gt;, 微软双拼 &lt;code&gt;double-pinyin-mspy&lt;/code&gt; and
-地球拼音 &lt;code&gt;terra-pinyin&lt;/code&gt; with 20+ dictionaries including symbols and
-emoji;&lt;/li&gt;
-&lt;li&gt;Feature 地球双拼 &lt;code&gt;terra-double-pinyin-mspy&lt;/code&gt;, a double pinyin input
-method supporting tone marks;&lt;/li&gt;
-&lt;li&gt;Use 地球双拼 &lt;code&gt;terra-double-pinyin-mspy&lt;/code&gt; to reverse lookup
-吴语（苏州话） &lt;code&gt;wugniu_soutseu&lt;/code&gt; with tone marks, toggled by &lt;code&gt;`&lt;/code&gt;;&lt;/li&gt;
-&lt;li&gt;Use ASCII mode for several applications.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;supported-rime-version&#34;&gt;Supported Rime Version&lt;/h2&gt;
-
-&lt;h3 id=&#34;macos&#34;&gt;MacOS&lt;/h3&gt;
-
-&lt;p&gt;The config should run on Squarrel 0.14.0 or greater.&lt;/p&gt;
-
-&lt;h2 id=&#34;installation&#34;&gt;Installation&lt;/h2&gt;
-
-&lt;h3 id=&#34;鼠鬚管-squirrel--macos&#34;&gt;&lt;a href=&#34;https://rime.im&#34; target=&#34;_blank&#34;&gt;鼠鬚管&lt;/a&gt; Squirrel (MacOS)&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;via &lt;a href=&#34;https://rime.im&#34; target=&#34;_blank&#34;&gt;Latest release&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;via &lt;a href=&#34;https://github.com/rime/squirrel&#34; target=&#34;_blank&#34;&gt;source code&lt;/a&gt;: &lt;a href=&#34;https://github.com/rime/squirrel/blob/master/INSTALL.md&#34; target=&#34;_blank&#34;&gt;Build instruction&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;via &lt;a href=&#34;https://brew.sh&#34; target=&#34;_blank&#34;&gt;Homebrew&lt;/a&gt;: &lt;code&gt;brew cask install squirrel&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;東風破-plum&#34;&gt;&lt;a href=&#34;https://github.com/rime/plum&#34; target=&#34;_blank&#34;&gt;東風破&lt;/a&gt; &lt;em&gt;plum&lt;/em&gt;&lt;/h3&gt;
-
-&lt;p&gt;Install &lt;em&gt;plum&lt;/em&gt;, the configuration manager for Rime input method engine:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~/Library/Rime
-curl -fsSL https://git.io/rime-install | bash
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then install packages:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd plum
-bash rime-install :preset double-pinyin emoji NGLI/rime-wugniu_soutseu
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;em&gt;Supported input methods ℞&lt;/em&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Essentials:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-prelude&#34; target=&#34;_blank&#34;&gt;prelude&lt;/a&gt; 基础配置 / &lt;a href=&#34;https://github.com/rime/rime-essay&#34; target=&#34;_blank&#34;&gt;essay&lt;/a&gt; 八股文&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Phonetic-based:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-luna-pinyin&#34; target=&#34;_blank&#34;&gt;luna-pinyin&lt;/a&gt; 朙月拼音 / &lt;a href=&#34;https://github.com/rime/rime-terra-pinyin&#34; target=&#34;_blank&#34;&gt;terra-pinyin&lt;/a&gt; 地球拼音 / &lt;a href=&#34;https://github.com/rime/rime-bopomofo&#34; target=&#34;_blank&#34;&gt;bopomofo&lt;/a&gt; 注音 / &lt;a href=&#34;https://github.com/rime/rime-pinyin-simp&#34; target=&#34;_blank&#34;&gt;pinyin-simp&lt;/a&gt; 袖珍简化字拼音&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Derivatives of Pinyin:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-double-pinyin&#34; target=&#34;_blank&#34;&gt;double-pinyin&lt;/a&gt; 双拼 / &lt;a href=&#34;https://github.com/rime/rime-combo-pinyin&#34; target=&#34;_blank&#34;&gt;combo-pinyin&lt;/a&gt; 宫保拼音 / &lt;a href=&#34;https://github.com/rime/rime-stenotype&#34; target=&#34;_blank&#34;&gt;stenotype&lt;/a&gt; 打字速记法&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Varieties of Chinese:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-jyutping&#34; target=&#34;_blank&#34;&gt;jyutping&lt;/a&gt; 粤拼 / &lt;a href=&#34;https://github.com/rime/rime-wugniu&#34; target=&#34;_blank&#34;&gt;wugniu&lt;/a&gt; 上海吴语 / &lt;a href=&#34;https://github.com/rime/rime-soutzoe&#34; target=&#34;_blank&#34;&gt;soutzoe&lt;/a&gt; 苏州吴语
-/ &lt;a href=&#34;https://github.com/rime/rime-middle-chinese&#34; target=&#34;_blank&#34;&gt;middle-chinese&lt;/a&gt; 中古汉语拼音&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Shape-based:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-stroke&#34; target=&#34;_blank&#34;&gt;stroke&lt;/a&gt; 笔画 / &lt;a href=&#34;https://github.com/rime/rime-cangjie&#34; target=&#34;_blank&#34;&gt;cangjie&lt;/a&gt; 仓颉输入法 / &lt;a href=&#34;https://github.com/rime/rime-quick&#34; target=&#34;_blank&#34;&gt;quick&lt;/a&gt; 速成 / &lt;a href=&#34;https://github.com/rime/rime-wubi&#34; target=&#34;_blank&#34;&gt;wubi&lt;/a&gt; 五笔字型 / &lt;a href=&#34;https://github.com/rime/rime-array&#34; target=&#34;_blank&#34;&gt;array&lt;/a&gt; 行列输入法 / &lt;a href=&#34;https://github.com/rime/rime-scj&#34; target=&#34;_blank&#34;&gt;scj&lt;/a&gt; 快速仓颉&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Miscellaneous:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-emoji&#34; target=&#34;_blank&#34;&gt;emoji&lt;/a&gt; 颜文字 / &lt;a href=&#34;https://github.com/rime/rime-ipa&#34; target=&#34;_blank&#34;&gt;ipa&lt;/a&gt;: 国际音标&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;personalized-configuration-and-dictionaries&#34;&gt;Personalized configuration and dictionaries&lt;/h3&gt;
-
-&lt;p&gt;To install, clone this repo to &lt;code&gt;~/Library/Rime&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~/Library/Rime
-git init
-echo -e &amp;quot;/*\n\!/README.org\n\!/dict\n\!/*.custom.yaml\n\!/*.extended.dict.yaml\n\!/terra_double_pinyin_mspy.*\n!/*pyim*&amp;quot; &amp;gt;&amp;gt; .gitignore
-git remote add origin https://github.com/ziyunch/Rime.git
-git pull origin master
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Update: 2019-08-31&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;ln -s /Library/Input\ Methods/Squirrel.app/Contents/SharedSupport/opencc/* ./opencc/
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;deploy&#34;&gt;Deploy&lt;/h2&gt;
-
-&lt;p&gt;Press &lt;kbd&gt;Control + Option + `&lt;/kbd&gt; to deploy current configuration.&lt;/p&gt;
-
-&lt;p&gt;Press &lt;kbd&gt;Control + `&lt;/kbd&gt; to select input method.&lt;/p&gt;
-
-&lt;h2 id=&#34;updates&#34;&gt;Updates&lt;/h2&gt;
-
-&lt;p&gt;To update &lt;em&gt;plum&lt;/em&gt; itself, run:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~/Library/Rime/plum
-bash rime-install plum
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To update the &lt;em&gt;plum&lt;/em&gt; packages, run:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~/Library/Rime/plum
-bash rime-install :preset double-pinyin emoji NGLI/rime-wugniu_soutseu
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To update the config, run:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~/Library/Rime
-git pull origin master
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;customerization&#34;&gt;Customerization&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Modify &lt;code&gt;default.custom.yaml&lt;/code&gt; to select more input methods or comment
-out input methods no longer needed:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;!--listend--&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;schema_list:
-  - schema: luna_pinyin          # 朙月拼音
-  - schema: terra_pinyin         # 地球拼音 dì qiú pīn yīn
-  - schema: terra_double_pinyin_mspy # 地球双拼
-  - schema: double_pinyin_mspy   # 微软双拼
-  - schema: double_pinyin        # 自然码双拼
-  - schema: double_pinyin_abc    # 智能ABC双拼
-  - schema: double_pinyin_flypy  # 小鹤双拼
-  - schema: wugniu_soutseu       # 吴语（苏州话）
-  - schema: stroke               # 笔画
-  - schema: cangjie              # 仓颉输入法
-  - schema: bopomofo             # 注音
-  - schema: emoji                # 颜文字
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Delete &lt;code&gt;wugniu_soutseu.custom.yaml&lt;/code&gt; to use the default 朙月拼音
-&lt;code&gt;luna_pinyin&lt;/code&gt; reverse lookup 吴语（苏州话） &lt;code&gt;wugniu_soutseu&lt;/code&gt;.&lt;/li&gt;
-&lt;/ul&gt;</description>
+</description>
     </item>
     
     <item>
       <title>My first Django app</title>
-      <link>/post/444.html/</link>
+      <link>/post/451.html/</link>
       <pubDate>Fri, 11 Oct 2019 13:58:00 -0700</pubDate>
-      <guid>/post/444.html/</guid>
+      <guid>/post/451.html/</guid>
       <description>
 
 &lt;p&gt;This is my implementaion on the &lt;a href=&#34;https://docs.djangoproject.com/en/1.11/intro/tutorial01/&#34; target=&#34;_blank&#34;&gt;Django tutorial&lt;/a&gt;.&lt;/p&gt;
@@ -1546,6 +888,705 @@ cp PATH/django/contrib/admin/templates/admin/base_site.html templates/admin/base
 
 &lt;p&gt;It is also useful to turn the &lt;code&gt;polls&lt;/code&gt; app into a standalone Python package, but it is another story.&lt;/p&gt;
 </description>
+    </item>
+    
+    <item>
+      <title>Add structure template in Org-mode</title>
+      <link>/post/450.html/</link>
+      <pubDate>Wed, 04 Sep 2019 20:06:00 -0400</pubDate>
+      <guid>/post/450.html/</guid>
+      <description>&lt;p&gt;The org-mode code blocks can be used for literate programming and creating executable snippets. There is also a quick way to insert some common code blocks, for example, &lt;code&gt;&amp;lt;s&lt;/code&gt; &lt;kbd&gt;TAB&lt;/kbd&gt; would expand as&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-org&#34;&gt;#+BEGIN_SRC
+
+#+END_SRC
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Thus, it is pretty convenient to insert code blocks or examples.&lt;/p&gt;
+
+&lt;p&gt;在 &lt;code&gt;org-structure-template-alist&lt;/code&gt; 这个列表中预置了许多常用结构，如&lt;a href=&#34;https://orgmode.org/manual/Structure-Templates.html&#34; target=&#34;_blank&#34;&gt;官方文档&lt;/a&gt;所示:&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Key&lt;/th&gt;
+&lt;th&gt;Structure Template&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;a&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_EXPORT ascii’ … ‘#+END_EXPORT’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;c&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_CENTER’ … ‘#+END_CENTER’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;C&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_COMMENT’ … ‘#+END_COMMENT’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;e&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_EXAMPLE’ … ‘#+END_EXAMPLE’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_EXPORT’ … ‘#+END_EXPORT’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_EXPORT html’ … ‘#+END_EXPORT’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;l&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_EXPORT latex’ … ‘#+END_EXPORT’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;q&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_QUOTE’ … ‘#+END_QUOTE’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;s&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_SRC’ … ‘#+END_SRC’&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;v&lt;/td&gt;
+&lt;td&gt;‘#+BEGIN_VERSE’ … ‘#+END_VERSE’&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;不过有时也会想要自己造个轮子，比如我平时写博客，有时需要插入按键标签 &lt;code&gt;&amp;lt;kbd&amp;gt;&lt;/code&gt; 。此时可用 lisp 的 &lt;a href=&#34;https://www.gnu.org/software/emacs/manual/html%5Fnode/elisp/List-Variables.html&#34; target=&#34;_blank&#34;&gt;add-to-list 语法&lt;/a&gt;来添加新的结构模板：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;add-to-list symbol element &amp;amp;optional append compare-fn
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;即&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(add-to-list &#39;org-structure-template-alist
+             &#39;(&amp;quot;k&amp;quot; &amp;quot;@@html:&amp;lt;kbd&amp;gt;@@?@@html:&amp;lt;/kbd&amp;gt;@@&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个语法的优点在于它会对比原列表内的元素以避免添加重复元素。&lt;/p&gt;
+
+&lt;p&gt;这个 &lt;code&gt;add-to-list&lt;/code&gt; 语法每次只能添加一个元素进入列表，并不能添加多个元素。而简单执行 &lt;a href=&#34;http://clhs.lisp.se/Body/f%5Fappend.htm&#34; target=&#34;_blank&#34;&gt;append&lt;/a&gt; ，则无法避免重复元素的添加。所以我采用 &lt;a href=&#34;http://clhs.lisp.se/Body/m%5Fdolist.htm&#34; target=&#34;_blank&#34;&gt;dolist&lt;/a&gt; 指令来添加多个元素：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(dolist
+    (my-org-structure-template
+     &#39;((&amp;quot;k&amp;quot; &amp;quot;@@html:&amp;lt;kbd&amp;gt;@@?@@html:&amp;lt;/kbd&amp;gt;@@&amp;quot;)
+       (&amp;quot;spy&amp;quot; &amp;quot;#+BEGIN_SRC python\n?\n#+END_SRC&amp;quot;)
+       (&amp;quot;son&amp;quot; &amp;quot;#+BEGIN_SRC org :eval never-export\n,?\n#+END_SRC&amp;quot;)))
+  (add-to-list &#39;org-structure-template-alist my-org-structure-template))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;效果拔群。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Integrate Mac version Emacs with Rime input engine</title>
+      <link>/post/449.html/</link>
+      <pubDate>Sat, 31 Aug 2019 20:40:00 -0400</pubDate>
+      <guid>/post/449.html/</guid>
+      <description>&lt;p&gt;由于我习惯写中文博客，所以将写博客这件事也转移到 Emacs 后，我渐渐感觉到 pyim 的不足。所以今天研究一下如何让 pyim 调用 Rime 的词库。&lt;/p&gt;
+
+&lt;h2 id=&#34;基础配置&#34;&gt;基础配置&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;首先安装鼠须管，此一节可见 &lt;a href=&#34;https://blindwith.science/2019/07/445.html/&#34; target=&#34;_blank&#34;&gt;鼠须管傻瓜化配置&lt;/a&gt;，一句话概括呢就是：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;brew cask install squirrel
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;然后参考&lt;a href=&#34;https://manateelazycat.github.io/emacs/2019/07/24/use-rime-in-emacs.html&#34; target=&#34;_blank&#34;&gt;前人经验&lt;/a&gt;，下载 librime 获取源码并从鼠须管中获取编译好的 &lt;code&gt;librime.dylib&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~
+git clone --recursive https://github.com/rime/librime.git --depth=1
+mkdir -p ~/librime/xbuild/lib/Release/
+cp /Library/Input\ Methods/Squirrel.app/Contents/Frameworks/librime.1.dylib ~/librime/xbuild/lib/Release/librime.dylib
+sudo cp /Library/Input\ Methods/Squirrel.app/Contents/Frameworks/librime.1.dylib /usr/local/lib
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;然后下载并编译 liberime，需要提前安装 cmake 库来进行编译：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;git clone https://gitlab.com/liberime/liberime.git --depth=1
+cd ~/liberime
+export RIME_PATH=~/librime
+make liberime
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;然后需要在 emacs 中安装 pyim，此一节详见 &lt;a href=&#34;https://blindwith.science/2019/07/443.html/&#34; target=&#34;_blank&#34;&gt;Emacs 中文环境配置&lt;/a&gt; ，当然不看也行，毕竟具体设置在本篇中需要推倒重来；
+&lt;kbd&gt;M-x package-install RET pyim RET&lt;/kbd&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;将 &lt;code&gt;liberime.so&lt;/code&gt; 动态库存至 pyim 文件夹中：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cp ~/liberime/buid/liberime.so ~/.emacs.d/pyim/
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;初试啼声&#34;&gt;初试啼声&lt;/h2&gt;
+
+&lt;p&gt;接下来就是添加 emacs 对于 liberime 的配置，我先想当然地试了这个配置：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(liberime-start (expand-file-name &amp;quot;~/Library/Rime&amp;quot;)
+                (expand-file-name &amp;quot;~/.emacs.d/pyim/rime/&amp;quot;))
+(liberime-select-schema &amp;quot;terra_double_pinyin_mspy&amp;quot;)
+(setq pyim-default-scheme &#39;rime)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个方法有几个问题，一是哪怕我在设置中采用了简体，输出依然为繁体字；二是不支持分号与声调，所以在微软双拼中不能输入元音为 ing 的字，也不能通过声调来选词；三则是由于引入了诸多词库，打字特别卡顿。&lt;/p&gt;
+
+&lt;h2 id=&#34;再接再厉&#34;&gt;再接再厉&lt;/h2&gt;
+
+&lt;p&gt;然后我可以通过添加新的 schema 来提供对分号的支持，但是声调比较麻烦。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(add-to-list
+ &#39;pyim-schemes
+ &#39;(rime-mspy
+   :document &amp;quot;support ;&amp;quot;
+   :class rime
+   :first-chars &amp;quot;abcdefghijklmnopqrstuvwxyz&amp;quot;
+   :rest-chars &amp;quot;abcdefghijklmnopqrstuvwxyz;&amp;quot;
+   :prefer-trigger-chars nil
+   ))
+
+(liberime-start (expand-file-name &amp;quot;/Library/Input Methods/Squirrel.app/Contents/SharedSupport&amp;quot;)
+                (expand-file-name &amp;quot;~/.emacs.d/pyim/rime/&amp;quot;))
+(liberime-select-schema &amp;quot;double_pinyin_mspy&amp;quot;)
+(setq pyim-default-scheme &#39;rime-mspy)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是我发现只要改回共享库，打出来的就是简体，但是我不明白为什么只能使用共享库，却不能使用个人库，毕竟我还魔改了我的鼠须管呀，万一我想打 emoji 呢，万一我想引用个古诗词呢？&lt;/p&gt;
+
+&lt;h2 id=&#34;最终解决方案&#34;&gt;最终解决方案&lt;/h2&gt;
+
+&lt;p&gt;一番折腾之后，终于找出了合适的方案：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;个人库无法显示繁体的原因其实很简单，由于鼠须管默认将 &lt;a href=&#34;https://github.com/BYVoid/OpenCC&#34; target=&#34;_blank&#34;&gt;opencc 开放中文转换库&lt;/a&gt; 放在共享库中，所以个人库中并不包含 opencc，这样 build 的时候就不能调用这些转换文件。所以，一行代码搞定。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;ln -s /Library/Input\ Methods/Squirrel.app/Contents/SharedSupport/opencc/* ~/Library/Rime/opencc/
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;输入分号的问题前面通过调用新写的 schema 解决，但是声调问题比较麻烦。由于 pyim 作者给减号键（我用作平声调的）赋予了太多用途，我这半调子 lisp 水平一时半会儿也写不了一个新的函数使此键在非后翻页状态作为简单的 &lt;code&gt;pyim-self-insert-command&lt;/code&gt; ，而且还得把后面那个函数改了，事情实在太多，所以我将方括号改作翻页，并将长得差不多的等号键用作平声。以后有时间，可能还是会把它改回减号键，毕竟长得更像一点。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;其次则是卡顿的问题。我发现当 liberime build 时，由于在个人库中已经有过 build 好的文件，所以不会在 liberime 的库中重新 build 一份，这样非常影响速度。所以我复制了一份我写的地球双拼给 liberime 专用（yaml 文件见&lt;a href=&#34;https://github.com/ziyunch/Rime/blob/master/terra%5Fdouble%5Fpinyin%5Fpyim.schema.yaml&#34; target=&#34;_blank&#34;&gt;这儿&lt;/a&gt;），效果拔群。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;具体配置如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-lisp&#34;&gt;(require &#39;use-package)
+(use-package pyim
+    :ensure nil
+    :demand t
+    :config
+    (setq default-input-method &amp;quot;pyim&amp;quot;)
+    (setq pyim-page-length 9)
+    :bind
+    (:map pyim-mode-map
+          (&amp;quot;]&amp;quot; . pyim-page-next-page)
+          (&amp;quot;[&amp;quot; . pyim-page-previous-page)
+          (&amp;quot;-&amp;quot; . pyim-self-insert-command)
+          (&amp;quot;=&amp;quot; . pyim-self-insert-command))
+    )
+(use-package liberime
+    :load-path &amp;quot;~/.emacs.d/pyim/&amp;quot;
+    :config
+    (liberime-start (expand-file-name &amp;quot;~/Library/Rime/&amp;quot;)
+                    (expand-file-name &amp;quot;~/.emacs.d/pyim/rime&amp;quot;))
+    (liberime-select-schema &amp;quot;terra_double_pinyin_pyim&amp;quot;)
+    (add-to-list
+     &#39;pyim-schemes
+     &#39;(rime-mspy
+       :document &amp;quot;support ;&amp;quot;
+       :class rime
+       :first-chars &amp;quot;abcdefghijklmnopqrstuvwxyz/&amp;quot;
+       :rest-chars &amp;quot;abcdefghijklmnopqrstuvwxyz;=/,\\&amp;quot;
+       :prefer-trigger-chars nil
+       ))
+    (setq pyim-default-scheme &#39;rime-mspy)
+    )
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;另外，我在 &lt;code&gt;~/.emacs.d/pyim/rime/&lt;/code&gt; 文件夹中添加了 pyim 作者推荐的优化配置文件 &lt;code&gt;default.custom.yaml&lt;/code&gt; ，详见其 &lt;a href=&#34;https://github.com/tumashu/pyim/blob/master/README.md&#34; target=&#34;_blank&#34;&gt;github&lt;/a&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;patch:
+  schema_list:
+    - schema: terra_double_pinyin_pyim
+  &amp;quot;menu/page_size&amp;quot;: 50
+  &amp;quot;speller/auto_select&amp;quot;: false
+  &amp;quot;speller/auto_select_unique_candidate&amp;quot;: false
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>Hacking the Data Transformation Interview</title>
+      <link>/post/448.html/</link>
+      <pubDate>Fri, 30 Aug 2019 11:14:00 -0400</pubDate>
+      <guid>/post/448.html/</guid>
+      <description>&lt;p&gt;I am currently (still) seeking a job in data/software engineering area, and I am preparing for all kinds of technical interviews, ranging from coding, algorithm, system design, SQL to computer science fundamental quiz. Data engineer is a role with vague definition, and people with this title functions as an ETL (extract, transformation, load) engineer in some companies. Thus, topics on data transformation could be covered during the interview. In this blog, I am trying to hack interview focusing on data tranformation.&lt;/p&gt;
+
+&lt;h2 id=&#34;prerequisites-boto3&#34;&gt;Prerequisites: boto3&lt;/h2&gt;
+
+&lt;p&gt;Boto is the AWS SDK for python, which provides easy-to-use, object-oriented API and low-level access to AWS services. We could find the documentation &lt;a href=&#34;https://boto3.amazonaws.com/v1/documentation/api/latest/index.html&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;We could easily install the latest Boto 3 release via pip:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ pip install boto3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then configure the credential file at &lt;code&gt;~/.aws/credentials&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-nil&#34;&gt;[default]
+aws_access_key_id = YOUR_ACCESS_KEY
+aws_secret_access_key = YOUR_SECRET_KEY
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And set the default region at &lt;code&gt;~/.aws/config&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-nil&#34;&gt;[default]
+region=us-east-1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To use boto3, we could import it and pass the service-to-use to it. For example, to use Amazon S3, we could choose a resource by:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import boto3
+s3 = boto3.resource(&#39;s3&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Create a s3 bucket over client level:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;s3_client = boto3.client(&#39;s3&#39;)
+s3_client.create_bucket(Bucket=&#39;BUCKET_NAME&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;List existing buckets for the AWS account:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;response = s3_client.list_buckets()
+for bucket in response[&#39;Buckets&#39;]:
+    print(f&#39;  {bucket[&amp;quot;Name&amp;quot;]}&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Upload file into a s3 bucket:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;response = s3_client.upload_file(file_name, bucket, object_name)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or upload object in binary mode into a s3 bucket:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;with open(&#39;test.jpg&#39;, &#39;rb&#39;) as f:
+    s3.upload_fileobj(f, &amp;quot;BUCKET_NAME&amp;quot;, &amp;quot;OBJECT_NAME&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or directly put object into a s3 bucket over the bucket level:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;data = open(&#39;test.jpg&#39;, &#39;rb&#39;)
+bucket = s3.Bucket(&#39;my-bucket&#39;)
+bucket.put_object(Key=object_name, Body=data)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To download file from a S3 bucket, we could:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;s3.download_file(&#39;BUCKET_NAME&#39;, &#39;OBJECT_NAME&#39;, &#39;FILE_NAME&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;with open(&#39;FILE_NAME&#39;, &#39;wb&#39;) as f:
+    s3.download_fileobj(&#39;BUCKET_NAME&#39;, &#39;OBJECT_NAME&#39;, f)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We could also set configuration when uploading, downloading, or copying a file or S3 object by:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from boto3.s3.transfer import TransferConfig
+GB = 1024 ** 3
+config = TransferConfig(multipart_threshold=5*GB)
+config = TransferConfig(max_concurrency=5)
+config = TransferConfig(use_threads=False)
+s3.upload_file(&#39;FILE_NAME&#39;, &#39;BUCKET_NAME&#39;, &#39;OBJECT_NAME&#39;, Config=config)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;prerequisites-psycopg2&#34;&gt;Prerequisites: psycopg2&lt;/h2&gt;
+
+&lt;p&gt;Psycopg2 is a popular PostgreSQL database adapter for python. We could find documentation &lt;a href=&#34;http://initd.org/psycopg/docs/&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;We could easily install psycopg2 via pip:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ pip install psycopg2-binary
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To use psycopg2, we could import it, connect to an existing database and open a cursor to perform database operations:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import psycopg2
+conn = psycopg2.connect(dbname=&amp;quot;DATABASE_NAME&amp;quot;, user=&amp;quot;USER&amp;quot;, host=&amp;quot;HOST&amp;quot;, port=&amp;quot;PORT&amp;quot;, password=&amp;quot;PASSWORD&amp;quot;)
+cur = conn.cursor()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Query the database and fetch data in an iteration-like way:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cur.execute(sql_query)
+cur.fetchone()
+cur.fetchmany(2)
+cur.fetchall()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Pass parameters to SQL queries:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cur.execute(&amp;quot;&amp;quot;&amp;quot;
+    INSERT INTO some_table (an_int, a_date, another_date, a_string)
+    VALUES (%(int)s, %(date)s, %(date)s, %(str)s);
+    &amp;quot;&amp;quot;&amp;quot;,
+    {&#39;int&#39;: 10, &#39;str&#39;: &amp;quot;O&#39;Reilly&amp;quot;, &#39;date&#39;: datetime.date(2005, 11, 18)})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Make the changes to the database persistent:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;conn.commit()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Close communication with the database&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cur.close()
+conn.close()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;upload-data-from-s3-into-redshift&#34;&gt;Upload data from S3 into Redshift&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def main():
+    connection_parameters = {
+        &#39;dbname&#39;: dbname,
+        &#39;user&#39;: user,
+        &#39;host&#39;: host,
+        &#39;port&#39;: port,
+        &#39;password&#39;: password
+    }
+    try:
+        conn = psycopg2.connect(**connection_parameters)
+        print(&amp;quot;Connected to Redshift.&amp;quot;)
+    except:
+        print(&amp;quot;Unable to connect to Redshift.&amp;quot;)
+
+    cur = conn.cursor()
+
+    upload_statement = &amp;quot;
+            COPY {}.{}
+            FROM {}
+            IAM_ROLE {}
+            CSV;
+            COMMIT;
+    &amp;quot;.format(table_name, schema, file_name, iam_role)
+
+    try:
+        cur.execute(upload_statement)
+        print(&amp;quot;Upload successfully&amp;quot;)
+    except psycopg2.Error:
+        raise ExecuteFailure(&amp;quot;Failed to upload the file.&amp;quot;)
+    cur.close()
+    conn.close()
+
+if __name__ == &amp;quot;__main__&amp;quot;:
+    main()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;load-data-from-redshift-to-pandas&#34;&gt;Load data from Redshift to pandas&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import sqlalchemy as sa
+import pandas as pd
+surl = &#39;redshift+psycopg2://&#39;
+engine = sa.create_engine(surl+user+&#39;:&#39;+password+&#39;@&#39;+host+&#39;:&#39;+port+&#39;/&#39;+dbname,echo=False)
+df = pd.read_sql_query(&#39;SELECT * FROM table ;&#39;, engine)
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>Manage personal blog in org-mode and host on Github using Hugo</title>
+      <link>/post/447.html/</link>
+      <pubDate>Mon, 26 Aug 2019 23:49:00 -0400</pubDate>
+      <guid>/post/447.html/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;This post is prepared completely in org-mode. YEAH!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;从 2016 将博客迁移至 Hexo+Github 的方案后，我便一直采用此方案写博客。大体来说感受挺不错的，然而由于我有数百篇博客，build 速度永远很让我头大。尤其是有时 markdown 显示出问题了，我又得等上数分钟才能看到结果，体验很不好。所以一听说 Hugo 能一秒生成博客，哪怕要舍弃我花大功夫美化的 NeXT 主题，我依然心生向往，今天便将 Hexo 迁移至 Hugo，顺便达成了 Emacs 写博客的小目标。&lt;/p&gt;
+
+&lt;h2 id=&#34;安装-hugo-并初始化&#34;&gt;安装 Hugo 并初始化&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;首先使用 Homebrew 安装 Hugo:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!--listend--&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ brew install hugo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;然后建立站点&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!--listend--&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ hugo new site blog
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;安装主题，我采用比较简单的 even 主题&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!--listend--&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ git clone https://github.com/olOwOlo/hugo-theme-even themes/even
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;从-hexo-迁移&#34;&gt;从 Hexo 迁移&lt;/h2&gt;
+
+&lt;p&gt;好消息是，此迁移过程相当无痛。由于我之前将博客内容存在 Dropbox 上，所以只需要将相关文件 link 至 Hugo 的相关文件夹内。结构大致如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;.
+├── content
+│   ├── about
+│   │   └── index.md
+│   └── post
+│       ├── post1.md
+│       └── ...
+├── static
+│   ├── images
+│   │   ├── image1.png
+│   │   └── ...
+│   └── CNAME
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有一个需要注意的地方是 Hexo 与 Hugo 对于 markdown 头文件中的 url 定义不同，我采用 &lt;code&gt;grep&lt;/code&gt; 将其批量改成 &lt;code&gt;slug&lt;/code&gt; ，并在配置文件中添加了 permalinks 的生成方式，以保证超链接的稳定：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;[permalinks]
+  post = &amp;quot;/:year/:month/:slug&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;生成预览&#34;&gt;生成预览&lt;/h2&gt;
+
+&lt;p&gt;输入 &lt;code&gt;hugo server&lt;/code&gt; ，几乎是眨眼工夫，便已在内存中生成预览，而且对于博文可即时显示改动，非常方便。确实比 Hexo 快上百倍。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;                   | ZH-CN
++------------------+-------+
+  Pages            |   956
+  Paginator pages  |   139
+  Non-page files   |     0
+  Static files     |    85
+  Processed images |     0
+  Aliases          |   254
+  Sitemaps         |     1
+  Cleaned          |     0
+
+Total in 820 ms
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;配合-org-mode-使用更佳&#34;&gt;配合 org-mode 使用更佳&lt;/h2&gt;
+
+&lt;p&gt;以前使用 Hexo 写博客时，博文都分散于各种 &lt;code&gt;.md&lt;/code&gt; 文件中，管理起来很不方便。另一方面，由于我平时习惯用 org-mode 记记笔记，管理生活。有了好轮子，我干脆想着一鼓作气把车换了。在此我使用的是 &lt;code&gt;ox-hugo&lt;/code&gt; 的 One post per Org subtree 方案，配置如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-org&#34;&gt;#+HUGO_BASE_DIR: ~/Dropbox/Blog/
+#+HUGO_SECTION: post
+#+HUGO_WEIGHT: auto
+#+HUGO_AUTO_SET_LASTMOD: t
+#+author:
+#+hugo_custom_front_matter: :author &amp;quot;ziyunch&amp;quot;
+* Technical                                                       :@技术宅:
+** TODO 博客由 Hexo 迁移至 Hugo                           :Emacs:Hexo:Hugo:
+   :PROPERTIES:
+   :EXPORT_FILE_NAME: 20190826-hexo-2-hugo
+   :END:
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;也就是说采用标签继承的方式，将博文分类。写完当篇博文，将 &lt;code&gt;TODO&lt;/code&gt; 状态变更为 &lt;code&gt;DONE&lt;/code&gt; 时， &lt;code&gt;ox-hugo&lt;/code&gt; 会自动为文档生成时间戳。然后在 subtree 上 &lt;kbd&gt;C-c C-e H H&lt;/kbd&gt; 即可在相应目录生成 &lt;code&gt;.md&lt;/code&gt; 文档。此时如果后台正在运行着 &lt;code&gt;hugo server&lt;/code&gt; ，即可在 &lt;code&gt;http://localhost:1313/&lt;/code&gt; 看到即时更新。&lt;/p&gt;
+
+&lt;h2 id=&#34;在-github-上发布&#34;&gt;在 Github 上发布&lt;/h2&gt;
+
+&lt;p&gt;第一次部署，需要新建一个 public 文件夹，并将原来部署了 Hexo 博客的 repo 关联上，步骤如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ mkdir public
+$ hugo -t even
+$ cd public
+$ git init
+$ git remote add upstream https://github.com/ziyunch/ziyunch.github.io.git
+$ git add .
+$ git commit -m &amp;quot;switch to hugo&amp;quot;
+$ git push -f upstream master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;之后则可如官网&lt;a href=&#34;https://gohugo.io/hosting-and-deployment/hosting-on-github/&#34; target=&#34;_blank&#34;&gt;发布指南&lt;/a&gt;所示编写一个可执行的 &lt;code&gt;.sh&lt;/code&gt; 文件来自动化部署发布：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;#!/bin/sh
+
+# If a command fails then the deploy stops
+set -e
+
+printf &amp;quot;\033[0;32mDeploying updates to GitHub...\033[0m\n&amp;quot;
+
+# Build the project.
+hugo -t even
+
+# Go To Public folder
+cd public
+
+# Add changes to git.
+git add .
+
+# Commit changes.
+msg=&amp;quot;rebuilding site $(date)&amp;quot;
+if [ -n &amp;quot;$*&amp;quot; ]; then
+        msg=&amp;quot;$*&amp;quot;
+fi
+git commit -m &amp;quot;$msg&amp;quot;
+
+# Push source and build repos.
+git push upstream master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;自此大功告成&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>An optimized Rime configuration</title>
+      <link>/post/445.html/</link>
+      <pubDate>Sat, 20 Jul 2019 20:58:00 -0400</pubDate>
+      <guid>/post/445.html/</guid>
+      <description>&lt;p&gt;This configuration:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Optimized for simplified Chinese;&lt;/li&gt;
+&lt;li&gt;Implement 朙月拼音 &lt;code&gt;luna-pinyin&lt;/code&gt;, 微软双拼 &lt;code&gt;double-pinyin-mspy&lt;/code&gt; and
+地球拼音 &lt;code&gt;terra-pinyin&lt;/code&gt; with 20+ dictionaries including symbols and
+emoji;&lt;/li&gt;
+&lt;li&gt;Feature 地球双拼 &lt;code&gt;terra-double-pinyin-mspy&lt;/code&gt;, a double pinyin input
+method supporting tone marks;&lt;/li&gt;
+&lt;li&gt;Use 地球双拼 &lt;code&gt;terra-double-pinyin-mspy&lt;/code&gt; to reverse lookup
+吴语（苏州话） &lt;code&gt;wugniu_soutseu&lt;/code&gt; with tone marks, toggled by &lt;code&gt;`&lt;/code&gt;;&lt;/li&gt;
+&lt;li&gt;Use ASCII mode for several applications.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;supported-rime-version&#34;&gt;Supported Rime Version&lt;/h2&gt;
+
+&lt;h3 id=&#34;macos&#34;&gt;MacOS&lt;/h3&gt;
+
+&lt;p&gt;The config should run on Squarrel 0.14.0 or greater.&lt;/p&gt;
+
+&lt;h2 id=&#34;installation&#34;&gt;Installation&lt;/h2&gt;
+
+&lt;h3 id=&#34;鼠鬚管-squirrel--macos&#34;&gt;&lt;a href=&#34;https://rime.im&#34; target=&#34;_blank&#34;&gt;鼠鬚管&lt;/a&gt; Squirrel (MacOS)&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;via &lt;a href=&#34;https://rime.im&#34; target=&#34;_blank&#34;&gt;Latest release&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;via &lt;a href=&#34;https://github.com/rime/squirrel&#34; target=&#34;_blank&#34;&gt;source code&lt;/a&gt;: &lt;a href=&#34;https://github.com/rime/squirrel/blob/master/INSTALL.md&#34; target=&#34;_blank&#34;&gt;Build instruction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;via &lt;a href=&#34;https://brew.sh&#34; target=&#34;_blank&#34;&gt;Homebrew&lt;/a&gt;: &lt;code&gt;brew cask install squirrel&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;東風破-plum&#34;&gt;&lt;a href=&#34;https://github.com/rime/plum&#34; target=&#34;_blank&#34;&gt;東風破&lt;/a&gt; &lt;em&gt;plum&lt;/em&gt;&lt;/h3&gt;
+
+&lt;p&gt;Install &lt;em&gt;plum&lt;/em&gt;, the configuration manager for Rime input method engine:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~/Library/Rime
+curl -fsSL https://git.io/rime-install | bash
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then install packages:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd plum
+bash rime-install :preset double-pinyin emoji NGLI/rime-wugniu_soutseu
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;Supported input methods ℞&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Essentials:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-prelude&#34; target=&#34;_blank&#34;&gt;prelude&lt;/a&gt; 基础配置 / &lt;a href=&#34;https://github.com/rime/rime-essay&#34; target=&#34;_blank&#34;&gt;essay&lt;/a&gt; 八股文&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Phonetic-based:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-luna-pinyin&#34; target=&#34;_blank&#34;&gt;luna-pinyin&lt;/a&gt; 朙月拼音 / &lt;a href=&#34;https://github.com/rime/rime-terra-pinyin&#34; target=&#34;_blank&#34;&gt;terra-pinyin&lt;/a&gt; 地球拼音 / &lt;a href=&#34;https://github.com/rime/rime-bopomofo&#34; target=&#34;_blank&#34;&gt;bopomofo&lt;/a&gt; 注音 / &lt;a href=&#34;https://github.com/rime/rime-pinyin-simp&#34; target=&#34;_blank&#34;&gt;pinyin-simp&lt;/a&gt; 袖珍简化字拼音&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Derivatives of Pinyin:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-double-pinyin&#34; target=&#34;_blank&#34;&gt;double-pinyin&lt;/a&gt; 双拼 / &lt;a href=&#34;https://github.com/rime/rime-combo-pinyin&#34; target=&#34;_blank&#34;&gt;combo-pinyin&lt;/a&gt; 宫保拼音 / &lt;a href=&#34;https://github.com/rime/rime-stenotype&#34; target=&#34;_blank&#34;&gt;stenotype&lt;/a&gt; 打字速记法&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Varieties of Chinese:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-jyutping&#34; target=&#34;_blank&#34;&gt;jyutping&lt;/a&gt; 粤拼 / &lt;a href=&#34;https://github.com/rime/rime-wugniu&#34; target=&#34;_blank&#34;&gt;wugniu&lt;/a&gt; 上海吴语 / &lt;a href=&#34;https://github.com/rime/rime-soutzoe&#34; target=&#34;_blank&#34;&gt;soutzoe&lt;/a&gt; 苏州吴语
+/ &lt;a href=&#34;https://github.com/rime/rime-middle-chinese&#34; target=&#34;_blank&#34;&gt;middle-chinese&lt;/a&gt; 中古汉语拼音&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Shape-based:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-stroke&#34; target=&#34;_blank&#34;&gt;stroke&lt;/a&gt; 笔画 / &lt;a href=&#34;https://github.com/rime/rime-cangjie&#34; target=&#34;_blank&#34;&gt;cangjie&lt;/a&gt; 仓颉输入法 / &lt;a href=&#34;https://github.com/rime/rime-quick&#34; target=&#34;_blank&#34;&gt;quick&lt;/a&gt; 速成 / &lt;a href=&#34;https://github.com/rime/rime-wubi&#34; target=&#34;_blank&#34;&gt;wubi&lt;/a&gt; 五笔字型 / &lt;a href=&#34;https://github.com/rime/rime-array&#34; target=&#34;_blank&#34;&gt;array&lt;/a&gt; 行列输入法 / &lt;a href=&#34;https://github.com/rime/rime-scj&#34; target=&#34;_blank&#34;&gt;scj&lt;/a&gt; 快速仓颉&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Miscellaneous:&lt;/strong&gt; &lt;a href=&#34;https://github.com/rime/rime-emoji&#34; target=&#34;_blank&#34;&gt;emoji&lt;/a&gt; 颜文字 / &lt;a href=&#34;https://github.com/rime/rime-ipa&#34; target=&#34;_blank&#34;&gt;ipa&lt;/a&gt;: 国际音标&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;personalized-configuration-and-dictionaries&#34;&gt;Personalized configuration and dictionaries&lt;/h3&gt;
+
+&lt;p&gt;To install, clone this repo to &lt;code&gt;~/Library/Rime&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~/Library/Rime
+git init
+echo -e &amp;quot;/*\n\!/README.org\n\!/dict\n\!/*.custom.yaml\n\!/*.extended.dict.yaml\n\!/terra_double_pinyin_mspy.*\n!/*pyim*&amp;quot; &amp;gt;&amp;gt; .gitignore
+git remote add origin https://github.com/ziyunch/Rime.git
+git pull origin master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Update: 2019-08-31&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;ln -s /Library/Input\ Methods/Squirrel.app/Contents/SharedSupport/opencc/* ./opencc/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;deploy&#34;&gt;Deploy&lt;/h2&gt;
+
+&lt;p&gt;Press &lt;kbd&gt;Control + Option + `&lt;/kbd&gt; to deploy current configuration.&lt;/p&gt;
+
+&lt;p&gt;Press &lt;kbd&gt;Control + `&lt;/kbd&gt; to select input method.&lt;/p&gt;
+
+&lt;h2 id=&#34;updates&#34;&gt;Updates&lt;/h2&gt;
+
+&lt;p&gt;To update &lt;em&gt;plum&lt;/em&gt; itself, run:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~/Library/Rime/plum
+bash rime-install plum
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To update the &lt;em&gt;plum&lt;/em&gt; packages, run:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~/Library/Rime/plum
+bash rime-install :preset double-pinyin emoji NGLI/rime-wugniu_soutseu
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To update the config, run:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cd ~/Library/Rime
+git pull origin master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;customerization&#34;&gt;Customerization&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Modify &lt;code&gt;default.custom.yaml&lt;/code&gt; to select more input methods or comment
+out input methods no longer needed:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!--listend--&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;schema_list:
+  - schema: luna_pinyin          # 朙月拼音
+  - schema: terra_pinyin         # 地球拼音 dì qiú pīn yīn
+  - schema: terra_double_pinyin_mspy # 地球双拼
+  - schema: double_pinyin_mspy   # 微软双拼
+  - schema: double_pinyin        # 自然码双拼
+  - schema: double_pinyin_abc    # 智能ABC双拼
+  - schema: double_pinyin_flypy  # 小鹤双拼
+  - schema: wugniu_soutseu       # 吴语（苏州话）
+  - schema: stroke               # 笔画
+  - schema: cangjie              # 仓颉输入法
+  - schema: bopomofo             # 注音
+  - schema: emoji                # 颜文字
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Delete &lt;code&gt;wugniu_soutseu.custom.yaml&lt;/code&gt; to use the default 朙月拼音
+&lt;code&gt;luna_pinyin&lt;/code&gt; reverse lookup 吴语（苏州话） &lt;code&gt;wugniu_soutseu&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;</description>
     </item>
     
     <item>

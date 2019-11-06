@@ -31,7 +31,7 @@
   <meta name="description" content="Data Engineer">
 
   
-  <link rel="alternate" hreflang="en-us" href="/tags/django/">
+  <link rel="alternate" hreflang="en-us" href="/tags/postgresql/">
 
   
 
@@ -90,14 +90,14 @@
   
 
   
-  <link rel="alternate" href="/tags/django/index.xml" type="application/rss+xml" title="RUNHAN YU">
+  <link rel="alternate" href="/tags/postgresql/index.xml" type="application/rss+xml" title="RUNHAN YU">
   
 
   <link rel="manifest" href="/index.webmanifest">
   <link rel="icon" type="image/png" href="/img/icon-32.png">
   <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
 
-  <link rel="canonical" href="/tags/django/">
+  <link rel="canonical" href="/tags/postgresql/">
 
   
   
@@ -110,12 +110,12 @@
   <meta property="twitter:card" content="summary">
   
   <meta property="og:site_name" content="RUNHAN YU">
-  <meta property="og:url" content="/tags/django/">
-  <meta property="og:title" content="Django | RUNHAN YU">
+  <meta property="og:url" content="/tags/postgresql/">
+  <meta property="og:title" content="PostgreSQL | RUNHAN YU">
   <meta property="og:description" content="Data Engineer"><meta property="og:image" content="/img/icon-192.png">
   <meta property="twitter:image" content="/img/icon-192.png"><meta property="og:locale" content="en-us">
   
-    <meta property="og:updated_time" content="2019-10-11T13:58:00-07:00">
+    <meta property="og:updated_time" content="2019-11-05T11:23:00-08:00">
   
 
   
@@ -132,7 +132,7 @@
 
 
 
-  <title>Django | RUNHAN YU</title>
+  <title>PostgreSQL | RUNHAN YU</title>
 
 </head>
 
@@ -227,7 +227,7 @@
         
 
         <li class="nav-item">
-          <a class="nav-link " href="/post"><span>Posts</span></a>
+          <a class="nav-link  active" href="/post"><span>Posts</span></a>
         </li>
 
         
@@ -370,7 +370,7 @@
     
   
 <div class="universal-wrapper pt-3">
-  <h1>Django</h1>
+  <h1>PostgreSQL</h1>
 
   
 
@@ -385,13 +385,11 @@
   
   
   <div>
-    <h2><a href="/post/451.html/">My first Django app</a></h2>
+    <h2><a href="/post/452.html/">Postgresql server did not shutdown correctly</a></h2>
     <div class="article-style">
       
-      This is my implementaion on the Django tutorial.
-Create Django project and a polls app First, I verify my Django installation and version by:
-python -m django --version  If Python (use 3 here) or Django (1.11.23 here) is not installed, go by:
-brew install python mkdir ~/.venvs/venv python3 -m venv ~/.venvs/venv source ~/.venvs/venv/bin/activate pip install django==1.11.23 pip install psycopg2  Now I could create a project with a collection of settings for an instance of Django.
+      I setup Postgresql as database for Django and it works as a charm. However, today I got a error message when I tried to migrate my django.
+conn = _connect(dsn, connection_factory=connection_factory, **kwasync) django.db.utils.OperationalError: could not connect to server: Connection refused Is the server running on host &quot;localhost&quot; (::1) and accepting TCP/IP connections on port 5432? could not connect to server: Connection refused Is the server running on host &quot;localhost&quot; (127.0.0.1) and accepting TCP/IP connections on port 5432?
       
     </div>
   </div>
