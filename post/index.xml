@@ -49,8 +49,7 @@ It doesn&amp;rsquo;t give the process a chance to cleanly:&lt;/p&gt;
 &lt;li&gt;inform its children that it is going away&lt;/li&gt;
 &lt;li&gt;reset its terminal characteristics&lt;/li&gt;
 &lt;/ol&gt;
-&lt;/blockquote&gt;
-</description>
+&lt;/blockquote&gt;</description>
     </item>
     
     <item>
@@ -58,9 +57,7 @@ It doesn&amp;rsquo;t give the process a chance to cleanly:&lt;/p&gt;
       <link>/post/451.html/</link>
       <pubDate>Fri, 11 Oct 2019 13:58:00 -0700</pubDate>
       <guid>/post/451.html/</guid>
-      <description>
-
-&lt;p&gt;This is my implementaion on the &lt;a href=&#34;https://docs.djangoproject.com/en/1.11/intro/tutorial01/&#34; target=&#34;_blank&#34;&gt;Django tutorial&lt;/a&gt;.&lt;/p&gt;
+      <description>&lt;p&gt;This is my implementaion on the &lt;a href=&#34;https://docs.djangoproject.com/en/1.11/intro/tutorial01/&#34; target=&#34;_blank&#34;&gt;Django tutorial&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id=&#34;create-django-project-and-a-polls-app&#34;&gt;Create Django project and a &lt;code&gt;polls&lt;/code&gt; app&lt;/h2&gt;
 
@@ -886,8 +883,7 @@ cp PATH/django/contrib/admin/templates/admin/base_site.html templates/admin/base
         └── base_site.html
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;It is also useful to turn the &lt;code&gt;polls&lt;/code&gt; app into a standalone Python package, but it is another story.&lt;/p&gt;
-</description>
+&lt;p&gt;It is also useful to turn the &lt;code&gt;polls&lt;/code&gt; app into a standalone Python package, but it is another story.&lt;/p&gt;</description>
     </item>
     
     <item>

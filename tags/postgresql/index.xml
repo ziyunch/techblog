@@ -49,8 +49,7 @@ It doesn&amp;rsquo;t give the process a chance to cleanly:&lt;/p&gt;
 &lt;li&gt;inform its children that it is going away&lt;/li&gt;
 &lt;li&gt;reset its terminal characteristics&lt;/li&gt;
 &lt;/ol&gt;
-&lt;/blockquote&gt;
-</description>
+&lt;/blockquote&gt;</description>
     </item>
     
   </channel>
